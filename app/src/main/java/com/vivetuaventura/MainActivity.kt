@@ -15,7 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.modelos.Aventura
+import kotlinx.android.synthetic.main.activity_crear_aventura.view.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.crear_dialogo_layout.*
+import kotlinx.android.synthetic.main.crear_dialogo_layout.view.*
+import kotlinx.android.synthetic.main.crear_dialogo_layout.view.nombreAventuraDLG
 
 class MainActivity : AppCompatActivity() {
 
@@ -70,8 +74,13 @@ class MainActivity : AppCompatActivity() {
         val yesBtn = dialog.findViewById(R.id.empezarCrearBTN) as Button
 
         yesBtn.setOnClickListener {
+
+            val nombreAventuraET = dialog.findViewById(R.id.nombreAventuraDLG) as EditText
+            val autorET = dialog.findViewById(R.id.AutorDLG) as EditText
+
             val intent = Intent (this, CrearAventuraActivity::class.java).apply {
-                putExtra("AVENTURA", "Crear Aventura")
+                putExtra("NOMBRE_AVENTURA", nombreAventuraET.text.toString())
+                putExtra("AUTOR_AVENTURA", autorET.text.toString())
             }
             startActivity(intent)
             dialog.dismiss()
