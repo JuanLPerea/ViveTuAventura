@@ -44,12 +44,6 @@
         android:hint="@string/autor"
         android:inputType="textNoSuggestions" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mostrar solo tus aventuras sin publicar" />
-
     <Button
         android:id="@+id/aceptarBTN_filtrar"
         android:layout_width="wrap_content"

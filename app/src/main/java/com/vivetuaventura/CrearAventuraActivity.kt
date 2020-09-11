@@ -24,7 +24,7 @@ class CrearAventuraActivity : AppCompatActivity() {
     var capituloActual = 0;
 
     // Creamos una aventura nueva
-    var aventuraNueva = Aventura("-", "-", 0, 0)
+    var aventuraNueva = Aventura("ejemplo", "-", "-", 0, 0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ class CrearAventuraActivity : AppCompatActivity() {
         aventuraNueva.creador = autorAventura
 
 
-        aventuraNueva.listaCapitulos.add(Capitulo(0, "Capitulo Padre", "URL imagen", false))
+        aventuraNueva.listaCapitulos.add(Capitulo(0, "Aventura", "Capitulo Padre", "URL imagen", false))
 
 
     }
@@ -84,6 +84,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                 aventuraNueva.listaCapitulos.add(
                     Capitulo(
                         indiceNuevoCapitulo,
+                        "Aventura",
                         "Nuevo capitulo 1",
                         "URL imagen",
                         false
@@ -110,7 +111,6 @@ class CrearAventuraActivity : AppCompatActivity() {
             override fun onTextChanged (s : CharSequence, start : Int, before : Int, count : Int) {
                    // guardar cambios cuando editemos el texto
 
-                    SharedApp.prefs.name = "hola"
 
             }
         })
