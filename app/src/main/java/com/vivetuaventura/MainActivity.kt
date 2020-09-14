@@ -40,15 +40,8 @@ class MainActivity : AppCompatActivity() {
         databaseHelper = DatabaseHelper(this)
         db = databaseHelper.writableDatabase
 
-        val aventura1 = Aventura("1", "Primera Aventura", "Juan Luis", 10, 10)
-        val aventura2 = Aventura("2", "Segunda Aventura", "Juan Luis", 3, 6)
-        listaAventuras.add(aventura1)
-        listaAventuras.add(aventura2)
-        listaAventuras.add(aventura2)
-        listaAventuras.add(aventura2)
-        listaAventuras.add(aventura2)
-        listaAventuras.add(aventura2)
-
+        // Recuperar lista aventuras en la BD
+        listaAventuras = databaseHelper.cargarListaAventurasBD(db)
         setUpRecyclerView()
 
         val crearAventuraBTN = findViewById(R.id.crearAventuraBTN) as FloatingActionButton
@@ -122,6 +115,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onRestart() {
+        super.onRestart()
+
+        // Recargar la lista de las aventuras
+        listaAventuras.removeAll(listaAventuras)
+        listaAventuras.addAll( databaseHelper.cargarListaAventurasBD(db))
+        mAdapter.notifyDataSetChanged()
+        Log.d("Miapp", "On restart")
+
+
+    }
 }
 
 

@@ -65,10 +65,12 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             itemView.setOnLongClickListener{
                 Toast.makeText(context, "Has hecho long click en: " + nombreAventura.text, Toast.LENGTH_LONG).show()
 
-                TODO("Si hacemos long Click mostramos un dialog para decidir si editamos esta aventura o la queremos eliminar" +
+            /*    TODO("Si hacemos long Click mostramos un dialog para decidir si editamos esta aventura o la queremos eliminar" +
                         "Primero hay que comprobar si la aventura que hemos seleccionado es nuestra y si es así" +
                         "lanzamos el intent de crear aventura cargando los datos que tengamos ya creados" +
                         "Si no es nuestra mostramos un mensaje diciendo que no podemos editar aventuras que no son nuestras")
+
+            */
 
 
                 true

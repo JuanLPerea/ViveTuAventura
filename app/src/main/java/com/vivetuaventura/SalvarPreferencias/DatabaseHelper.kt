@@ -7,11 +7,11 @@ import android.util.Log
 import com.vivetuaventura.modelos.Aventura
 import com.vivetuaventura.modelos.AventuraContract
 
-class  DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS",null, 1) {
+class  DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
 
-        Log.d("MIAPP" , "Crear BD")
+        Log.d("MIAPP", "Crear BD")
 
         val CREATE_TABLE_AVENTURA = "CREATE TABLE AVENTURA (ID TEXT, NOMBRE TEXT, CREADOR TEXT, NOTA INTEGER, PUBLICADO BOOLEAN, VISITAS INTEGER)"
         val CREATE_TABLE_CAPITULOS = "CREATE TABLE CAPITULOS (ID TEXT, IDAVENTURA INTEGER, CAPITULOPADRE INTEGER, CAPITULO1 INTEGER, CAPITULO2 INTEGER, TEXTOCAPITULO TEXT, IMAGENCAPITULO TEXT, FINHISTORIA BOOLEAN)"
@@ -26,7 +26,7 @@ class  DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURA
         onCreate(db)
     }
 
-    fun crearAventuraBD(db: SQLiteDatabase?, nombreAventura : String , autorAventura : String) {
+    fun crearAventuraBD(db: SQLiteDatabase?, nombreAventura: String, autorAventura: String) {
 
         val rnds = (0..100000).random()
         val aventuraUUID =  nombreAventura + "_" + System.currentTimeMillis().toString() + "_" + rnds.toString()
@@ -34,15 +34,48 @@ class  DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURA
         val ADD_NODO = "INSERT INTO AVENTURA VALUES ('" + aventuraUUID + "' , '" + nombreAventura + "' , '" + autorAventura  + "' , 0 , 0, 0)"
 
         db!!.execSQL(ADD_NODO)
-        Log.d("MIAPP" , "Creada Aventura en la BD")
+        Log.d("MIAPP", "Creada Aventura en la BD")
     }
 
-    fun cargarAventura(db: SQLiteDatabase, aventuraUIID:String) {
+    fun cargarAventura(db: SQLiteDatabase, aventuraUIID: String) {
 
         val aventura:Aventura
-        aventura = Aventura("jk","Aventura falsa", "cualquiera", 0 , 0)
+        aventura = Aventura("jk", "Aventura falsa", "cualquiera", 0, 0)
 
        // return aventura
+    }
+
+    fun cargarListaAventurasBD(db: SQLiteDatabase): MutableList<Aventura> {
+
+        var listaAventuras:MutableList<Aventura> = mutableListOf()
+
+        val datosBruto = db.rawQuery("SELECT * FROM AVENTURA", null)
+
+        if (datosBruto!!.moveToFirst()) {
+            do {
+                val idTMP = datosBruto.getString(datosBruto.getColumnIndex("ID"))
+                val nombreTMP = datosBruto.getString(datosBruto.getColumnIndex("NOMBRE"))
+                val creadorTMP = datosBruto.getString(datosBruto.getColumnIndex("CREADOR"))
+                val notaTMP = datosBruto.getInt(datosBruto.getColumnIndex("NOTA"))
+                val publicadoTMP = datosBruto.getInt(datosBruto.getColumnIndex("PUBLICADO"))
+                val visitasTMP = datosBruto.getInt(datosBruto.getColumnIndex("VISITAS"))
+
+                val aventuraTMP : Aventura = Aventura(idTMP, nombreTMP, creadorTMP, visitasTMP, notaTMP)
+
+                listaAventuras.add(aventuraTMP)
+
+
+            } while (datosBruto.moveToNext())
+        }
+
+
+        datosBruto.close()
+
+
+
+
+
+        return listaAventuras
     }
 
 
