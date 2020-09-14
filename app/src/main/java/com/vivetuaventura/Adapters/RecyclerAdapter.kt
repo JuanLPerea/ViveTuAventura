@@ -77,6 +77,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             }
 
 
+
         }
 
     }
