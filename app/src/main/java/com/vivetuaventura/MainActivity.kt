@@ -85,13 +85,8 @@ class MainActivity : AppCompatActivity() {
                     recargarReciclerView()
                 } else {
 
-                    // Swipte hacia la derecha borrar
-
-
-
-
+                    // Swipe hacia la derecha borrar
                     databaseHelper.eliminarAventuraBD(db , listaAventuras.get(position).id)
-
                     recargarReciclerView()
 
                 }
@@ -132,11 +127,10 @@ class MainActivity : AppCompatActivity() {
             if (autorTMP.equals("")) autorTMP = "Sin Autor"
 
             // CREAMOS LA AVENTURA EN LA BASE DE DATOS
-            databaseHelper.crearAventuraBD(db , nomavTMP, autorTMP)
+            val idAventura = databaseHelper.crearAventuraBD(db , nomavTMP, autorTMP)
 
             val intent = Intent (this, CrearAventuraActivity::class.java).apply {
-                putExtra("NOMBRE_AVENTURA", nomavTMP)
-                putExtra("AUTOR_AVENTURA", autorTMP)
+                putExtra("ID_AVENTURA", idAventura)
             }
             startActivity(intent)
             dialog.dismiss()

@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Aventura
 import com.vivetuaventura.modelos.Capitulo
 import kotlinx.android.synthetic.main.activity_crear_aventura.*
@@ -21,7 +23,10 @@ import kotlinx.android.synthetic.main.activity_crear_aventura.*
 
 class CrearAventuraActivity : AppCompatActivity() {
 
-    var capituloActual = 0;
+    var capituloActual = 0
+    lateinit var databaseHelper: DatabaseHelper
+    lateinit var db : SQLiteDatabase
+    lateinit var capituloActivo : Capitulo
 
     // Creamos una aventura nueva
     var aventuraNueva = Aventura("ejemplo", "-", "-", 0, 0)
@@ -33,15 +38,22 @@ class CrearAventuraActivity : AppCompatActivity() {
         // Establecemos las acciones para los botones y click en los componentes
         clickHandler()
 
-        // Recuperamos datos del intent
-        val nombreAventura: String = intent.getStringExtra("NOMBRE_AVENTURA")
-        val autorAventura: String = intent.getStringExtra("AUTOR_AVENTURA")
-        aventuraNueva.nombreAventura = nombreAventura
-        aventuraNueva.creador = autorAventura
+        // Recuperamos id de la aventura del intent
+        aventuraNueva.id = intent.getStringExtra("ID_AVENTURA")
 
+        // Accedemos a la BD
+        databaseHelper = DatabaseHelper(this)
+        db = databaseHelper.writableDatabase
 
-        aventuraNueva.listaCapitulos.add(Capitulo(0, "Aventura", "Capitulo Padre", "URL imagen", false))
+        // Cargamos la aventura de la BD
+        aventuraNueva = databaseHelper.recuperarAventura(db, aventuraNueva.id)
 
+        // Insertamos el primer capítulo que editaremos mediante la aplicación
+        capituloActivo = Capitulo(aventuraNueva.id, 0, 0, 0, 0, "","imagenURL", false)
+        aventuraNueva.listaCapitulos.add(capituloActivo)
+
+        // Guardamos el capitulo nuevo en la BD
+        databaseHelper.guardarCapitulo(db, aventuraNueva.id, capituloActivo)
 
     }
 
@@ -83,10 +95,13 @@ class CrearAventuraActivity : AppCompatActivity() {
                 // Si no lo hay añadimos un nuevo nodo a nuestra historia y guardamos que el capitulo padre es el actual
                 aventuraNueva.listaCapitulos.add(
                     Capitulo(
+                        aventuraNueva.id,
                         indiceNuevoCapitulo,
-                        "Aventura",
-                        "Nuevo capitulo 1",
-                        "URL imagen",
+                        0,
+                        0,
+                        0,
+                        "" ,
+                        "" ,
                         false
                     )
                 )
@@ -107,10 +122,14 @@ class CrearAventuraActivity : AppCompatActivity() {
         val editarTextoListener = findViewById(R.id.editTextCrearAventura) as EditText
         editarTextoListener.addTextChangedListener (object : TextWatcher {
             override fun afterTextChanged(s : Editable) {}
-            override fun beforeTextChanged (s : CharSequence, start : Int , count : Int, after : Int) {  }
+            override fun beforeTextChanged (s : CharSequence, start : Int , count : Int, after : Int) {
+            }
             override fun onTextChanged (s : CharSequence, start : Int, before : Int, count : Int) {
                    // guardar cambios cuando editemos el texto
-
+                Log.d("Miapp" , "Texto cambiado")
+                val textoView = editTextCrearAventura.text.toString()
+                aventuraNueva.listaCapitulos.get(capituloActual).textoCapitulo = textoView
+                databaseHelper.actualizarCapitulo(db, aventuraNueva.id, aventuraNueva.listaCapitulos.get(capituloActual))
 
             }
         })
@@ -149,7 +168,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     pickImageFromGallery()
                 } else {
                     //permission from popup denied
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show()
                 }
             }
         }
