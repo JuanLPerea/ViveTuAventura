@@ -139,8 +139,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
         val datosBruto = db.rawQuery("SELECT * FROM CAPITULOS WHERE IDAVENTURA ='" + idAventura + "' AND ID = '" + id + "'", null)
         if (datosBruto!!.moveToFirst()) {
             val capituloPadreTMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULOPADRE"))
-            val capitulo1 = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO1"))
-            val capitulo2 = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO2"))
+            val capitulo1TMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO1"))
+            val capitulo2TMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO2"))
             val textoTMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOCAPITULO"))
             val imagenTMP = datosBruto.getString(datosBruto.getColumnIndex("IMAGENCAPITULO"))
             val finhistoriaTMP = datosBruto.getInt(datosBruto.getColumnIndex("FINHISTORIA"))
@@ -149,8 +149,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
             if (finhistoriaTMP == 1) finhistoria = true
 
             capituloRecuperado.capituloPadre = capituloPadreTMP
-            capituloRecuperado.capitulo1 = capitulo1
-            capituloRecuperado.capitulo2 = capitulo2
+            capituloRecuperado.capitulo1 = capitulo1TMP
+            capituloRecuperado.capitulo2 = capitulo2TMP
             capituloRecuperado.textoCapitulo = textoTMP
             capituloRecuperado.imagenCapitulo = imagenTMP
             capituloRecuperado.finHistoria = finhistoria
@@ -166,9 +166,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
         val nuevoCapitulo:Capitulo
         val rnds = (0..100000).random()
         val capituloUUID = "CAPITULO_" + System.currentTimeMillis().toString() + "_" + rnds.toString()
-        val ADD_NODO = "INSERT INTO CAPITULOS VALUES ('" + aventuraUUID + "' , '" + capituloUUID + "' , '" + capituloPadreID + "' , '' , '', 'TEXTO CAPITULO' , 'IMAGEN' , 0)"
+
+        val ADD_NODO = "INSERT INTO CAPITULOS VALUES ('" + aventuraUUID + "' , '" + capituloUUID + "' , '" + capituloPadreID + "' , '' , '', '' , '' , 0)"
         db!!.execSQL(ADD_NODO)
-        nuevoCapitulo = Capitulo(aventuraUUID, capituloUUID, "" , "" , "" , "" , "" , false)
+        nuevoCapitulo = Capitulo(aventuraUUID, capituloUUID, capituloPadreID , "" , "" , "" , "" , false)
         return nuevoCapitulo
     }
 
