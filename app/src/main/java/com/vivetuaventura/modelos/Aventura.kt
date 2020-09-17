@@ -19,13 +19,5 @@ class Aventura  (id:String, nombreAventura: String, creador:String, visitas:Int,
     }
 
 
-     fun newCapitulo (idCapituloPadre : Int) {
-          // añadimos un capitulo al nodo indicado
-          val newCapitulo = Capitulo("Id aventura" , listaCapitulos.size + 1, idCapituloPadre,0, 0, "", "",false)
-          newCapitulo.capituloPadre = idCapituloPadre
-          listaCapitulos.add(newCapitulo)
-     }
-
-     // fun actualizarCapitulo
 
 }

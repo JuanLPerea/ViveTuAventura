@@ -23,10 +23,9 @@ import kotlinx.android.synthetic.main.activity_crear_aventura.*
 
 class CrearAventuraActivity : AppCompatActivity() {
 
-    var capituloActual = 0
     lateinit var databaseHelper: DatabaseHelper
-    lateinit var db : SQLiteDatabase
-    lateinit var capituloActivo : Capitulo
+    lateinit var db: SQLiteDatabase
+    lateinit var capituloActivo: Capitulo
 
     // Creamos una aventura nueva
     var aventuraNueva = Aventura("ejemplo", "-", "-", 0, 0)
@@ -49,11 +48,8 @@ class CrearAventuraActivity : AppCompatActivity() {
         aventuraNueva = databaseHelper.recuperarAventura(db, aventuraNueva.id)
 
         // Insertamos el primer capítulo que editaremos mediante la aplicación
-        capituloActivo = Capitulo(aventuraNueva.id, 0, 0, 0, 0, "","imagenURL", false)
+        capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, "")
         aventuraNueva.listaCapitulos.add(capituloActivo)
-
-        // Guardamos el capitulo nuevo en la BD
-        databaseHelper.guardarCapitulo(db, aventuraNueva.id, capituloActivo)
 
     }
 
@@ -84,58 +80,46 @@ class CrearAventuraActivity : AppCompatActivity() {
 
         val decision1Click = findViewById(R.id.botonDecision1CA) as Button
         decision1Click.setOnClickListener {
-            val indiceNuevoCapitulo = aventuraNueva.listaCapitulos.size
-
             // Comprobar si ya hay un capitulo en esta posición
-            // Si existe cargamos el capitulo existente
-            if (aventuraNueva.listaCapitulos.get(capituloActual).capitulo1 != 0) {
-                capituloActual = aventuraNueva.listaCapitulos.get(capituloActual).capitulo1
+            if (!capituloActivo.capitulo1.equals("")) {
+                // Si existe cargamos el capitulo existente
+                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.id)
             } else {
+                // Si no lo hay añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
+                val capituloPadreOrigen = capituloActivo.id
+                val capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloActivo.id)
+                capituloActivo.capituloPadre = capituloPadreOrigen
 
-                // Si no lo hay añadimos un nuevo nodo a nuestra historia y guardamos que el capitulo padre es el actual
-                aventuraNueva.listaCapitulos.add(
-                    Capitulo(
-                        aventuraNueva.id,
-                        indiceNuevoCapitulo,
-                        0,
-                        0,
-                        0,
-                        "" ,
-                        "" ,
-                        false
-                    )
-                )
-                aventuraNueva.listaCapitulos.get(indiceNuevoCapitulo).capituloPadre = capituloActual
-
-                // Al capitulo actual le ponemos que el nodo1 es el nuevo capitulo creado
-                aventuraNueva.listaCapitulos.get(capituloActual).capitulo1 = indiceNuevoCapitulo
-                // ahora el capitulo actual será el nuevo capitulo creado
-                capituloActual = indiceNuevoCapitulo
             }
 
-            // lo mostramos en pantalla
+            // Mostrar el capitulo en pantalla
             cargarCapituloEnPantalla()
-
-
         }
 
         val editarTextoListener = findViewById(R.id.editTextCrearAventura) as EditText
-        editarTextoListener.addTextChangedListener (object : TextWatcher {
-            override fun afterTextChanged(s : Editable) {}
-            override fun beforeTextChanged (s : CharSequence, start : Int , count : Int, after : Int) {
+        editarTextoListener.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
-            override fun onTextChanged (s : CharSequence, start : Int, before : Int, count : Int) {
-                   // guardar cambios cuando editemos el texto
-                Log.d("Miapp" , "Texto cambiado")
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                // guardar cambios cuando editemos el texto
                 val textoView = editTextCrearAventura.text.toString()
-                aventuraNueva.listaCapitulos.get(capituloActual).textoCapitulo = textoView
-                databaseHelper.actualizarCapitulo(db, aventuraNueva.id, aventuraNueva.listaCapitulos.get(capituloActual))
+                capituloActivo.textoCapitulo = textoView
+                databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
 
             }
         })
 
+    }
+
+    private fun cargarCapituloEnPantalla() {
+        editTextCrearAventura.setText(capituloActivo.textoCapitulo)
 
     }
+
+
+    // ------------------------------------------------------------------------------------------------------------------------------------------
 
 
     private fun pickImageFromGallery() {
@@ -182,10 +166,6 @@ class CrearAventuraActivity : AppCompatActivity() {
         }
     }
 
-
-    fun cargarCapituloEnPantalla() {
-
-    }
 
 }
 
