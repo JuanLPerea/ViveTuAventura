@@ -12,11 +12,11 @@ class Capitulo ( idAventura: String, id:String , capituloPadre: String, capitulo
      var finHistoria:Boolean
 
     init {
-        this.idAventura = "."
+        this.idAventura = idAventura
         this.id = id
-        this.capituloPadre = "";
-        this.capitulo1 = "";
-        this.capitulo2 = "";
+        this.capituloPadre = capituloPadre;
+        this.capitulo1 = capitulo1;
+        this.capitulo2 = capitulo1;
         this.textoCapitulo = textoCapitulo
         this.imagenCapitulo = imagenCapitulo
         this.finHistoria = finHistoria

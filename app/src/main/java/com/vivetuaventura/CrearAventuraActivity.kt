@@ -89,12 +89,12 @@ class CrearAventuraActivity : AppCompatActivity() {
                 capituloTMP = capituloActivo
                 // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
                 capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
-                capituloActivo.capituloPadre = capituloTMP.id
+           //     capituloActivo.capituloPadre = capituloTMP.id
                 // Al capitulo que estabamos antes actualizamos el campo decisión1 con el id del nuevo capitulo
                 capituloTMP.capitulo1 = capituloActivo.id
                 // Actualizamos en la base de datos
                 databaseHelper.actualizarCapitulo(db,aventuraNueva.id,capituloTMP)
-                databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
+          //      databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
 
             }
 
