@@ -89,13 +89,36 @@ class CrearAventuraActivity : AppCompatActivity() {
                 capituloTMP = capituloActivo
                 // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
                 capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
-           //     capituloActivo.capituloPadre = capituloTMP.id
                 // Al capitulo que estabamos antes actualizamos el campo decisión1 con el id del nuevo capitulo
                 capituloTMP.capitulo1 = capituloActivo.id
                 // Actualizamos en la base de datos
                 databaseHelper.actualizarCapitulo(db,aventuraNueva.id,capituloTMP)
-          //      databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
+                aventuraNueva.listaCapitulos.add(capituloActivo)
+            }
 
+            // Mostrar el capitulo en pantalla
+            cargarCapituloEnPantalla()
+        }
+
+        val decision2Click = findViewById(R.id.botonDecision2CA) as Button
+        decision2Click.setOnClickListener {
+            // Comprobar si ya hay un capitulo en esta posición
+            if (!capituloActivo.capitulo2.equals("")) {
+                // Si existe cargamos el capitulo existente
+                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo2)
+            } else {
+                // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
+                // añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
+                //Primero guardamos el capitulo activo en una variable temporal
+                var capituloTMP:Capitulo
+                capituloTMP = capituloActivo
+                // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
+                capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
+                // Al capitulo que estabamos antes actualizamos el campo decisión1 con el id del nuevo capitulo
+                capituloTMP.capitulo2 = capituloActivo.id
+                // Actualizamos en la base de datos
+                databaseHelper.actualizarCapitulo(db,aventuraNueva.id,capituloTMP)
+                aventuraNueva.listaCapitulos.add(capituloActivo)
             }
 
             // Mostrar el capitulo en pantalla
@@ -130,6 +153,7 @@ class CrearAventuraActivity : AppCompatActivity() {
 
     private fun cargarCapituloEnPantalla() {
         editTextCrearAventura.setText(capituloActivo.textoCapitulo)
+        Log.d("MiApp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
 
     }
 
