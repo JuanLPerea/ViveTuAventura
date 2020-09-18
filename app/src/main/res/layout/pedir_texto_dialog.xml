@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/titulo_img_header"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#FFFFBB33"
+        android:contentDescription="@string/app_name"
+        android:scaleType="center"
+        android:src="@drawable/brujula" />
+
+    <EditText
+        android:id="@+id/textoDescisionDLG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="Introduce decisión"
+        android:inputType="textNoSuggestions"
+        android:maxLength="30" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelar_texto_dialog_BTN"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Cancelar" />
+
+        <Button
+            android:id="@+id/aceptar_texto_dialog_BTN"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Aceptar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="600dp"
+        android:layout_height="5dp"
+        android:background="@android:color/black"
+        android:orientation="horizontal"></LinearLayout>
+</LinearLayout>

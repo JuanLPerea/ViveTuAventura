@@ -15,7 +15,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
         val CREATE_TABLE_AVENTURA =
             "CREATE TABLE AVENTURA (ID TEXT, NOMBRE TEXT, CREADOR TEXT, NOTA INTEGER, PUBLICADO BOOLEAN, VISITAS INTEGER)"
         val CREATE_TABLE_CAPITULOS =
-            "CREATE TABLE CAPITULOS ( IDAVENTURA TEXT, ID TEXT, CAPITULOPADRE TEXT, CAPITULO1 TEXT, CAPITULO2 TEXT, TEXTOCAPITULO TEXT, IMAGENCAPITULO TEXT, FINHISTORIA BOOLEAN)"
+            "CREATE TABLE CAPITULOS ( IDAVENTURA TEXT, ID TEXT, CAPITULOPADRE TEXT, CAPITULO1 TEXT, TEXTOOPCION1 TEXT,CAPITULO2 TEXT, TEXTOOPCION2 TEXT, TEXTOCAPITULO TEXT, IMAGENCAPITULO TEXT, FINHISTORIA BOOLEAN)"
         db!!.execSQL(CREATE_TABLE_AVENTURA)
         db!!.execSQL(CREATE_TABLE_CAPITULOS)
     }
@@ -97,7 +97,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     fun actualizarCapitulo(db: SQLiteDatabase, idAventura: String, capitulo: Capitulo) {
         var finhistoria = 0
         if (capitulo.finHistoria == true) finhistoria = 1
-        val UPDATE_CAPITULO = "UPDATE CAPITULOS SET ID = '" + capitulo.id + "' , IDAVENTURA = '" + idAventura + "' , CAPITULOPADRE = '" +  capitulo.capituloPadre + "' , CAPITULO1 = '" + capitulo.capitulo1 + "' , CAPITULO2 = '" + capitulo.capitulo2  + "' , TEXTOCAPITULO = '" + capitulo.textoCapitulo + "' , IMAGENCAPITULO = '" + capitulo.imagenCapitulo + "' , FINHISTORIA = " + finhistoria + " WHERE  IDAVENTURA = '" + idAventura + "' AND ID = '" + capitulo.id + "'"
+        val UPDATE_CAPITULO = "UPDATE CAPITULOS SET ID = '" + capitulo.id + "' , IDAVENTURA = '" + idAventura + "' , CAPITULOPADRE = '" +  capitulo.capituloPadre + "' , CAPITULO1 = '" + capitulo.capitulo1 +"', TEXTOOPCION1 = '" + capitulo.textoOpcion1 + "' , CAPITULO2 = '"  + capitulo.capitulo2 + "', TEXTOOPCION2 = '" + capitulo.textoOpcion2  + "' , TEXTOCAPITULO = '" + capitulo.textoCapitulo + "' , IMAGENCAPITULO = '" + capitulo.imagenCapitulo + "' , FINHISTORIA = " + finhistoria + " WHERE  IDAVENTURA = '" + idAventura + "' AND ID = '" + capitulo.id + "'"
         db!!.execSQL(UPDATE_CAPITULO)
     }
 
@@ -112,7 +112,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
                 val idAventuraTMP = datosBruto.getString(datosBruto.getColumnIndex("IDAVENTURA"))
                 val capituloPadreTMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULOPADRE"))
                 val capitulo1 = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO1"))
+                val textoOpcion1 = datosBruto.getString(datosBruto.getColumnIndex("TEXTOOPCION1"))
                 val capitulo2 = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO2"))
+                val textoOpcion2 = datosBruto.getString(datosBruto.getColumnIndex("TEXTOOPCION2"))
                 val textoTMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOCAPITULO"))
                 val imagenTMP = datosBruto.getString(datosBruto.getColumnIndex("IMAGENCAPITULO"))
                 val finhistoriaTMP = datosBruto.getInt(datosBruto.getColumnIndex("FINHISTORIA"))
@@ -120,8 +122,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
                 var finhistoria = false
                 if (finhistoriaTMP == 1) finhistoria = true
 
-                val capituloTMP: Capitulo =
-                    Capitulo(idAventuraTMP, idTMP, capituloPadreTMP, capitulo1, capitulo2, textoTMP, imagenTMP, finhistoria)
+                val capituloTMP: Capitulo = Capitulo(idAventuraTMP, idTMP, capituloPadreTMP, capitulo1, textoOpcion1,  capitulo2, textoOpcion2 , textoTMP, imagenTMP, finhistoria)
 
                 listaCapitulos.add(capituloTMP)
 
@@ -135,12 +136,14 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     fun cargarCapitulo(db: SQLiteDatabase, idAventura: String, id: String) : Capitulo {
 
         val capituloRecuperado : Capitulo
-        capituloRecuperado = Capitulo(idAventura,id,"0","0","0","", "", false)
+        capituloRecuperado = Capitulo(idAventura,id,"0","0","0", "" , "", "", "", false)
         val datosBruto = db.rawQuery("SELECT * FROM CAPITULOS WHERE IDAVENTURA ='" + idAventura + "' AND ID = '" + id + "'", null)
         if (datosBruto!!.moveToFirst()) {
             val capituloPadreTMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULOPADRE"))
             val capitulo1TMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO1"))
+            val textoOpcion1TMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOOPCION1"))
             val capitulo2TMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO2"))
+            val textoOpcion2TMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOOPCION2"))
             val textoTMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOCAPITULO"))
             val imagenTMP = datosBruto.getString(datosBruto.getColumnIndex("IMAGENCAPITULO"))
             val finhistoriaTMP = datosBruto.getInt(datosBruto.getColumnIndex("FINHISTORIA"))
@@ -150,7 +153,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
 
             capituloRecuperado.capituloPadre = capituloPadreTMP
             capituloRecuperado.capitulo1 = capitulo1TMP
+            capituloRecuperado.textoOpcion1 = textoOpcion1TMP
             capituloRecuperado.capitulo2 = capitulo2TMP
+            capituloRecuperado.textoOpcion2 = textoOpcion2TMP
             capituloRecuperado.textoCapitulo = textoTMP
             capituloRecuperado.imagenCapitulo = imagenTMP
             capituloRecuperado.finHistoria = finhistoria
@@ -167,9 +172,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
         val rnds = (0..100000).random()
         val capituloUUID = "CAPITULO_" + System.currentTimeMillis().toString() + "_" + rnds.toString()
 
-        val ADD_NODO = "INSERT INTO CAPITULOS VALUES ('" + aventuraUUID + "' , '" + capituloUUID + "' , '" + capituloPadreID + "' , '' , '', '' , '' , 0)"
+        val ADD_NODO = "INSERT INTO CAPITULOS VALUES ('" + aventuraUUID + "' , '" + capituloUUID + "' , '" + capituloPadreID + "' , '' , '', '' , '' , '', '', 0)"
         db!!.execSQL(ADD_NODO)
-        nuevoCapitulo = Capitulo(aventuraUUID, capituloUUID, capituloPadreID , "" , "" , "" , "" , false)
+        nuevoCapitulo = Capitulo(aventuraUUID, capituloUUID, capituloPadreID , "" , "" , "" , "", "", "" , false)
         return nuevoCapitulo
     }
 

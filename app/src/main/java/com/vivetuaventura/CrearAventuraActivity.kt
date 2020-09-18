@@ -2,6 +2,7 @@ package com.vivetuaventura
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
@@ -11,11 +12,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.view.Window
 import android.widget.*
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Aventura
 import com.vivetuaventura.modelos.Capitulo
 import kotlinx.android.synthetic.main.activity_crear_aventura.*
+import kotlinx.android.synthetic.main.pedir_texto_dialog.*
 
 
 class CrearAventuraActivity : AppCompatActivity() {
@@ -85,17 +89,18 @@ class CrearAventuraActivity : AppCompatActivity() {
                 // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
                 // añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
                 //Primero guardamos el capitulo activo en una variable temporal
-                var capituloTMP:Capitulo
+                var capituloTMP: Capitulo
                 capituloTMP = capituloActivo
                 // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
                 capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
                 // Al capitulo que estabamos antes actualizamos el campo decisión1 con el id del nuevo capitulo
                 capituloTMP.capitulo1 = capituloActivo.id
-                // Actualizamos en la base de datos
-                databaseHelper.actualizarCapitulo(db,aventuraNueva.id,capituloTMP)
+                // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
+                pedirTexto(decision1Click , capituloTMP )
+                // Añadimos el capitulo nuevo a la lista de la aventura
                 aventuraNueva.listaCapitulos.add(capituloActivo)
-            }
 
+            }
             // Mostrar el capitulo en pantalla
             cargarCapituloEnPantalla()
         }
@@ -105,19 +110,21 @@ class CrearAventuraActivity : AppCompatActivity() {
             // Comprobar si ya hay un capitulo en esta posición
             if (!capituloActivo.capitulo2.equals("")) {
                 // Si existe cargamos el capitulo existente
-                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo2)
+                capituloActivo =
+                    databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo2)
             } else {
                 // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
                 // añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
                 //Primero guardamos el capitulo activo en una variable temporal
-                var capituloTMP:Capitulo
+                var capituloTMP: Capitulo
                 capituloTMP = capituloActivo
                 // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
                 capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
-                // Al capitulo que estabamos antes actualizamos el campo decisión1 con el id del nuevo capitulo
+                // Al capitulo que estabamos antes actualizamos el campo decisión2 con el id del nuevo capitulo
                 capituloTMP.capitulo2 = capituloActivo.id
-                // Actualizamos en la base de datos
-                databaseHelper.actualizarCapitulo(db,aventuraNueva.id,capituloTMP)
+                // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
+                pedirTexto(decision2Click , capituloTMP )
+                // Añadimos el capitulo nuevo a la lista de la aventura
                 aventuraNueva.listaCapitulos.add(capituloActivo)
             }
 
@@ -129,7 +136,11 @@ class CrearAventuraActivity : AppCompatActivity() {
         atrasClick.setOnClickListener {
             // Al hacer click en el botón atrás navegamos al nodo padre, si ya estamos en el nodo raiz, no hacemos nada
             if (!capituloActivo.capituloPadre.equals("")) {
-                capituloActivo = databaseHelper.cargarCapitulo(db,aventuraNueva.id,capituloActivo.capituloPadre)
+                capituloActivo = databaseHelper.cargarCapitulo(
+                    db,
+                    aventuraNueva.id,
+                    capituloActivo.capituloPadre
+                )
                 cargarCapituloEnPantalla()
             }
         }
@@ -151,9 +162,51 @@ class CrearAventuraActivity : AppCompatActivity() {
 
     }
 
+    private fun pedirTexto(botonPulsado : Button, capituloTMP:Capitulo) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.pedir_texto_dialog)
+
+        val textoDecisionET = dialog.findViewById(R.id.textoDescisionDLG) as EditText
+
+        val yesBtn = dialog.findViewById(R.id.aceptar_texto_dialog_BTN) as Button
+        yesBtn.setOnClickListener  {
+            val textoRespuestas = textoDecisionET.text.toString()
+
+            if (textoRespuestas.equals("")) {
+                Toast.makeText(this, "Debes introducir al menos una palabra", Toast.LENGTH_LONG).show()
+            } else {
+                when (botonPulsado.id) {
+                    R.id.botonDecision1CA -> {
+                        capituloTMP.textoOpcion1 = textoRespuestas
+
+                    }
+                    R.id.botonDecision2CA -> {
+                        capituloTMP.textoOpcion2 = textoRespuestas
+
+                    }
+                }
+                // actualizamos la base de datos
+                databaseHelper.actualizarCapitulo(db,aventuraNueva.id, capituloTMP)
+                dialog.dismiss()
+            }
+
+        }
+
+        val noBtn = dialog.findViewById(R.id.cancelar_texto_dialog_BTN) as Button
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     private fun cargarCapituloEnPantalla() {
         editTextCrearAventura.setText(capituloActivo.textoCapitulo)
-        Log.d("MiApp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
+        botonDecision1CA.setText(capituloActivo.textoOpcion1)
+        botonDecision2CA.setText(capituloActivo.textoOpcion2)
+        Log.d("Miapp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
 
     }
 

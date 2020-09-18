@@ -36,38 +36,40 @@
 
         <Button
             android:id="@+id/botonDecision1CA"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_weight="3"
             android:text="Decision 1" />
 
         <Button
             android:id="@+id/botonDecision2CA"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
+            android:layout_weight="3"
             android:text="Decision 2" />
 
         <ImageButton
             android:id="@+id/botonAtrasCA"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/ic_menu_revert" />
 
         <ImageButton
             android:id="@+id/botonBorrarNodoCA"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
         <ImageButton
             android:id="@+id/botonPublicarCA"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_menu_share" />
+            app:srcCompat="@android:drawable/ic_menu_save" />
 
     </LinearLayout>
 
