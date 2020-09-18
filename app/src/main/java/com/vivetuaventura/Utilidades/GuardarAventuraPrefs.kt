@@ -1,4 +1,4 @@
-package com.vivetuaventura.SalvarPreferencias
+package com.vivetuaventura.Utilidades
 
 import android.content.Context
 import android.content.SharedPreferences

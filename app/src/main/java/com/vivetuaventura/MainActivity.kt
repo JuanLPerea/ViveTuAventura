@@ -9,8 +9,6 @@ import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,11 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Aventura
-import kotlinx.android.synthetic.main.activity_crear_aventura.view.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.crear_dialogo_layout.*
-import kotlinx.android.synthetic.main.crear_dialogo_layout.view.*
-import kotlinx.android.synthetic.main.crear_dialogo_layout.view.nombreAventuraDLG
 
 class MainActivity : AppCompatActivity() {
 
