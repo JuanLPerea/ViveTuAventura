@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         databaseHelper = DatabaseHelper(this)
         db = databaseHelper.writableDatabase
 
+        // Desactivar modo estricto
+
+
         // Recuperar lista aventuras en la BD
         listaAventuras = databaseHelper.cargarListaAventurasBD(db)
         setUpRecyclerView()

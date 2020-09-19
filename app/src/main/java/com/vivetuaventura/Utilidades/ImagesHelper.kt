@@ -5,26 +5,14 @@ import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
+import android.os.StrictMode
+import android.util.Log
 import com.vivetuaventura.modelos.Capitulo
 import java.io.*
-import java.util.*
 
 
 class ImagesHelper(context: Context) {
-
-    fun guardarImagenEnMemoriaInterna () {
-        TODO("Guardar copia de una imagen en la memoria interna de la app")
-    }
-
-    fun cargarImagenDeMemoriaInterna () {
-
-    }
-
-    fun redimensionarImagen(bitmap: Bitmap) : Bitmap {
-        TODO("Reducir la resolución de la imágen y darle un aspecto retro '8bits'")
-    }
-
-
 
     @Throws(FileNotFoundException::class, IOException::class)
     fun obtenerBitmap(context: Context, uri: Uri?): Bitmap? {
@@ -56,26 +44,61 @@ class ImagesHelper(context: Context) {
 
 
     // Método para guardar un bitmap en la memoria interna, devuelve su ruta (URI)
-     fun guardarBitmapEnMemoria (context: Context , bitmap:Bitmap , capitulo: Capitulo): Uri {
+     fun guardarBitmapEnMemoria(context: Context, bitmap: Bitmap, capitulo: Capitulo): Uri {
         // Get the context wrapper
         val wrapper = ContextWrapper(context)
 
         // Initialize a new file instance to save bitmap object
-        var file = wrapper.getDir("Images",Context.MODE_PRIVATE)
-        file = File(file,"IMAGEN_"+ capitulo.id + ".jpg")
+        var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
+        file = File(file, "IMAGEN_" + capitulo.id + ".jpg")
 
         try{
             // Compress the bitmap and save in jpg format
             val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             stream.flush()
             stream.close()
-        }catch (e:IOException){
+        }catch (e: IOException){
             e.printStackTrace()
         }
 
         // Return the saved bitmap uri
         return Uri.parse(file.absolutePath)
     }
+
+    fun recuperarImagenMemoriaInterna( archivo: String?): Bitmap? {
+        var archivo = archivo
+        var bitmap: Bitmap? = null
+        System.gc()
+        if (archivo == null) {
+            archivo = "Constantes.ARCHIVO_IMAGEN_JUGADOR"
+        }
+        try {
+            val fileInputStream = FileInputStream(archivo )
+
+            /*
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 3;
+            options.inTempStorage = new byte[16 * 1024];
+            options.inPurgeable = true;
+            */
+            bitmap = BitmapFactory.decodeStream(fileInputStream)
+        } catch (io: IOException) {
+            io.printStackTrace()
+        }
+        return bitmap
+    }
+
+    fun desactivarModoEstricto() {
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                val m = StrictMode::class.java.getMethod("disableDeathOnFileUriExposure")
+                m.invoke(null)
+            } catch (e: Exception) {
+                Log.e("Miapp", "Error al trucar el método disableDeathOnFileUriExposure", e)
+            }
+        }
+    }
+
 }
 

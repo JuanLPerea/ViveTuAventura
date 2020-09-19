@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -51,6 +52,9 @@ class CrearAventuraActivity : AppCompatActivity() {
 
         // creamos una instancia de la clase para manipular la imágenes
         imagesHelper = ImagesHelper(this)
+
+        // Desactivamos modo estricto
+        imagesHelper.desactivarModoEstricto()
 
         // Cargamos la aventura de la BD
         aventuraNueva = databaseHelper.recuperarAventura(db, aventuraNueva.id)
@@ -213,6 +217,9 @@ class CrearAventuraActivity : AppCompatActivity() {
         editTextCrearAventura.setText(capituloActivo.textoCapitulo)
         botonDecision1CA.setText(capituloActivo.textoOpcion1)
         botonDecision2CA.setText(capituloActivo.textoOpcion2)
+        // Visualizamos la imagen en el ImageView
+        imagenCrearAventura.setImageBitmap(imagesHelper.recuperarImagenMemoriaInterna(capituloActivo.imagenCapitulo))
+
         Log.d("Miapp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
 
     }
@@ -261,7 +268,6 @@ class CrearAventuraActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            //imagenCrearAventura.setImageURI(data?.data)
 
             // Convertimos el URI de la imagen seleccionada en un Bitmap
             val imageURI = data?.data
@@ -269,17 +275,21 @@ class CrearAventuraActivity : AppCompatActivity() {
             // redimensionamos la imagen
             val resizedBitmap = Bitmap.createScaledBitmap(bitmap!!,256,192,false)
 
-            imagenCrearAventura.setImageBitmap(resizedBitmap)
+          //  imagenCrearAventura.setImageBitmap(resizedBitmap)
 
             // guardamos la imagen en la memoria interna
-            val rutaImagen = imagesHelper.guardarBitmapEnMemoria(applicationContext , bitmap , capituloActivo)
+            val rutaImagen = imagesHelper.guardarBitmapEnMemoria(applicationContext , resizedBitmap , capituloActivo)
 
             Log.d("Miapp" , rutaImagen.toString())
 
             // Convertimos la ruta del archivo a String y lo guardamos en la BD
+            capituloActivo.imagenCapitulo = rutaImagen.toString()
+            databaseHelper.actualizarCapitulo(db, aventuraNueva.id , capituloActivo)
 
             // Visualizamos la imagen en el ImageView
+            imagenCrearAventura.setImageBitmap(imagesHelper.recuperarImagenMemoriaInterna(capituloActivo.imagenCapitulo))
 
+            Log.d("Miapp" , Uri.parse(capituloActivo.imagenCapitulo).toString() )
 
 
         }
