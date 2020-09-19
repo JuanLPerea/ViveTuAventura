@@ -55,7 +55,7 @@ class ImagesHelper(context: Context) {
         try{
             // Compress the bitmap and save in jpg format
             val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream)
             stream.flush()
             stream.close()
         }catch (e: IOException){

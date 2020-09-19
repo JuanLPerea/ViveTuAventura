@@ -170,7 +170,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     fun crearCapituloBD(db: SQLiteDatabase?, aventuraUUID: String , capituloPadreID:String): Capitulo {
         val nuevoCapitulo:Capitulo
         val rnds = (0..100000).random()
-        val capituloUUID = "CAPITULO_" + System.currentTimeMillis().toString() + "_" + rnds.toString()
+        val capituloUUID = aventuraUUID + "_CAPITULO_" + System.currentTimeMillis().toString() + "_" + rnds.toString()
 
         val ADD_NODO = "INSERT INTO CAPITULOS VALUES ('" + aventuraUUID + "' , '" + capituloUUID + "' , '" + capituloPadreID + "' , '' , '', '' , '' , '', '', 0)"
         db!!.execSQL(ADD_NODO)

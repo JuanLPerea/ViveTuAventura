@@ -280,7 +280,6 @@ class CrearAventuraActivity : AppCompatActivity() {
             // guardamos la imagen en la memoria interna
             val rutaImagen = imagesHelper.guardarBitmapEnMemoria(applicationContext , resizedBitmap , capituloActivo)
 
-            Log.d("Miapp" , rutaImagen.toString())
 
             // Convertimos la ruta del archivo a String y lo guardamos en la BD
             capituloActivo.imagenCapitulo = rutaImagen.toString()
@@ -289,7 +288,6 @@ class CrearAventuraActivity : AppCompatActivity() {
             // Visualizamos la imagen en el ImageView
             imagenCrearAventura.setImageBitmap(imagesHelper.recuperarImagenMemoriaInterna(capituloActivo.imagenCapitulo))
 
-            Log.d("Miapp" , Uri.parse(capituloActivo.imagenCapitulo).toString() )
 
 
         }
