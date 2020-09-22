@@ -3,6 +3,7 @@ package com.vivetuaventura
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
@@ -58,6 +59,7 @@ class CrearAventuraActivity : AppCompatActivity() {
 
         // Cargamos la aventura de la BD
         aventuraNueva = databaseHelper.recuperarAventura(db, aventuraNueva.id)
+        setTitle(aventuraNueva.nombreAventura + " (" + aventuraNueva.creador + ")")
 
         // Insertamos el primer capítulo que editaremos mediante la aplicación
         capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, "")
@@ -95,7 +97,8 @@ class CrearAventuraActivity : AppCompatActivity() {
             // Comprobar si ya hay un capitulo en esta posición
             if (!capituloActivo.capitulo1.equals("")) {
                 // Si existe cargamos el capitulo existente
-                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo1)
+                capituloActivo =
+                    databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo1)
             } else {
                 // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
                 // añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
@@ -103,11 +106,12 @@ class CrearAventuraActivity : AppCompatActivity() {
                 var capituloTMP: Capitulo
                 capituloTMP = capituloActivo
                 // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
-                capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
+                capituloActivo =
+                    databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
                 // Al capitulo que estabamos antes actualizamos el campo decisión1 con el id del nuevo capitulo
                 capituloTMP.capitulo1 = capituloActivo.id
                 // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
-                pedirTexto(decision1Click , capituloTMP )
+                pedirTexto(decision1Click, capituloTMP)
                 // Añadimos el capitulo nuevo a la lista de la aventura
                 aventuraNueva.listaCapitulos.add(capituloActivo)
 
@@ -130,11 +134,12 @@ class CrearAventuraActivity : AppCompatActivity() {
                 var capituloTMP: Capitulo
                 capituloTMP = capituloActivo
                 // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
-                capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
+                capituloActivo =
+                    databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
                 // Al capitulo que estabamos antes actualizamos el campo decisión2 con el id del nuevo capitulo
                 capituloTMP.capitulo2 = capituloActivo.id
                 // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
-                pedirTexto(decision2Click , capituloTMP )
+                pedirTexto(decision2Click, capituloTMP)
                 // Añadimos el capitulo nuevo a la lista de la aventura
                 aventuraNueva.listaCapitulos.add(capituloActivo)
             }
@@ -171,9 +176,64 @@ class CrearAventuraActivity : AppCompatActivity() {
             }
         })
 
+        val borrarClick = findViewById(R.id.botonBorrarNodoCA) as ImageButton
+        borrarClick.setOnClickListener {
+            // Comprobamos que no sea el capítulo raiz, que no se puede borrar.
+            if (!capituloActivo.capituloPadre.equals("")) {
+                // Borrar un nodo. También borraremos los nodos que dependan de éste
+                val dialogBorrar = Dialog(this)
+                dialogBorrar.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialogBorrar.setCancelable(true)
+                dialogBorrar.setContentView(R.layout.confirmar_dialog)
+
+                val textoConfirmarET =
+                    dialogBorrar.findViewById(R.id.texto_dialog_confirmarTV) as TextView
+                textoConfirmarET.setText("¿Borrar capítulo? ¡OJO! Se borrarán también todos los capitulos que dependan de éste y no se puede deshacer")
+
+                val yesBtn = dialogBorrar.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
+                yesBtn.setOnClickListener {
+                    // volver al nodo padre
+                    // borrar mensaje opcion (hay que saber si venimos de la opcion 1 o la 2
+                    // Borrar nodo
+                    // ahora el nodo activo es el nodo padre
+                    // actualizamos la base de datos
+                    var capituloTMP = databaseHelper.cargarCapitulo(
+                        db,
+                        aventuraNueva.id,
+                        capituloActivo.capituloPadre
+                    )
+                    if (capituloTMP.capitulo1.equals(capituloActivo.id)) {
+                        capituloTMP.textoOpcion1 = ""
+                        capituloTMP.capitulo1 = ""
+                        Log.d("Miapp", "veniamos de la opcion 1")
+                    } else if (capituloTMP.capitulo2.equals(capituloActivo.id)) {
+                        Log.d("Miapp", "veniamos de la opcion 2")
+                        capituloTMP.textoOpcion2 = ""
+                        capituloTMP.capitulo2 = ""
+                    }
+                    databaseHelper.borrarCapituloBD(db, aventuraNueva.id, capituloActivo)
+                    capituloActivo = capituloTMP
+                    databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
+                    cargarCapituloEnPantalla()
+                    dialogBorrar.dismiss()
+                }
+
+                val noBtn = dialogBorrar.findViewById(R.id.cancelar_confirmar_dialog_BTN) as Button
+                noBtn.setOnClickListener {
+                    dialogBorrar.dismiss()
+                }
+
+                dialogBorrar.show()
+            } else {
+                Toast.makeText(applicationContext, "No se puede borrar el primer capítulo" , Toast.LENGTH_LONG).show()
+            }
+
+
+        }
+
     }
 
-    private fun pedirTexto(botonPulsado : Button, capituloTMP:Capitulo) {
+    private fun pedirTexto(botonPulsado: Button, capituloTMP: Capitulo) {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
@@ -182,11 +242,12 @@ class CrearAventuraActivity : AppCompatActivity() {
         val textoDecisionET = dialog.findViewById(R.id.textoDescisionDLG) as EditText
 
         val yesBtn = dialog.findViewById(R.id.aceptar_texto_dialog_BTN) as Button
-        yesBtn.setOnClickListener  {
+        yesBtn.setOnClickListener {
             val textoRespuestas = textoDecisionET.text.toString()
 
             if (textoRespuestas.equals("")) {
-                Toast.makeText(this, "Debes introducir al menos una palabra", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Debes introducir al menos una palabra", Toast.LENGTH_LONG)
+                    .show()
             } else {
                 when (botonPulsado.id) {
                     R.id.botonDecision1CA -> {
@@ -199,7 +260,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     }
                 }
                 // actualizamos la base de datos
-                databaseHelper.actualizarCapitulo(db,aventuraNueva.id, capituloTMP)
+                databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloTMP)
                 dialog.dismiss()
             }
 
@@ -273,26 +334,35 @@ class CrearAventuraActivity : AppCompatActivity() {
             val imageURI = data?.data
             val bitmap = imagesHelper.obtenerBitmap(applicationContext, imageURI)
             // redimensionamos la imagen
-            val resizedBitmap = Bitmap.createScaledBitmap(bitmap!!,256,192,false)
+            val resizedBitmap = Bitmap.createScaledBitmap(bitmap!!, 256, 192, false)
 
-          //  imagenCrearAventura.setImageBitmap(resizedBitmap)
+            //  imagenCrearAventura.setImageBitmap(resizedBitmap)
 
             // guardamos la imagen en la memoria interna
-            val rutaImagen = imagesHelper.guardarBitmapEnMemoria(applicationContext , resizedBitmap , capituloActivo)
-
+            val rutaImagen = imagesHelper.guardarBitmapEnMemoria(
+                applicationContext,
+                resizedBitmap,
+                capituloActivo
+            )
 
             // Convertimos la ruta del archivo a String y lo guardamos en la BD
             capituloActivo.imagenCapitulo = rutaImagen.toString()
-            databaseHelper.actualizarCapitulo(db, aventuraNueva.id , capituloActivo)
+            databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
 
             // Visualizamos la imagen en el ImageView
-            imagenCrearAventura.setImageBitmap(imagesHelper.recuperarImagenMemoriaInterna(capituloActivo.imagenCapitulo))
-
-
+            imagenCrearAventura.setImageBitmap(
+                imagesHelper.recuperarImagenMemoriaInterna(
+                    capituloActivo.imagenCapitulo
+                )
+            )
 
         }
     }
 
+
+    override fun onBackPressed() {
+
+    }
 
 }
 

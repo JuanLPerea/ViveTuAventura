@@ -71,7 +71,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     }
 
     fun eliminarAventuraBD(db: SQLiteDatabase, id: String) {
+        // Borramos en la tabla de aventura y la de capitulos todas las filas que le pertenezcan
         db.delete("AVENTURA", "  ID = '" + id + "'", null)
+        db.delete("CAPITULOS", "IDAVENTURA = '" + id + "'", null)
       //  Log.d("Miapp", "Borrar linea de la tabla de aventuras")
     }
 
@@ -177,5 +179,50 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
         nuevoCapitulo = Capitulo(aventuraUUID, capituloUUID, capituloPadreID , "" , "" , "" , "", "", "" , false)
         return nuevoCapitulo
     }
+
+    fun borrarCapituloBD(db: SQLiteDatabase, aventuraUUID: String, capitulo: Capitulo) {
+
+        // crear lista con capitulos que dependen del que vamos a borrar
+        var listaCapitulosBorrar: MutableList<String> = mutableListOf()
+        var capituloTMP:Capitulo
+        var fin : Boolean = false
+        capituloTMP = capitulo
+        listaCapitulosBorrar.add(capituloTMP.id)
+        // Recorrer el árbol e ir añadiendo los capitulos que dependan del que vamos a borrar
+        do {
+
+            if (!capituloTMP.capitulo1.equals("") && !listaCapitulosBorrar.contains(capituloTMP.capitulo1)) {
+                // Miramos si hay algún nodo en la opción 1
+                capituloTMP = cargarCapitulo(db, aventuraUUID, capituloTMP.capitulo1)
+                listaCapitulosBorrar.add(capituloTMP.id)
+            } else if (!capituloTMP.capitulo2.equals("") && !listaCapitulosBorrar.contains(capituloTMP.capitulo2)) {
+                // Si no hay opcion 1 miramos si hay opción 2
+                capituloTMP = cargarCapitulo(db, aventuraUUID, capituloTMP.capitulo2)
+                listaCapitulosBorrar.add(capituloTMP.id)
+            } else if (!capituloTMP.id.equals(capitulo.id)){
+                // volver al nodo anterior
+                capituloTMP = cargarCapitulo(db, aventuraUUID, capituloTMP.capituloPadre)
+            }
+            // el bucle termina en estos casos:
+            // 1 - no hay opcion 1 ni 2 y estamos en el nodo en el que empezamos
+            // 2 - hay opcion 1 pero está en la lista y no hay opcion 2
+            // 3 - no hay opcion 1 y si hay en la 2 pero está en la lista
+            // 4 - estamos en el nodo origen, hay opcion 1 y 2 pero están en la lista (solo comprobamos que los 2 estén en la lista, no que haya)
+            if (capituloTMP.capitulo1.equals("") && capituloTMP.capitulo2.equals("") && capituloTMP.id.equals(capitulo.id)) fin = true
+            if (!capituloTMP.capitulo1.equals("") && listaCapitulosBorrar.contains(capituloTMP.capitulo1) && capituloTMP.capitulo2.equals("") && capituloTMP.id.equals(capitulo.id)) fin = true
+            if (capituloTMP.capitulo1.equals("") && listaCapitulosBorrar.contains(capituloTMP.capitulo2) && !capituloTMP.capitulo2.equals("") && capituloTMP.id.equals(capitulo.id)) fin = true
+            if (listaCapitulosBorrar.contains(capituloTMP.capitulo1) && listaCapitulosBorrar.contains(capituloTMP.capitulo2) && capituloTMP.id.equals(capitulo.id)) fin = true
+
+        } while (!fin)
+
+        // borrar los capitulos en la base de datos
+        for (capituloBorrado : String in listaCapitulosBorrar) {
+            db.delete("CAPITULOS", "  ID = '" + capituloBorrado + "' AND IDAVENTURA = '" + aventuraUUID + "'", null)
+        }
+
+    }
+
+
+
 
 }
