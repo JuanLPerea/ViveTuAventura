@@ -5,4 +5,6 @@
     <string name="t_tulo_de_la_aventura">Título de la Aventura</string>
     <string name="autor">Autor</string>
     <string name="titulo_aventura_hint">Aquí el título de la aventura</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

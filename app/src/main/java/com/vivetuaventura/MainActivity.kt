@@ -6,40 +6,59 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
 import com.vivetuaventura.Adapters.RecyclerAdapter
+import com.vivetuaventura.Adapters.TabLayoutAdapter
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Aventura
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var mRecyclerView : RecyclerView
     lateinit var databaseHelper: DatabaseHelper
-    lateinit var db : SQLiteDatabase
-    val mAdapter : RecyclerAdapter = RecyclerAdapter()
-    var listaAventuras:MutableList<Aventura> = mutableListOf()
-
+    lateinit var db: SQLiteDatabase
+    lateinit var tabLayout: TabLayout
+    lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d("MIAPP", "on Create")
-        databaseHelper = DatabaseHelper(this)
+
+        databaseHelper = DatabaseHelper(applicationContext)
         db = databaseHelper.writableDatabase
 
-        // Desactivar modo estricto
+
+        // Tab Layout
+        tabLayout = findViewById(R.id.tabLayout)
+        viewPager = findViewById(R.id.viewPager)
+        tabLayout.addTab(tabLayout.newTab().setText("Tus Aventuras"))
+        tabLayout.addTab(tabLayout.newTab().setText("Aventuras Web"))
+        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        val adapter = TabLayoutAdapter(
+            this, supportFragmentManager,
+            tabLayout.tabCount
+        )
+        viewPager.adapter = adapter
+        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
 
 
-        // Recuperar lista aventuras en la BD
-        listaAventuras = databaseHelper.cargarListaAventurasBD(db)
-        setUpRecyclerView()
 
         val crearAventuraBTN = findViewById(R.id.crearAventuraBTN) as FloatingActionButton
         crearAventuraBTN.setOnClickListener {
@@ -53,55 +72,7 @@ class MainActivity : AppCompatActivity() {
             dialogoFiltrar()
         }
 
-        val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                TODO("Not yet implemented")
-            }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-                val position = viewHolder.adapterPosition
-
-                if (direction == ItemTouchHelper.LEFT) {
-                    // Swipe hacia la izquierda editar
-
-                    /*
-                    removeView()
-                    edit_position = position
-                    alertDialog!!.setTitle("Edit Name")
-                    et_name!!.setText(names[position])
-                    alertDialog!!.show()
-
-
-                     */
-                    recargarReciclerView()
-                } else {
-
-                    // Swipe hacia la derecha borrar
-                    databaseHelper.eliminarAventuraBD(db , listaAventuras.get(position).id)
-                    recargarReciclerView()
-
-                }
-            }
-
-        }
-
-
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(mRecyclerView)
-
-    }
-
-    fun setUpRecyclerView() {
-        mRecyclerView = findViewById(R.id.recyclerAventura) as RecyclerView
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter.RecyclerAdapter(listaAventuras, this)
-        mRecyclerView.adapter = mAdapter
     }
 
     private fun showDialog() {
@@ -151,6 +122,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
+
+}
+        /*
+
+
+
+    }
+
+
+
+
+
     override fun onRestart() {
         super.onRestart()
         recargarReciclerView()
@@ -159,14 +144,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun recargarReciclerView() {
-        // Recargar la lista de las aventuras
-        listaAventuras.removeAll(listaAventuras)
-        listaAventuras.addAll( databaseHelper.cargarListaAventurasBD(db))
-        mAdapter.notifyDataSetChanged()
-        Log.d("Miapp", "On restart")
-    }
-}
 
+}
+*/
 
 
