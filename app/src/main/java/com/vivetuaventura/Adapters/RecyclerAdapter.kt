@@ -55,7 +55,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 Toast.makeText(context, "Has hecho click en: " + nombreAventura.text, Toast.LENGTH_LONG).show()
 
                 val intent = Intent (context, JugarActivity::class.java).apply {
-                    putExtra("AVENTURA", aventura.nombreAventura)
+                    putExtra("ID_AVENTURA", aventura.id)
                 }
                 context.startActivity(intent)
 
@@ -71,13 +71,8 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                         "Si no es nuestra mostramos un mensaje diciendo que no podemos editar aventuras que no son nuestras")
 
             */
-
-
                 true
             }
-
-
-
         }
 
     }

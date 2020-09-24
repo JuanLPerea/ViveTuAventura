@@ -19,7 +19,7 @@
         android:id="@+id/editTextCrearAventura"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:gravity="start"
         android:hint="Escribe aquí tu historia"
         android:maxLength="255"
@@ -30,7 +30,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -53,23 +53,23 @@
         <ImageButton
             android:id="@+id/botonAtrasCA"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/ic_menu_revert" />
 
         <ImageButton
             android:id="@+id/botonBorrarNodoCA"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
         <ImageButton
-            android:id="@+id/botonPublicarCA"
+            android:id="@+id/botonTerminarCA"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_menu_save" />
+            app:srcCompat="@drawable/ic_bandera" />
 
     </LinearLayout>
 

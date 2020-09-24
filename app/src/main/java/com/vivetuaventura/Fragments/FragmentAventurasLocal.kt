@@ -30,7 +30,6 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_aventuras_local, container, false)
 
-
         Log.d("MIAPP", "on Create")
         databaseHelper = DatabaseHelper(context!!)
         db = databaseHelper.writableDatabase
@@ -83,7 +82,6 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
 
         }
 
-
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(mRecyclerView)
 
@@ -96,6 +94,11 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         listaAventuras.addAll( databaseHelper.cargarListaAventurasBD(db))
         mAdapter.notifyDataSetChanged()
         Log.d("Miapp", "On restart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        recargarReciclerView()
     }
 
 }
