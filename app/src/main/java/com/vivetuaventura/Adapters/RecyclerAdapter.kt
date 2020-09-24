@@ -56,6 +56,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
                 val intent = Intent (context, JugarActivity::class.java).apply {
                     putExtra("ID_AVENTURA", aventura.id)
+                    putExtra("ALMACENADO" , "LOCAL")
                 }
                 context.startActivity(intent)
 

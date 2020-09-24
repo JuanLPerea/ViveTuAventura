@@ -222,7 +222,38 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
 
     }
 
+    fun cargarCapituloRaiz (db: SQLiteDatabase, idAventura: String) : Capitulo {
 
+        val capituloRecuperado : Capitulo
+        capituloRecuperado = Capitulo(idAventura,"","0","0","0", "" , "", "", "", false)
+        val datosBruto = db.rawQuery("SELECT * FROM CAPITULOS WHERE IDAVENTURA ='" + idAventura + "' AND CAPITULOPADRE = ''", null)
+        if (datosBruto!!.moveToFirst()) {
+            val capituloPadreTMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULOPADRE"))
+            val capitulo1TMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO1"))
+            val textoOpcion1TMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOOPCION1"))
+            val capitulo2TMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULO2"))
+            val textoOpcion2TMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOOPCION2"))
+            val textoTMP = datosBruto.getString(datosBruto.getColumnIndex("TEXTOCAPITULO"))
+            val imagenTMP = datosBruto.getString(datosBruto.getColumnIndex("IMAGENCAPITULO"))
+            val finhistoriaTMP = datosBruto.getInt(datosBruto.getColumnIndex("FINHISTORIA"))
+
+            var finhistoria = false
+            if (finhistoriaTMP == 1) finhistoria = true
+
+            capituloRecuperado.capituloPadre = capituloPadreTMP
+            capituloRecuperado.capitulo1 = capitulo1TMP
+            capituloRecuperado.textoOpcion1 = textoOpcion1TMP
+            capituloRecuperado.capitulo2 = capitulo2TMP
+            capituloRecuperado.textoOpcion2 = textoOpcion2TMP
+            capituloRecuperado.textoCapitulo = textoTMP
+            capituloRecuperado.imagenCapitulo = imagenTMP
+            capituloRecuperado.finHistoria = finhistoria
+        }
+        datosBruto.close()
+
+
+        return capituloRecuperado
+    }
 
 
 }
