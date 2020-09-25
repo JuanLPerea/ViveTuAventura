@@ -353,7 +353,7 @@ class CrearAventuraActivity : AppCompatActivity() {
             var resizedBitmap = Bitmap.createScaledBitmap(bitmap!!, 256, 192, false)
 
             // filtro a la imagen
-            resizedBitmap = EfectosImagen.sketch(resizedBitmap)
+          //  resizedBitmap = EfectosImagen.sketch(resizedBitmap)
 
             //  imagenCrearAventura.setImageBitmap(resizedBitmap)
 

@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.Toast
 import  com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.ImagesHelper
@@ -61,6 +63,40 @@ class JugarActivity : AppCompatActivity() {
     }
 
     private fun clickHandler() {
+
+        val clickDecision1 = findViewById(R.id.decision1JugarBTN) as Button
+        clickDecision1.setOnClickListener {
+            if (capituloActivo.textoOpcion1.equals("FIN")){
+                Log.d("Miapp" , "Este capitulo es final")
+                Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
+            }
+
+            if (!capituloActivo.capitulo1.equals("")) {
+                    capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo1)
+                    if (capituloActivo.capitulo1.equals("") && capituloActivo.capitulo2.equals((""))) {
+                        capituloActivo.textoOpcion1 = "FIN"
+                        capituloActivo.textoOpcion2 = "FIN"
+                    }
+                    cargarCapituloEnPantalla()
+            }
+        }
+
+        val clickDecision2 = findViewById(R.id.decision2JugarBTN) as Button
+        clickDecision2.setOnClickListener {
+            if (capituloActivo.textoOpcion2.equals("FIN")){
+                Log.d("Miapp" , "Este capitulo es final")
+                Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
+            }
+
+            if (!capituloActivo.capitulo2.equals("")) {
+                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo2)
+                if (capituloActivo.capitulo1.equals("") && capituloActivo.capitulo2.equals((""))) {
+                    capituloActivo.textoOpcion1 = "FIN"
+                    capituloActivo.textoOpcion2 = "FIN"
+                }
+                cargarCapituloEnPantalla()
+            }
+        }
 
     }
 
