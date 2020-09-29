@@ -1,17 +1,16 @@
 package com.vivetuaventura
 
+import android.app.Dialog
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
 import android.widget.Button
-import android.widget.Toast
-import  com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.ImagesHelper
 import com.vivetuaventura.modelos.Aventura
 import com.vivetuaventura.modelos.Capitulo
-import kotlinx.android.synthetic.main.activity_crear_aventura.*
 import kotlinx.android.synthetic.main.activity_jugar.*
 
 class JugarActivity : AppCompatActivity() {
@@ -68,7 +67,8 @@ class JugarActivity : AppCompatActivity() {
         clickDecision1.setOnClickListener {
             if (capituloActivo.textoOpcion1.equals("FIN")){
                 Log.d("Miapp" , "Este capitulo es final")
-                Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
+            //    Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
+                dialogoFin()
             }
 
             if (!capituloActivo.capitulo1.equals("")) {
@@ -85,7 +85,8 @@ class JugarActivity : AppCompatActivity() {
         clickDecision2.setOnClickListener {
             if (capituloActivo.textoOpcion2.equals("FIN")){
                 Log.d("Miapp" , "Este capitulo es final")
-                Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
+                dialogoFin()
+             //   Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
             }
 
             if (!capituloActivo.capitulo2.equals("")) {
@@ -100,6 +101,31 @@ class JugarActivity : AppCompatActivity() {
 
     }
 
+    private fun dialogoFin() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.dialogo_fin_jugar)
+
+        val volverAEmpezarBtn = dialog.findViewById(R.id.reiniciar_jugar_dialog_BTN) as Button
+        volverAEmpezarBtn.setOnClickListener {
+           // Volver a empezar
+            capituloActivo = databaseHelper.cargarCapituloRaiz(db, aventuraNueva.id)
+            cargarCapituloEnPantalla()
+            dialog.dismiss()
+            }
+
+        val salirBtn = dialog.findViewById(R.id.salir_jugar_dialog_BTN) as Button
+        salirBtn.setOnClickListener {
+            // Volver a empezar
+            finish()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+
+    }
+
     private fun cargarCapituloEnPantalla() {
         textoJugarTV.setText(capituloActivo.textoCapitulo)
         decision1JugarBTN.setText(capituloActivo.textoOpcion1)
@@ -107,7 +133,7 @@ class JugarActivity : AppCompatActivity() {
         // Visualizamos la imagen en el ImageView
         jugarIV.setImageBitmap(imagesHelper.recuperarImagenMemoriaInterna(capituloActivo.imagenCapitulo))
 
-    //    Log.d("Miapp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
+       //    Log.d("Miapp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
 
     }
 }

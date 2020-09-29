@@ -52,7 +52,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             nota.text = aventura.nota.toString()
             itemView.setOnClickListener(View.OnClickListener {
 
-                Toast.makeText(context, "Has hecho click en: " + nombreAventura.text, Toast.LENGTH_LONG).show()
+              //  Toast.makeText(context, "Has hecho click en: " + nombreAventura.text, Toast.LENGTH_LONG).show()
 
                 val intent = Intent (context, JugarActivity::class.java).apply {
                     putExtra("ID_AVENTURA", aventura.id)

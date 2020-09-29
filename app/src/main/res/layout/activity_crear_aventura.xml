@@ -14,33 +14,38 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/ic_launcher_background"
+        android:contentDescription="TODO" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
 
-        <CheckBox android:id="@+id/checkbox_sinfiltro"
+        <CheckBox
+            android:id="@+id/checkbox_sinfiltro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sin Filtro"/>
+            android:text="Sin Filtro" />
 
-        <CheckBox android:id="@+id/checkbox_sketch"
+        <CheckBox
+            android:id="@+id/checkbox_sketch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sketch"/>
+            android:text="Sketch" />
 
-        <CheckBox android:id="@+id/checkbox_vigneta"
+        <CheckBox
+            android:id="@+id/checkbox_vigneta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Viñeta"/>
+            android:text="Viñeta" />
 
-        <CheckBox android:id="@+id/checkbox_sepia"
+        <CheckBox
+            android:id="@+id/checkbox_sepia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sepia"/>
+            android:text="Sepia" />
 
     </LinearLayout>
 
