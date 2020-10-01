@@ -61,19 +61,13 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
                 if (direction == ItemTouchHelper.LEFT) {
                     // Swipe hacia la izquierda editar
 
-                    /*
-                    removeView()
-                    edit_position = position
-                    alertDialog!!.setTitle("Edit Name")
-                    et_name!!.setText(names[position])
-                    alertDialog!!.show()
+                   // TODO mostrar un SnackBar dando opcion para editar
 
-
-                     */
                     recargarReciclerView()
                 } else {
 
                     // Swipe hacia la derecha borrar
+                    // TODO mostrar un SnackBar pidiendo confirmación para borrar
                     databaseHelper.eliminarAventuraBD(db , listaAdventures.get(position).id)
                     recargarReciclerView()
 

@@ -2,9 +2,12 @@ package com.vivetuaventura.Utilidades
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.vivetuaventura.Interfaces.FirebaseCallback
+import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.Capitulo
@@ -71,6 +74,21 @@ class FirebaseUtils (val context: Context) {
 
         return listaAventuras
         
+    }
+
+    fun subirImagenesFirebase (usuario: String , idAventura: String) {
+        // TODO recuperar las imágenes que correspondan a una aventura y subirlas a Firebase
+
+    }
+
+    fun cargarImagenFirebase (usuario: String , idAventura: String, idImagen : String) : Bitmap {
+        // TODO cargar una imágen de Firebase (Necesario Interface para pasar los datos cuando finalice la tarea)
+        var bitmapCargado : Bitmap
+
+            bitmapCargado = BitmapFactory.decodeResource(context.resources , R.drawable.brujula)
+
+        return bitmapCargado
+
     }
 
 
