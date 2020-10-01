@@ -3,29 +3,23 @@ package com.vivetuaventura
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.view.Window
 import android.widget.*
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
-import com.vivetuaventura.Utilidades.EfectosImagen
 import com.vivetuaventura.Utilidades.ImagesHelper
-import com.vivetuaventura.modelos.Aventura
+import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.Capitulo
 import kotlinx.android.synthetic.main.activity_crear_aventura.*
-import kotlinx.android.synthetic.main.pedir_texto_dialog.*
 
 
 class CrearAventuraActivity : AppCompatActivity() {
@@ -35,8 +29,9 @@ class CrearAventuraActivity : AppCompatActivity() {
     lateinit var imagesHelper: ImagesHelper
     lateinit var capituloActivo: Capitulo
 
+
     // Creamos una aventura nueva
-    var aventuraNueva = Aventura("ejemplo", "-", "-", 0, 0)
+    var aventuraNueva = Adventure("ejemplo", "-", "-", 0, 0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,6 +167,13 @@ class CrearAventuraActivity : AppCompatActivity() {
         val guardarClick = findViewById(R.id.botonTerminarCA) as ImageButton
         guardarClick.setOnClickListener {
             // Botón terminar
+
+
+
+
+
+
+            // Salir de la activity
             finish()
         }
 

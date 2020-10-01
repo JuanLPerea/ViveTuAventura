@@ -1,6 +1,6 @@
 package com.vivetuaventura.modelos
 
-class Aventura  (id:String, nombreAventura: String, creador:String, visitas:Int, nota:Int) {
+class Adventure  (id:String, nombreAventura: String, creador:String, visitas:Int, nota:Int) {
      var id: String
      var nombreAventura: String
      var creador: String

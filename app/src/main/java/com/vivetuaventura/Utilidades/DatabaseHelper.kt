@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.vivetuaventura.modelos.Aventura
+import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.AventuraContract
 import com.vivetuaventura.modelos.Capitulo
 
@@ -40,10 +40,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
         Log.d("MIAPP", "Creada Aventura en la BD")
     }
 
+    fun actualizarAventura(db: SQLiteDatabase?, adventure:Adventure) {
+        var publicado = 0
+        if (adventure.publicado == true) publicado = 1
+        val UPDATE_AVENTURA = "UPDATE AVENTURA SET ID = '" + adventure.id + "' , NOMBRE = '" + adventure.nombreAventura + "' , CREADOR = '" +  adventure.creador + "' , NOTA = " + adventure.nota +", PUBLICADO = " + publicado + " , VISITAS = "  + adventure.visitas
+        db!!.execSQL(UPDATE_AVENTURA)
+    }
 
-    fun cargarListaAventurasBD(db: SQLiteDatabase): MutableList<Aventura> {
 
-        var listaAventuras: MutableList<Aventura> = mutableListOf()
+    fun cargarListaAventurasBD(db: SQLiteDatabase): MutableList<Adventure> {
+
+        var listaAdventures: MutableList<Adventure> = mutableListOf()
 
         val datosBruto = db.rawQuery("SELECT * FROM AVENTURA", null)
 
@@ -56,10 +63,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
                 val publicadoTMP = datosBruto.getInt(datosBruto.getColumnIndex("PUBLICADO"))
                 val visitasTMP = datosBruto.getInt(datosBruto.getColumnIndex("VISITAS"))
 
-                val aventuraTMP: Aventura =
-                    Aventura(idTMP, nombreTMP, creadorTMP, visitasTMP, notaTMP)
+                val adventureTMP: Adventure =
+                    Adventure(idTMP, nombreTMP, creadorTMP, visitasTMP, notaTMP)
 
-                listaAventuras.add(aventuraTMP)
+                listaAdventures.add(adventureTMP)
 
 
             } while (datosBruto.moveToNext())
@@ -67,7 +74,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
 
         datosBruto.close()
 
-        return listaAventuras
+        return listaAdventures
     }
 
     fun eliminarAventuraBD(db: SQLiteDatabase, id: String) {
@@ -77,9 +84,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
       //  Log.d("Miapp", "Borrar linea de la tabla de aventuras")
     }
 
-    fun recuperarAventura(db: SQLiteDatabase, idAventura: String): Aventura {
-        var aventuraTMP: Aventura
-        aventuraTMP = Aventura("Vacio", "Vacio", "Vacio", 0, 0)
+    fun recuperarAventura(db: SQLiteDatabase, idAventura: String): Adventure {
+        var adventureTMP: Adventure
+        adventureTMP = Adventure("Vacio", "Vacio", "Vacio", 0, 0)
         val datosBruto = db.rawQuery("SELECT * FROM AVENTURA WHERE ID ='" + idAventura + "'", null)
         if (datosBruto!!.moveToFirst()) {
             val idTMP = datosBruto.getString(datosBruto.getColumnIndex("ID"))
@@ -88,10 +95,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
             val notaTMP = datosBruto.getInt(datosBruto.getColumnIndex("NOTA"))
             val publicadoTMP = datosBruto.getInt(datosBruto.getColumnIndex("PUBLICADO"))
             val visitasTMP = datosBruto.getInt(datosBruto.getColumnIndex("VISITAS"))
-            aventuraTMP = Aventura(idTMP, nombreTMP, creadorTMP, visitasTMP, notaTMP)
+            adventureTMP = Adventure(idTMP, nombreTMP, creadorTMP, visitasTMP, notaTMP)
+            if (publicadoTMP == 1) adventureTMP.publicado = true
         }
+
+
         datosBruto.close()
-        return aventuraTMP
+        return adventureTMP
 
     }
 

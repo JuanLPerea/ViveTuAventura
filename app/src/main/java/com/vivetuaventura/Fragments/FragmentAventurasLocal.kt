@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
-import com.vivetuaventura.modelos.Aventura
+import com.vivetuaventura.modelos.Adventure
 
 class FragmentAventurasLocal(context : Context) : Fragment() {
 
@@ -22,7 +22,7 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     val mAdapter: RecyclerAdapter = RecyclerAdapter()
-    var listaAventuras: MutableList<Aventura> = mutableListOf()
+    var listaAdventures: MutableList<Adventure> = mutableListOf()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,12 +35,12 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         db = databaseHelper.writableDatabase
 
         // Recuperar lista aventuras en la BD
-        listaAventuras = databaseHelper.cargarListaAventurasBD(db)
+        listaAdventures = databaseHelper.cargarListaAventurasBD(db)
 
         mRecyclerView = view.findViewById(R.id.recyclerAventura) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mAdapter.RecyclerAdapter(listaAventuras, view.context)
+        mAdapter.RecyclerAdapter(listaAdventures, view.context)
         mRecyclerView.adapter = mAdapter
 
 
@@ -74,7 +74,7 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
                 } else {
 
                     // Swipe hacia la derecha borrar
-                    databaseHelper.eliminarAventuraBD(db , listaAventuras.get(position).id)
+                    databaseHelper.eliminarAventuraBD(db , listaAdventures.get(position).id)
                     recargarReciclerView()
 
                 }
@@ -90,8 +90,8 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
 
     fun recargarReciclerView() {
         // Recargar la lista de las aventuras
-        listaAventuras.removeAll(listaAventuras)
-        listaAventuras.addAll( databaseHelper.cargarListaAventurasBD(db))
+        listaAdventures.removeAll(listaAdventures)
+        listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db))
         mAdapter.notifyDataSetChanged()
         Log.d("Miapp", "On restart")
     }

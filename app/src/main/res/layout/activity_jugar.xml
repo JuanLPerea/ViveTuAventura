@@ -16,14 +16,30 @@
         app:srcCompat="@drawable/ic_launcher_background"
         />
 
-    <TextView
-        android:id="@+id/textoJugarTV"
+    <RelativeLayout
+        android:id="@+id/frameJugarTV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        tools:text="Aventura"
-        android:textSize="24sp"
-        />
+        android:layout_weight="3">
+
+        <TextView
+            android:id="@+id/textoJugarTV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            tools:text="Aventura" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/publicarBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            app:elevation="5dp"
+            app:srcCompat="@android:drawable/ic_menu_share" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

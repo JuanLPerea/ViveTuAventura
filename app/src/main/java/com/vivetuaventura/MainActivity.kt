@@ -6,32 +6,33 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ListView
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import com.vivetuaventura.Adapters.RecyclerAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.vivetuaventura.Adapters.TabLayoutAdapter
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
-import com.vivetuaventura.modelos.Aventura
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initialize Firebase Auth
+        auth = Firebase.auth
 
         databaseHelper = DatabaseHelper(applicationContext)
         db = databaseHelper.writableDatabase
@@ -122,8 +123,37 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        Log.d("Miapp" , "Usuario: " + currentUser.toString())
+        if (currentUser == null) signInAnonymously()
+
+    }
+
+    private fun signInAnonymously() {
+        // [START signin_anonymously]
+        auth.signInAnonymously()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("Miapp", "signInAnonymously:success")
+                    val user = auth.currentUser
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("Miapp", "signInAnonymously:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                }
+
+            }
+    }
 
 
+    private fun signOut() {
+        auth.signOut()
+    }
 
 
 }
