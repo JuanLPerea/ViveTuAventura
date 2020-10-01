@@ -31,7 +31,7 @@ class JugarActivity : AppCompatActivity() {
     private var user = ""
 
     // Creamos una aventura nueva
-    var aventuraNueva = Adventure("ejemplo", "-", "-", 0, 0)
+    var aventuraNueva = Adventure()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

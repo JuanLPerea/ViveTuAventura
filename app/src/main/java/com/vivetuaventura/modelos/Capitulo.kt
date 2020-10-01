@@ -1,6 +1,6 @@
 package com.vivetuaventura.modelos
 
-class Capitulo ( idAventura: String, id:String , capituloPadre: String, capitulo1:String, textoOpcion1:String, capitulo2:String, textoOpcion2:String, textoCapitulo:String, imagenCapitulo:String, finHistoria:Boolean) {
+class Capitulo () {
 
      var idAventura:String
      var capituloPadre:String
@@ -14,16 +14,16 @@ class Capitulo ( idAventura: String, id:String , capituloPadre: String, capitulo
      var finHistoria:Boolean
 
     init {
-        this.idAventura = idAventura
-        this.id = id
-        this.capituloPadre = capituloPadre;
-        this.capitulo1 = capitulo1;
-        this.textoOpcion1 = textoOpcion1
-        this.capitulo2 = capitulo1;
-        this.textoOpcion2 = textoOpcion2
-        this.textoCapitulo = textoCapitulo
-        this.imagenCapitulo = imagenCapitulo
-        this.finHistoria = finHistoria
+        this.idAventura = ""
+        this.id = ""
+        this.capituloPadre = ""
+        this.capitulo1 = ""
+        this.textoOpcion1 = ""
+        this.capitulo2 = ""
+        this.textoOpcion2 = ""
+        this.textoCapitulo = ""
+        this.imagenCapitulo = ""
+        this.finHistoria = false
     }
 
 }

@@ -37,7 +37,7 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         // Recuperar lista aventuras en la BD
         listaAdventures = databaseHelper.cargarListaAventurasBD(db)
 
-        mRecyclerView = view.findViewById(R.id.recyclerAventura) as RecyclerView
+        mRecyclerView = view.findViewById(R.id.recyclerAventuraLocal) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
         mAdapter.RecyclerAdapter(listaAdventures, view.context)

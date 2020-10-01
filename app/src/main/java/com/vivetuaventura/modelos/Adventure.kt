@@ -1,6 +1,6 @@
 package com.vivetuaventura.modelos
 
-class Adventure  (id:String, nombreAventura: String, creador:String, visitas:Int, nota:Int) {
+class Adventure  () {
      var id: String
      var nombreAventura: String
      var creador: String
@@ -9,12 +9,14 @@ class Adventure  (id:String, nombreAventura: String, creador:String, visitas:Int
      var publicado: Boolean
      var listaCapitulos: MutableList<Capitulo> = mutableListOf()
 
+
+
    init {
-        this.id = id
-        this.nombreAventura = nombreAventura
-        this.creador = creador
-        this.visitas = visitas
-        this.nota = nota
+        this.id = ""
+        this.nombreAventura = ""
+        this.creador = ""
+        this.visitas = 0
+        this.nota = 0
         this.publicado = false
     }
 

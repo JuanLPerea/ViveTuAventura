@@ -21,7 +21,7 @@ internal class TabLayoutAdapter (
                 FragmentAventurasLocal(context)
             }
             1 -> {
-                FragmentAventurasWeb()
+                FragmentAventurasWeb(context)
             }
             else -> getItem(position)
         }

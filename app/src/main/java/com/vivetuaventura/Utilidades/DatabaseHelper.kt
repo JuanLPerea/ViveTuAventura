@@ -63,8 +63,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
                 val publicadoTMP = datosBruto.getInt(datosBruto.getColumnIndex("PUBLICADO"))
                 val visitasTMP = datosBruto.getInt(datosBruto.getColumnIndex("VISITAS"))
 
-                val adventureTMP: Adventure =
-                    Adventure(idTMP, nombreTMP, creadorTMP, visitasTMP, notaTMP)
+                val adventureTMP = Adventure()
+                adventureTMP.id = idTMP
+                adventureTMP.nombreAventura = nombreTMP
+                adventureTMP.creador = creadorTMP
+                adventureTMP.nota = notaTMP
+                if (publicadoTMP == 0) {
+                    adventureTMP.publicado = false
+                } else {
+                    adventureTMP.publicado = true
+                }
+                adventureTMP.visitas = visitasTMP
 
                 listaAdventures.add(adventureTMP)
 
@@ -86,7 +95,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
 
     fun recuperarAventura(db: SQLiteDatabase, idAventura: String): Adventure {
         var adventureTMP: Adventure
-        adventureTMP = Adventure("Vacio", "Vacio", "Vacio", 0, 0)
+        adventureTMP = Adventure()
         val datosBruto = db.rawQuery("SELECT * FROM AVENTURA WHERE ID ='" + idAventura + "'", null)
         if (datosBruto!!.moveToFirst()) {
             val idTMP = datosBruto.getString(datosBruto.getColumnIndex("ID"))
@@ -95,10 +104,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
             val notaTMP = datosBruto.getInt(datosBruto.getColumnIndex("NOTA"))
             val publicadoTMP = datosBruto.getInt(datosBruto.getColumnIndex("PUBLICADO"))
             val visitasTMP = datosBruto.getInt(datosBruto.getColumnIndex("VISITAS"))
-            adventureTMP = Adventure(idTMP, nombreTMP, creadorTMP, visitasTMP, notaTMP)
-            if (publicadoTMP == 1) adventureTMP.publicado = true
-        }
 
+            adventureTMP.id = idTMP
+            adventureTMP.nombreAventura = nombreTMP
+            adventureTMP.creador = creadorTMP
+            adventureTMP.nota = notaTMP
+            if (publicadoTMP == 0) {
+                adventureTMP.publicado = false
+            } else {
+                adventureTMP.publicado = true
+            }
+            adventureTMP.visitas = visitasTMP
+        }
 
         datosBruto.close()
         return adventureTMP
@@ -134,7 +151,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
                 var finhistoria = false
                 if (finhistoriaTMP == 1) finhistoria = true
 
-                val capituloTMP: Capitulo = Capitulo(idAventuraTMP, idTMP, capituloPadreTMP, capitulo1, textoOpcion1,  capitulo2, textoOpcion2 , textoTMP, imagenTMP, finhistoria)
+                val capituloTMP: Capitulo = Capitulo()
+                capituloTMP.idAventura = idAventuraTMP
+                capituloTMP.id = idTMP
+                capituloTMP.capituloPadre = capituloPadreTMP
+                capituloTMP.capitulo1 = capitulo1
+                capituloTMP.textoOpcion1 = textoOpcion1
+                capituloTMP.capitulo2 = capitulo2
+                capituloTMP.textoOpcion2 = textoOpcion2
+                capituloTMP.textoCapitulo = textoTMP
+                capituloTMP.imagenCapitulo = imagenTMP
+                capituloTMP.finHistoria = finhistoria
 
                 listaCapitulos.add(capituloTMP)
 
@@ -148,7 +175,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     fun cargarCapitulo(db: SQLiteDatabase, idAventura: String, id: String) : Capitulo {
 
         val capituloRecuperado : Capitulo
-        capituloRecuperado = Capitulo(idAventura,id,"0","0","0", "" , "", "", "", false)
+        capituloRecuperado = Capitulo()
+        capituloRecuperado.idAventura = idAventura
+        capituloRecuperado.id = id
+
         val datosBruto = db.rawQuery("SELECT * FROM CAPITULOS WHERE IDAVENTURA ='" + idAventura + "' AND ID = '" + id + "'", null)
         if (datosBruto!!.moveToFirst()) {
             val capituloPadreTMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULOPADRE"))
@@ -186,7 +216,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
 
         val ADD_NODO = "INSERT INTO CAPITULOS VALUES ('" + aventuraUUID + "' , '" + capituloUUID + "' , '" + capituloPadreID + "' , '' , '', '' , '' , '', '', 0)"
         db!!.execSQL(ADD_NODO)
-        nuevoCapitulo = Capitulo(aventuraUUID, capituloUUID, capituloPadreID , "" , "" , "" , "", "", "" , false)
+        nuevoCapitulo = Capitulo()
+        nuevoCapitulo.idAventura = aventuraUUID
+        nuevoCapitulo.id = capituloUUID
+        nuevoCapitulo.capituloPadre = capituloPadreID
         return nuevoCapitulo
     }
 
@@ -235,7 +268,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     fun cargarCapituloRaiz (db: SQLiteDatabase, idAventura: String) : Capitulo {
 
         val capituloRecuperado : Capitulo
-        capituloRecuperado = Capitulo(idAventura,"","0","0","0", "" , "", "", "", false)
+        capituloRecuperado = Capitulo()
+        capituloRecuperado.idAventura = idAventura
         val datosBruto = db.rawQuery("SELECT * FROM CAPITULOS WHERE IDAVENTURA ='" + idAventura + "' AND CAPITULOPADRE = ''", null)
         if (datosBruto!!.moveToFirst()) {
             val capituloPadreTMP = datosBruto.getString(datosBruto.getColumnIndex("CAPITULOPADRE"))
