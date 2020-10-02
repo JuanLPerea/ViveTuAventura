@@ -18,6 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.vivetuaventura.Adapters.TabLayoutAdapter
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
+import com.vivetuaventura.Utilidades.ImagesHelper
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,15 +26,23 @@ class MainActivity : AppCompatActivity() {
     lateinit var db: SQLiteDatabase
     lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager
+    lateinit var imagesHelper : ImagesHelper
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // creamos una instancia de la clase para manipular la imágenes
+        imagesHelper = ImagesHelper(applicationContext)
+
+        // Desactivamos modo estricto
+        imagesHelper.desactivarModoEstricto()
+
         // Initialize Firebase Auth
         auth = Firebase.auth
 
+        // Instanciar Base de Datos SQLite
         databaseHelper = DatabaseHelper(applicationContext)
         db = databaseHelper.writableDatabase
 
@@ -99,6 +108,7 @@ class MainActivity : AppCompatActivity() {
 
             val intent = Intent (this, CrearAventuraActivity::class.java).apply {
                 putExtra("ID_AVENTURA", idAventura)
+                putExtra("ESNUEVO" , true)
             }
             startActivity(intent)
             dialog.dismiss()

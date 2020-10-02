@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.vivetuaventura.Interfaces.AventuraFirebaseCallback
 import com.vivetuaventura.Interfaces.FirebaseCallback
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
@@ -15,6 +16,7 @@ import com.vivetuaventura.modelos.Capitulo
 class FirebaseUtils (val context: Context) {
 
     private var listener: FirebaseCallback? = null //instance of your interface
+    private var aventuraListener : AventuraFirebaseCallback? = null
 
 
     fun subirAventuraFirebase (db : SQLiteDatabase, adventure : Adventure, usuario : String) {
@@ -37,20 +39,19 @@ class FirebaseUtils (val context: Context) {
 
     }
 
-    fun recuperarAventuraFirebase (db: SQLiteDatabase, usuario: String , idAventura:String) : Adventure {
+    fun recuperarAventuraFirebase  (usuario: String , idAventura:String) : Adventure {
 
         var  aventuraCargada = Adventure()
 
-        val databaseHelper = DatabaseHelper(context)
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
 
         val docRef = firebaseDatabase.collection(usuario).document(idAventura)
         docRef.get().addOnSuccessListener { documentSnapshot ->
             aventuraCargada = documentSnapshot.toObject(Adventure::class.java)!!
+            aventuraListener!!.onAventuraLoaded(aventuraCargada)
         }
 
         return  aventuraCargada
-
     }
     
     
@@ -76,7 +77,7 @@ class FirebaseUtils (val context: Context) {
         
     }
 
-    fun subirImagenesFirebase (usuario: String , idAventura: String) {
+    fun subirImagenesFirebase (db: SQLiteDatabase , usuario: String , idAventura: String) {
         // TODO recuperar las imágenes que correspondan a una aventura y subirlas a Firebase
 
     }
@@ -94,6 +95,10 @@ class FirebaseUtils (val context: Context) {
 
     fun setListener(listener : FirebaseCallback) {
         this.listener = listener
+    }
+
+    fun setAventuraListener(listenerAventura : AventuraFirebaseCallback) {
+        this.aventuraListener = listenerAventura
     }
 
     /*

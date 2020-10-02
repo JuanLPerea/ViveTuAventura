@@ -29,7 +29,6 @@ class CrearAventuraActivity : AppCompatActivity() {
     lateinit var imagesHelper: ImagesHelper
     lateinit var capituloActivo: Capitulo
 
-
     // Creamos una aventura nueva
     var aventuraNueva = Adventure()
 
@@ -42,6 +41,7 @@ class CrearAventuraActivity : AppCompatActivity() {
 
         // Recuperamos id de la aventura del intent
         aventuraNueva.id = intent.getStringExtra("ID_AVENTURA")
+        val esNuevaAventura = intent.getBooleanExtra("ESNUEVO" , true)
 
         // Accedemos a la BD
         databaseHelper = DatabaseHelper(this)
@@ -50,16 +50,20 @@ class CrearAventuraActivity : AppCompatActivity() {
         // creamos una instancia de la clase para manipular la imágenes
         imagesHelper = ImagesHelper(this)
 
-        // Desactivamos modo estricto
-        imagesHelper.desactivarModoEstricto()
-
         // Cargamos la aventura de la BD
         aventuraNueva = databaseHelper.recuperarAventura(db, aventuraNueva.id)
         setTitle(aventuraNueva.nombreAventura + " (" + aventuraNueva.creador + ")")
 
-        // Insertamos el primer capítulo que editaremos mediante la aplicación
-        capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, "")
-        aventuraNueva.listaCapitulos.add(capituloActivo)
+        // Comprobamos si la aventura ya existe (Editar) o es nueva (Crear)
+        // Insertamos o cargamos el primer capítulo que editaremos mediante la aplicación
+        if (esNuevaAventura) {
+            capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, "")
+            aventuraNueva.listaCapitulos.add(capituloActivo)
+        } else {
+            capituloActivo = databaseHelper.cargarCapituloRaiz(db, aventuraNueva.id)
+        }
+        // Mostrar el capitulo en pantalla
+        cargarCapituloEnPantalla()
 
     }
 

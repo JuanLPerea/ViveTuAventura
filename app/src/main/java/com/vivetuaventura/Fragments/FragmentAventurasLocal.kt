@@ -1,17 +1,23 @@
 package com.vivetuaventura.Fragments
 
+import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vivetuaventura.Adapters.RecyclerAdapter
+import com.vivetuaventura.CrearAventuraActivity
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Adventure
@@ -43,8 +49,6 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         mAdapter.RecyclerAdapter(listaAdventures, view.context)
         mRecyclerView.adapter = mAdapter
 
-
-
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -60,17 +64,14 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
 
                 if (direction == ItemTouchHelper.LEFT) {
                     // Swipe hacia la izquierda editar
-
-                   // TODO mostrar un SnackBar dando opcion para editar
-
+                    showDialogConfirmarEditar(position)
                     recargarReciclerView()
+
+
                 } else {
-
                     // Swipe hacia la derecha borrar
-                    // TODO mostrar un SnackBar pidiendo confirmación para borrar
-                    databaseHelper.eliminarAventuraBD(db , listaAdventures.get(position).id)
+                    showDialogConfirmarBorrar(position)
                     recargarReciclerView()
-
                 }
             }
 
@@ -95,4 +96,59 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         recargarReciclerView()
     }
 
+
+    private fun showDialogConfirmarBorrar(position : Int) {
+        val dialog = Dialog(context!!)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.confirmar_dialog)
+
+        val textoConfirmar = dialog.findViewById(R.id.texto_dialog_confirmarTV) as TextView
+        textoConfirmar.text = "¿Seguro que quieres borrar?"
+
+        val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
+        yesBtn.setOnClickListener {
+            databaseHelper.eliminarAventuraBD(db , listaAdventures.get(position).id)
+            recargarReciclerView()
+            dialog.dismiss()
+        }
+
+        val noBtn = dialog.findViewById(R.id.cancelar_confirmar_dialog_BTN) as Button
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showDialogConfirmarEditar(position : Int) {
+        val dialog = Dialog(context!!)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.confirmar_dialog)
+
+        val textoConfirmar = dialog.findViewById(R.id.texto_dialog_confirmarTV) as TextView
+        textoConfirmar.text = "Editar Aventura"
+
+        val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
+        yesBtn.setOnClickListener {
+
+            // Lanzamos el activity
+            val intent = Intent (activity, CrearAventuraActivity::class.java).apply {
+                putExtra("ID_AVENTURA", listaAdventures.get(position).id)
+                putExtra("ESNUEVO" , false)
+            }
+            startActivity(intent)
+            dialog.dismiss()
+        }
+
+        val noBtn = dialog.findViewById(R.id.cancelar_confirmar_dialog_BTN) as Button
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
 }
+
+

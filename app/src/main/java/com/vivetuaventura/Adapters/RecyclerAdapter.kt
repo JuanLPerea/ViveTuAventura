@@ -2,6 +2,7 @@ package com.vivetuaventura.Adapters
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
         val item = adventures.get(position)
-        holder.bind(item , context)
+        holder.bind(item , context )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
@@ -44,35 +45,29 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         val visitas = view.findViewById(R.id.itemVisitas) as TextView
         val nota = view.findViewById(R.id.itemNota) as TextView
 
+
+
         fun bind(adventure:Adventure, context: Context) {
             nombreAventura.text = adventure.nombreAventura
             creador.text = adventure.creador
             visitas.text = adventure.visitas.toString()
             nota.text = adventure.nota.toString()
+
             itemView.setOnClickListener(View.OnClickListener {
 
               //  Toast.makeText(context, "Has hecho click en: " + nombreAventura.text, Toast.LENGTH_LONG).show()
 
+            //    Log.d("Miapp" , "Aventura pulsada ID: " +  adventure.id)
+
                 val intent = Intent (context, JugarActivity::class.java).apply {
                     putExtra("ID_AVENTURA", adventure.id)
-                    putExtra("ALMACENADO" , "LOCAL")
                 }
                 context.startActivity(intent)
 
             })
 
 
-            itemView.setOnLongClickListener{
-                Toast.makeText(context, "Has hecho long click en: " + nombreAventura.text, Toast.LENGTH_LONG).show()
 
-            /*    TODO("Si hacemos long Click mostramos un dialog para decidir si editamos esta aventura o la queremos eliminar" +
-                        "Primero hay que comprobar si la aventura que hemos seleccionado es nuestra y si es así" +
-                        "lanzamos el intent de crear aventura cargando los datos que tengamos ya creados" +
-                        "Si no es nuestra mostramos un mensaje diciendo que no podemos editar aventuras que no son nuestras")
-
-            */
-                true
-            }
         }
 
     }

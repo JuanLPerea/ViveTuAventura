@@ -70,12 +70,10 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback {
 
     override fun onResume() {
         super.onResume()
-        Log.d("Miapp" , "Tamaño de la lista On Resume:" + listaAventuras.size.toString())
         recargarReciclerView()
     }
 
     override fun onListLoaded(listaAventurasRecuperadas: MutableList<Adventure>) {
-        Log.d("Miapp" , "Tamaño de la lista Interface:" + listaAventuras.size.toString())
         listaAventuras.removeAll(listaAventuras)
         listaAventuras.addAll(listaAventurasRecuperadas)
         mAdapter.notifyDataSetChanged()
