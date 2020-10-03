@@ -59,7 +59,7 @@ class JugarActivity : AppCompatActivity() , AventuraFirebaseCallback {
         val recuperarID = intent.getStringExtra("ID_AVENTURA")
 
         // TODO Diferenciar si la historia que queremos ver es local o de Firebase
-        aventuraNueva = databaseHelper.recuperarAventura(db, aventuraNueva.id)
+        aventuraNueva = databaseHelper.recuperarAventura(db, recuperarID)
 
         if (!aventuraNueva.id.equals("")) {
             // Cargar de la BD del dispositivo

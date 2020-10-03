@@ -4,19 +4,25 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.vivetuaventura.Interfaces.AventuraFirebaseCallback
 import com.vivetuaventura.Interfaces.FirebaseCallback
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.Capitulo
+import java.io.File
 
 class FirebaseUtils (val context: Context) {
 
     private var listener: FirebaseCallback? = null //instance of your interface
     private var aventuraListener : AventuraFirebaseCallback? = null
+    lateinit var storage: FirebaseStorage
 
 
     fun subirAventuraFirebase (db : SQLiteDatabase, adventure : Adventure, usuario : String) {
@@ -36,6 +42,25 @@ class FirebaseUtils (val context: Context) {
             .addOnFailureListener { e ->
                 Log.w("Miapp", "Error adding document", e)
             }
+
+        // Guardar imágenes en Firebase Storage
+        storage = FirebaseStorage.getInstance()
+        val storageRef = storage.getReference()
+
+
+        var file = Uri.fromFile(File(adventure.listaCapitulos.get(0).imagenCapitulo))
+        val imageRef = storageRef.child("images/${file.lastPathSegment}")
+        var uploadTask = imageRef.putFile(file)
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Log.d("Miapp" , "Error al subir foto a Firebase")
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+            Log.d("Miapp" , "Subida foto a Firebase")
+        }
 
     }
 
