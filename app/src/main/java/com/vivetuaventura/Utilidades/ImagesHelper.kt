@@ -10,6 +10,8 @@ import android.os.StrictMode
 import android.util.Log
 import com.vivetuaventura.modelos.Capitulo
 import java.io.*
+import java.net.URL
+import java.net.URLConnection
 
 
 class ImagesHelper(context: Context) {
@@ -66,7 +68,7 @@ class ImagesHelper(context: Context) {
         return Uri.parse(file.absolutePath)
     }
 
-    fun recuperarImagenMemoriaInterna( archivo: String?): Bitmap? {
+    fun recuperarImagenMemoriaInterna(archivo: String?): Bitmap? {
         var archivo = archivo
         var bitmap: Bitmap? = null
         System.gc()
@@ -74,7 +76,7 @@ class ImagesHelper(context: Context) {
             archivo = "Constantes.ARCHIVO_IMAGEN_JUGADOR"
         }
         try {
-            val fileInputStream = FileInputStream(archivo )
+            val fileInputStream = FileInputStream(archivo)
 
             /*
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -100,7 +102,36 @@ class ImagesHelper(context: Context) {
         }
     }
 
-
+    fun loadBitmap(url: String?): Bitmap? {
+        var bm: Bitmap? = null
+        var `is`: InputStream? = null
+        var bis: BufferedInputStream? = null
+        try {
+            val conn: URLConnection = URL(url).openConnection()
+            conn.connect()
+            `is` = conn.getInputStream()
+            bis = BufferedInputStream(`is`, 8192)
+            bm = BitmapFactory.decodeStream(bis)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+            if (`is` != null) {
+                try {
+                    `is`.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return bm
+    }
 
 
 }

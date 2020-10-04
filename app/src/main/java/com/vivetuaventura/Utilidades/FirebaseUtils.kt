@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.vivetuaventura.Interfaces.AventuraFirebaseCallback
 import com.vivetuaventura.Interfaces.FirebaseCallback
+import com.vivetuaventura.Interfaces.ImagenFirebaseCallback
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Adventure
@@ -22,8 +23,9 @@ class FirebaseUtils (val context: Context) {
 
     private var listener: FirebaseCallback? = null //instance of your interface
     private var aventuraListener : AventuraFirebaseCallback? = null
+    private var imageListener : ImagenFirebaseCallback? = null
     lateinit var storage: FirebaseStorage
-
+    var contador = 0
 
     fun subirAventuraFirebase (db : SQLiteDatabase, adventure : Adventure, usuario : String) {
 
@@ -43,28 +45,50 @@ class FirebaseUtils (val context: Context) {
                 Log.w("Miapp", "Error adding document", e)
             }
 
-        // Guardar imágenes en Firebase Storage
-        storage = FirebaseStorage.getInstance()
-        val storageRef = storage.getReference()
 
-
-        var file = Uri.fromFile(File(adventure.listaCapitulos.get(0).imagenCapitulo))
-        val imageRef = storageRef.child("images/${file.lastPathSegment}")
-        var uploadTask = imageRef.putFile(file)
-
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-            Log.d("Miapp" , "Error al subir foto a Firebase")
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // ...
-            Log.d("Miapp" , "Subida foto a Firebase")
-        }
 
     }
 
-    fun recuperarAventuraFirebase  (usuario: String , idAventura:String) : Adventure {
+    fun subirImagenesFirebase (listaCapitulos: MutableList<Capitulo> , idAventura: String) {
+        storage = FirebaseStorage.getInstance()
+
+        if (contador < listaCapitulos.size) {
+            val storageRef = storage.getReference()
+            var file = Uri.fromFile(File(listaCapitulos.get(contador).imagenCapitulo))
+            val idCapitulo = listaCapitulos.get(contador).id
+            val imageRef = storageRef.child("images/" + idAventura + "/" + idCapitulo + ".jpg")
+            var uploadTask = imageRef.putFile(file)
+
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener {
+                // Handle unsuccessful uploads
+                Log.d("Miapp" , "Error al subir foto a Firebase")
+            }.addOnSuccessListener { taskSnapshot ->
+                // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                // ...
+                Log.d("Miapp" , "Subida foto a Firebase")
+                contador++
+                subirImagenesFirebase(listaCapitulos, idAventura)
+            }
+        } else if (contador ==  listaCapitulos.size) {
+            contador = 0
+        }
+    }
+
+    fun cargarImagenFirebase (idAventura: String, idCapitulo : String)  {
+        storage = FirebaseStorage.getInstance()
+        val storageRef = storage.getReference()
+        val imageRef = storageRef.child("images/" + idAventura + "/" + idCapitulo + ".jpg")
+        val ONE_MEGABYTE: Long = 1024 * 1024
+        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener { bytes ->
+            val bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.size)
+            imageListener!!.onImageLoaded(bitmap)
+        }.addOnFailureListener{
+            Log.d("Miapp" , "Error al descargar imagen")
+        }
+    }
+
+    fun recuperarAventuraFirebase  (usuario: String , idAventura:String)  {
 
         var  aventuraCargada = Adventure()
 
@@ -76,7 +100,7 @@ class FirebaseUtils (val context: Context) {
             aventuraListener!!.onAventuraLoaded(aventuraCargada)
         }
 
-        return  aventuraCargada
+
     }
     
     
@@ -102,20 +126,8 @@ class FirebaseUtils (val context: Context) {
         
     }
 
-    fun subirImagenesFirebase (db: SQLiteDatabase , usuario: String , idAventura: String) {
-        // TODO recuperar las imágenes que correspondan a una aventura y subirlas a Firebase
 
-    }
 
-    fun cargarImagenFirebase (usuario: String , idAventura: String, idImagen : String) : Bitmap {
-        // TODO cargar una imágen de Firebase (Necesario Interface para pasar los datos cuando finalice la tarea)
-        var bitmapCargado : Bitmap
-
-            bitmapCargado = BitmapFactory.decodeResource(context.resources , R.drawable.brujula)
-
-        return bitmapCargado
-
-    }
 
 
     fun setListener(listener : FirebaseCallback) {
@@ -124,6 +136,10 @@ class FirebaseUtils (val context: Context) {
 
     fun setAventuraListener(listenerAventura : AventuraFirebaseCallback) {
         this.aventuraListener = listenerAventura
+    }
+
+    fun setImageListener(listenerImagenes : ImagenFirebaseCallback) {
+        this.imageListener = listenerImagenes
     }
 
     /*
