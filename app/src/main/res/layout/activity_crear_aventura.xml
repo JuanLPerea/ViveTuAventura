@@ -13,9 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_launcher_background"
-        android:contentDescription="TODO" />
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,10 +23,10 @@
         android:gravity="center">
 
         <CheckBox
-            android:id="@+id/checkbox_sinfiltro"
+            android:id="@+id/checkbox_boost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sin Filtro" />
+            android:text="Boost" />
 
         <CheckBox
             android:id="@+id/checkbox_sketch"
@@ -46,6 +45,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sepia" />
+
+        <CheckBox
+            android:id="@+id/checkbox_gammma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gamma" />
 
     </LinearLayout>
 

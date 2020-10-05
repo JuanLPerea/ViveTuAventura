@@ -118,7 +118,7 @@ class JugarActivity : AppCompatActivity() , AventuraFirebaseCallback , ImagenFir
             }
 
             if (!capituloActivo.capitulo2.equals("")) {
-                cargarCapitulo(capituloActivo.capitulo1)
+                cargarCapitulo(capituloActivo.capitulo2)
                 if (capituloActivo.capitulo1.equals("") && capituloActivo.capitulo2.equals((""))) {
                     capituloActivo.textoOpcion1 = "FIN"
                     capituloActivo.textoOpcion2 = "FIN"
@@ -168,14 +168,14 @@ class JugarActivity : AppCompatActivity() , AventuraFirebaseCallback , ImagenFir
         val volverAEmpezarBtn = dialog.findViewById(R.id.reiniciar_jugar_dialog_BTN) as Button
         volverAEmpezarBtn.setOnClickListener {
            // Volver a empezar
-            capituloActivo = databaseHelper.cargarCapituloRaiz(db, aventuraNueva.id)
+            capituloActivo =aventuraNueva.listaCapitulos.get(0)
             cargarCapituloEnPantalla()
             dialog.dismiss()
             }
 
         val salirBtn = dialog.findViewById(R.id.salir_jugar_dialog_BTN) as Button
         salirBtn.setOnClickListener {
-            // Volver a empezar
+            // Salir
             finish()
             dialog.dismiss()
         }

@@ -20,6 +20,7 @@ import com.vivetuaventura.Utilidades.ImagesHelper
 import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.Capitulo
 import kotlinx.android.synthetic.main.activity_crear_aventura.*
+import kotlinx.android.synthetic.main.activity_jugar.*
 
 
 class CrearAventuraActivity : AppCompatActivity() {
@@ -35,6 +36,8 @@ class CrearAventuraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_aventura)
+
+        imagenCrearAventura.setImageResource(R.drawable.selecciona_imagen)
 
         // Establecemos las acciones para los botones y click en los componentes
         clickHandler()
@@ -297,13 +300,33 @@ class CrearAventuraActivity : AppCompatActivity() {
     }
 
     private fun cargarCapituloEnPantalla() {
-        editTextCrearAventura.setText(capituloActivo.textoCapitulo)
-        botonDecision1CA.setText(capituloActivo.textoOpcion1)
-        botonDecision2CA.setText(capituloActivo.textoOpcion2)
-        // Visualizamos la imagen en el ImageView
-        imagenCrearAventura.setImageBitmap(imagesHelper.recuperarImagenMemoriaInterna(capituloActivo.imagenCapitulo))
 
-        Log.d("Miapp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
+        // Visualizamos la imagen en el ImageView
+        if (capituloActivo.imagenCapitulo.equals("")) {
+            imagenCrearAventura.setImageResource(R.drawable.selecciona_imagen)
+        } else {
+            imagenCrearAventura.setImageBitmap(imagesHelper.recuperarImagenMemoriaInterna(capituloActivo.imagenCapitulo))
+        }
+        // Visualizamos los textos
+        if (capituloActivo.textoCapitulo.equals("")) {
+            editTextCrearAventura.setText("")
+        } else {
+            editTextCrearAventura.setText(capituloActivo.textoCapitulo)
+        }
+
+        if (capituloActivo.textoOpcion1.equals("")) {
+            botonDecision1CA.setText("Pulsa para elegir lo que pasa")
+        } else {
+            botonDecision1CA.setText(capituloActivo.textoOpcion1)
+        }
+
+        if (capituloActivo.textoOpcion2.equals("")) {
+            botonDecision2CA.setText("Pulsa para elegir lo que pasa")
+        } else {
+            botonDecision2CA.setText(capituloActivo.textoOpcion2)
+        }
+
+    //    Log.d("Miapp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
 
     }
 
