@@ -22,35 +22,40 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <CheckBox
+        <ImageButton
             android:id="@+id/checkbox_boost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Boost" />
+            android:onClick="onCheckboxClicked"
+            app:srcCompat="@android:drawable/btn_star" />
 
-        <CheckBox
+        <ImageButton
             android:id="@+id/checkbox_sketch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sketch" />
+            android:onClick="onCheckboxClicked"
+            app:srcCompat="@android:drawable/ic_menu_view" />
 
-        <CheckBox
+        <ImageButton
             android:id="@+id/checkbox_vigneta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Viñeta" />
+            android:onClick="onCheckboxClicked"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
 
-        <CheckBox
+        <ImageButton
             android:id="@+id/checkbox_sepia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sepia" />
+            android:onClick="onCheckboxClicked"
+            app:srcCompat="@android:drawable/ic_menu_compass" />
 
-        <CheckBox
+        <ImageButton
             android:id="@+id/checkbox_gammma"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gamma" />
+            android:onClick="onCheckboxClicked"
+            app:srcCompat="@android:drawable/ic_menu_manage" />
 
     </LinearLayout>
 

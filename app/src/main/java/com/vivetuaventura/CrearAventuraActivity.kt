@@ -13,9 +13,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.*
+import androidx.core.view.drawToBitmap
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
+import com.vivetuaventura.Utilidades.EfectosImagen
 import com.vivetuaventura.Utilidades.ImagesHelper
 import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.Capitulo
@@ -375,6 +378,7 @@ class CrearAventuraActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
 
+
             // Convertimos el URI de la imagen seleccionada en un Bitmap
             val imageURI = data?.data
             val bitmap = imagesHelper.obtenerBitmap(applicationContext, imageURI)
@@ -408,11 +412,48 @@ class CrearAventuraActivity : AppCompatActivity() {
     }
 
 
+
+
     override fun onBackPressed() {
+        Toast.makeText(this, "Pulsa en el botón de la bandera para salir", Toast.LENGTH_LONG).show()
 
     }
 
 
+    fun onCheckboxClicked(view: View) {
+
+        var miBitmap = imagenCrearAventura.drawToBitmap()
+
+        if (view is ImageButton) {
+
+            when (view.id) {
+                R.id.checkbox_boost -> {
+                    miBitmap = EfectosImagen.gaussian(miBitmap)
+                }
+                R.id.checkbox_gammma -> {
+                    miBitmap =    EfectosImagen.gamma(miBitmap, .2 , .9, .8)
+                }
+                R.id.checkbox_vigneta -> {
+                    miBitmap = EfectosImagen.vignette(miBitmap)
+                }
+                R.id.checkbox_sketch -> {
+                    miBitmap = EfectosImagen.sketch(miBitmap)
+                }
+                R.id.checkbox_sepia -> {
+                    miBitmap = EfectosImagen.sepia(miBitmap)
+                }
+
+            }
+        }
+
+        imagenCrearAventura.setImageBitmap(miBitmap)
+
+        imagesHelper.guardarBitmapEnMemoria(
+            applicationContext,
+            miBitmap,
+            capituloActivo
+        )
+    }
 
 
 
