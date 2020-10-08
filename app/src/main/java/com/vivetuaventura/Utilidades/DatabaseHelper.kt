@@ -13,7 +13,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     override fun onCreate(db: SQLiteDatabase?) {
         Log.d("MIAPP", "Crear BD")
         val CREATE_TABLE_AVENTURA =
-            "CREATE TABLE AVENTURA (ID TEXT, NOMBRE TEXT, CREADOR TEXT, NOTA INTEGER, PUBLICADO BOOLEAN, VISITAS INTEGER)"
+            "CREATE TABLE AVENTURA (ID TEXT, NOMBRE TEXT, CREADOR TEXT, NOTA INTEGER, PUBLICADO BOOLEAN, VISITAS INTEGER, USUARIO TEXT)"
         val CREATE_TABLE_CAPITULOS =
             "CREATE TABLE CAPITULOS ( IDAVENTURA TEXT, ID TEXT, CAPITULOPADRE TEXT, CAPITULO1 TEXT, TEXTOOPCION1 TEXT,CAPITULO2 TEXT, TEXTOOPCION2 TEXT, TEXTOCAPITULO TEXT, IMAGENCAPITULO TEXT, FINHISTORIA BOOLEAN)"
         db!!.execSQL(CREATE_TABLE_AVENTURA)
@@ -26,13 +26,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
         onCreate(db)
     }
 
-    fun crearAventuraBD(db: SQLiteDatabase?, nombreAventura: String, autorAventura: String): String {
+    fun crearAventuraBD(db: SQLiteDatabase?, nombreAventura: String, autorAventura: String , usuario:String): String {
 
         val rnds = (0..100000).random()
         val aventuraUUID =
             nombreAventura + "_" + System.currentTimeMillis().toString() + "_" + rnds.toString()
 
-        val ADD_NODO = "INSERT INTO AVENTURA VALUES ('" + aventuraUUID + "' , '" + nombreAventura + "' , '" + autorAventura + "' , 0 , 0, 0)"
+        val ADD_NODO = "INSERT INTO AVENTURA VALUES ('" + aventuraUUID + "' , '" + nombreAventura + "' , '" + autorAventura + "' , 0 , 0, 0, '" + usuario + "')"
 
         db!!.execSQL(ADD_NODO)
 
@@ -43,7 +43,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     fun actualizarAventura(db: SQLiteDatabase?, adventure:Adventure) {
         var publicado = 0
         if (adventure.publicado == true) publicado = 1
-        val UPDATE_AVENTURA = "UPDATE AVENTURA SET ID = '" + adventure.id + "' , NOMBRE = '" + adventure.nombreAventura + "' , CREADOR = '" +  adventure.creador + "' , NOTA = " + adventure.nota +", PUBLICADO = " + publicado + " , VISITAS = "  + adventure.visitas
+        val UPDATE_AVENTURA = "UPDATE AVENTURA SET ID = '" + adventure.id + "' , NOMBRE = '" + adventure.nombreAventura + "' , CREADOR = '" +  adventure.creador + "' , NOTA = " + adventure.nota +", PUBLICADO = " + publicado + " , VISITAS = "  + adventure.visitas + ", USUARIO = '" + adventure.usuario + "'"
         db!!.execSQL(UPDATE_AVENTURA)
     }
 
@@ -62,12 +62,14 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
                 val notaTMP = datosBruto.getInt(datosBruto.getColumnIndex("NOTA"))
                 val publicadoTMP = datosBruto.getInt(datosBruto.getColumnIndex("PUBLICADO"))
                 val visitasTMP = datosBruto.getInt(datosBruto.getColumnIndex("VISITAS"))
+                val usuarioTMP = datosBruto.getString(datosBruto.getColumnIndex("USUARIO"))
 
                 val adventureTMP = Adventure()
                 adventureTMP.id = idTMP
                 adventureTMP.nombreAventura = nombreTMP
                 adventureTMP.creador = creadorTMP
                 adventureTMP.nota = notaTMP
+                adventureTMP.usuario = usuarioTMP
                 if (publicadoTMP == 0) {
                     adventureTMP.publicado = false
                 } else {
@@ -104,11 +106,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
             val notaTMP = datosBruto.getInt(datosBruto.getColumnIndex("NOTA"))
             val publicadoTMP = datosBruto.getInt(datosBruto.getColumnIndex("PUBLICADO"))
             val visitasTMP = datosBruto.getInt(datosBruto.getColumnIndex("VISITAS"))
+            val usuarioTMP = datosBruto.getString(datosBruto.getColumnIndex("USUARIO"))
 
             adventureTMP.id = idTMP
             adventureTMP.nombreAventura = nombreTMP
             adventureTMP.creador = creadorTMP
             adventureTMP.nota = notaTMP
+            adventureTMP.usuario = usuarioTMP
             if (publicadoTMP == 0) {
                 adventureTMP.publicado = false
             } else {

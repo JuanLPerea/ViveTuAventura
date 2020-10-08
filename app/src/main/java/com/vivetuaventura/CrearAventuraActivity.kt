@@ -172,10 +172,7 @@ class CrearAventuraActivity : AppCompatActivity() {
         atrasClick.setOnClickListener {
             // Al hacer click en el botón atrás navegamos al nodo padre, si ya estamos en el nodo raiz, no hacemos nada
             if (!capituloActivo.capituloPadre.equals("")) {
-                capituloActivo = databaseHelper.cargarCapitulo(
-                    db,
-                    aventuraNueva.id,
-                    capituloActivo.capituloPadre
+                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capituloPadre
                 )
                 cargarCapituloEnPantalla()
             }
@@ -184,12 +181,6 @@ class CrearAventuraActivity : AppCompatActivity() {
         val guardarClick = findViewById(R.id.botonTerminarCA) as ImageButton
         guardarClick.setOnClickListener {
             // Botón terminar
-
-
-
-
-
-
             // Salir de la activity
             finish()
         }
@@ -420,7 +411,6 @@ class CrearAventuraActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         Toast.makeText(this, "Pulsa en el botón de la bandera para salir", Toast.LENGTH_LONG).show()
-
     }
 
 
@@ -446,23 +436,18 @@ class CrearAventuraActivity : AppCompatActivity() {
 
         when (id) {
             R.id.checkbox_boost -> {
-                Log.d("Miapp" , "Efecto 1")
                 miBitmap = EfectosImagen.gaussian(bitmap)
             }
             R.id.checkbox_sepia -> {
-                Log.d("Miapp" , "Efecto 2")
                   miBitmap = EfectosImagen.sepia(bitmap)
             }
             R.id.checkbox_vigneta -> {
-                Log.d("Miapp" , "Efecto 3")
                    miBitmap = EfectosImagen.vignette(bitmap)
             }
             R.id.checkbox_sketch -> {
-                Log.d("Miapp" , "Efecto 4")
                    miBitmap = EfectosImagen.sketch(bitmap)
             }
             R.id.checkbox_gammma -> {
-                Log.d("Miapp" , "Efecto 5")
                    miBitmap = EfectosImagen.hue(bitmap, .5f)
             }
         }

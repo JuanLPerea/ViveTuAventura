@@ -8,6 +8,7 @@ class Adventure  () {
      var nota: Int
      var publicado: Boolean
      var listaCapitulos: MutableList<Capitulo> = mutableListOf()
+     var usuario:String
 
 
 
@@ -18,6 +19,7 @@ class Adventure  () {
         this.visitas = 0
         this.nota = 0
         this.publicado = false
+        this.usuario = ""
     }
 
 

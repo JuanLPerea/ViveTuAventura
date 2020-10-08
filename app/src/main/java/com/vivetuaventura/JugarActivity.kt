@@ -81,8 +81,6 @@ class JugarActivity : AppCompatActivity() , AventuraFirebaseCallback , ImagenFir
             firebaseUtils.recuperarAventuraFirebase(user , recuperarID)
         }
 
-
-
         clickHandler()
 
     }
@@ -114,7 +112,6 @@ class JugarActivity : AppCompatActivity() , AventuraFirebaseCallback , ImagenFir
             if (capituloActivo.textoOpcion2.equals("FIN")){
                 Log.d("Miapp" , "Este capitulo es final")
                 dialogoFin()
-             //   Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
             }
 
             if (!capituloActivo.capitulo2.equals("")) {

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/titulo_publicar_img_header"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#FFFFBB33"
+        android:contentDescription="@string/app_name"
+        android:scaleType="center"
+        android:src="@drawable/brujula" />
+
+
+    <TextView
+        android:id="@+id/texto_dialog_publicarTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="La historia deberá ser aprobada, normalmente tarda 1 día y si es correcto aparecerá en las historias compartidas y cualquiera podrá jugar y ver tu historia!!!"
+        android:textColor="@color/design_default_color_error"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelar_publicar_dialog_BTN"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Salir" />
+
+        <Button
+            android:id="@+id/aceptar_publicar_dialog_BTN"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Publicar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="600dp"
+        android:layout_height="5dp"
+        android:background="@android:color/black"
+        android:orientation="horizontal"></LinearLayout>
+
+
+</LinearLayout>

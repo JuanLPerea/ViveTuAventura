@@ -41,11 +41,12 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize Firebase Auth
         auth = Firebase.auth
+        val currentUser = auth.currentUser
+        if (currentUser == null) signInAnonymously()
 
         // Instanciar Base de Datos SQLite
         databaseHelper = DatabaseHelper(applicationContext)
         db = databaseHelper.writableDatabase
-
 
         // Tab Layout
         tabLayout = findViewById(R.id.tabLayout)
@@ -104,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             if (autorTMP.equals("")) autorTMP = "Sin Autor"
 
             // CREAMOS LA AVENTURA EN LA BASE DE DATOS
-            val idAventura = databaseHelper.crearAventuraBD(db , nomavTMP, autorTMP)
+            val idAventura = databaseHelper.crearAventuraBD(db , nomavTMP, autorTMP, auth.currentUser!!.uid)
 
             val intent = Intent (this, CrearAventuraActivity::class.java).apply {
                 putExtra("ID_AVENTURA", idAventura)

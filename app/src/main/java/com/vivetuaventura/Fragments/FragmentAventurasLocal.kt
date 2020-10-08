@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -122,13 +123,20 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         val dialog = Dialog(context!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.confirmar_dialog)
+        dialog.setContentView(R.layout.crear_dialogo_layout)
 
-        val textoConfirmar = dialog.findViewById(R.id.texto_dialog_confirmarTV) as TextView
-        textoConfirmar.text = "Editar Aventura"
+        val nombreAventura = dialog.findViewById(R.id.nombreAventuraDLG) as EditText
+        nombreAventura.setText(listaAdventures.get(position).nombreAventura)
+        val autorAventura = dialog.findViewById(R.id.AutorDLG) as EditText
+        autorAventura.setText(listaAdventures.get(position).creador)
 
-        val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
+        val yesBtn = dialog.findViewById(R.id.empezarCrearBTN) as Button
         yesBtn.setOnClickListener {
+
+            // Actualizamos el nombre y autor en la BD
+            listaAdventures.get(position).nombreAventura = nombreAventura.text.toString()
+            listaAdventures.get(position).creador = autorAventura.text.toString()
+            databaseHelper.actualizarAventura(db, listaAdventures.get(position))
 
             // Lanzamos el activity
             val intent = Intent (activity, CrearAventuraActivity::class.java).apply {
@@ -139,7 +147,7 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
             dialog.dismiss()
         }
 
-        val noBtn = dialog.findViewById(R.id.cancelar_confirmar_dialog_BTN) as Button
+        val noBtn = dialog.findViewById(R.id.cancelarCrearBTN) as Button
         noBtn.setOnClickListener {
             recargarReciclerView()
             dialog.dismiss()
