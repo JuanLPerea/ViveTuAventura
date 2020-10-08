@@ -127,9 +127,6 @@ class FirebaseUtils (val context: Context) {
     }
 
 
-
-
-
     fun setListener(listener : FirebaseCallback) {
         this.listener = listener
     }

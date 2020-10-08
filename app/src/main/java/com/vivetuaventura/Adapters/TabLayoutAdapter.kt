@@ -12,16 +12,18 @@ internal class TabLayoutAdapter (
 
     var context: Context,
     fm: FragmentManager,
-    var totalTabs: Int
+    var totalTabs: Int,
+    var fragmentAventurasLocal: FragmentAventurasLocal,
+    var fragmentAventurasWeb: FragmentAventurasWeb
 ) :
     FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                FragmentAventurasLocal(context)
+                fragmentAventurasLocal
             }
             1 -> {
-                FragmentAventurasWeb(context)
+                fragmentAventurasWeb
             }
             else -> getItem(position)
         }
@@ -29,4 +31,5 @@ internal class TabLayoutAdapter (
     override fun getCount(): Int {
         return totalTabs
     }
+
 }

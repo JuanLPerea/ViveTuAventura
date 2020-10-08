@@ -23,14 +23,13 @@ import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Adventure
 
-class FragmentAventurasLocal(context : Context) : Fragment() {
+class FragmentAventurasLocal(context : Context) : Fragment()  {
 
     lateinit var mRecyclerView: RecyclerView
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     val mAdapter: RecyclerAdapter = RecyclerAdapter()
     var listaAdventures: MutableList<Adventure> = mutableListOf()
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -158,6 +157,13 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
 
         dialog.show()
     }
+
+    fun filtrarLista(nombreAventura : String, autorAventura: String, soloNoPublicados : Boolean) {
+        Log.d("Miapp" , "Filtrar Lista: " + nombreAventura + ", " + autorAventura + " ," + soloNoPublicados )
+
+    }
+
+
 }
 
 

@@ -7,10 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -18,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.vivetuaventura.Adapters.TabLayoutAdapter
+import com.vivetuaventura.Fragments.FragmentAventurasLocal
+import com.vivetuaventura.Fragments.FragmentAventurasWeb
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.ImagesHelper
 
@@ -29,10 +28,16 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewPager: ViewPager
     lateinit var imagesHelper : ImagesHelper
     private lateinit var auth: FirebaseAuth
+    lateinit var fragmentAventurasLocal : FragmentAventurasLocal
+    lateinit var fragmentAventurasWeb : FragmentAventurasWeb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Referencias a los fragments
+        fragmentAventurasLocal = FragmentAventurasLocal(this)
+        fragmentAventurasWeb = FragmentAventurasWeb(this)
 
         // creamos una instancia de la clase para manipular la imágenes
         imagesHelper = ImagesHelper(applicationContext)
@@ -55,10 +60,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout.addTab(tabLayout.newTab().setText("Tus Aventuras"))
         tabLayout.addTab(tabLayout.newTab().setText("Aventuras Web"))
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
-        val adapter = TabLayoutAdapter(
-            this, supportFragmentManager,
-            tabLayout.tabCount
-        )
+        val adapter = TabLayoutAdapter(this, supportFragmentManager, tabLayout.tabCount, fragmentAventurasLocal, fragmentAventurasWeb)
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -69,7 +71,6 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-
 
 
         val crearAventuraBTN = findViewById(R.id.crearAventuraBTN) as FloatingActionButton
@@ -132,9 +133,31 @@ class MainActivity : AppCompatActivity() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.filtrar_dialogo_layout)
-        val okBTN = dialog.findViewById(R.id.aceptarBTN_filtrar) as Button
 
+        val nombreFiltrarET = dialog.findViewById(R.id.nombreAventuraDLG_filtrar) as EditText
+        val autorFiltrarET = dialog.findViewById(R.id.AutorDLG_filtrar) as EditText
+        val soloNoPublicadosCB = dialog.findViewById(R.id.publicadosCHKBX) as CheckBox
+
+
+        val okBTN = dialog.findViewById(R.id.aceptarBTN_filtrar) as Button
         okBTN.setOnClickListener {
+
+            var nombreFiltrar = ""
+            var autorFiltrar = ""
+            var soloNoPublicados = false
+
+            if (nombreFiltrarET.text != null) {
+                nombreFiltrar = nombreFiltrarET.text.toString()
+            }
+            if (autorFiltrarET.text != null) {
+                autorFiltrar = autorFiltrarET.text.toString()
+            }
+            if (soloNoPublicadosCB.isChecked) {
+                soloNoPublicados = true
+            }
+
+            // llamar a un método público dentro de Fragment Aventuras Local o Web según sea
+            fragmentAventurasLocal.filtrarLista(nombreFiltrar, autorFiltrar, soloNoPublicados)
             dialog.dismiss()
         }
 
