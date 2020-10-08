@@ -48,7 +48,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     }
 
 
-    fun cargarListaAventurasBD(db: SQLiteDatabase): MutableList<Adventure> {
+    fun cargarListaAventurasBD(db: SQLiteDatabase, nombreAventura: String, autorAventura: String, soloNoPublicados : Boolean): MutableList<Adventure> {
 
         var listaAdventures: MutableList<Adventure> = mutableListOf()
 
@@ -77,7 +77,27 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
                 }
                 adventureTMP.visitas = visitasTMP
 
-                listaAdventures.add(adventureTMP)
+                // Filtrar ...........................
+                //
+
+                var filtrarAdd = false
+                // Si no filtramos por ningún criterio, añadir siempre
+                if (nombreAventura.equals("") && autorAventura.equals("")) {
+                    filtrarAdd = true
+                } else {
+                    // si filtramos por nombre, añadir si contiene el texto buscado
+                    if (!nombreAventura.equals("") && adventureTMP.nombreAventura.contains(nombreAventura)) {
+                        filtrarAdd = true
+                    }
+                    // si filtramos por autor, añadir si contiene el texto buscado
+                    if (!autorAventura.equals("") && adventureTMP.creador.contains(autorAventura)) {
+                        filtrarAdd = true
+                    }
+                }
+                // Si queremos ver solo los no publicados (No tiene en cuenta si se ha filtrado por nombre o autor
+                if (soloNoPublicados && !adventureTMP.publicado) filtrarAdd = true
+
+                if (filtrarAdd) listaAdventures.add(adventureTMP)
 
 
             } while (datosBruto.moveToNext())

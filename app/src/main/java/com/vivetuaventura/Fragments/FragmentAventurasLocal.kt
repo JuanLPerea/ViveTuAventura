@@ -41,7 +41,7 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
         db = databaseHelper.writableDatabase
 
         // Recuperar lista aventuras en la BD
-        listaAdventures = databaseHelper.cargarListaAventurasBD(db)
+        listaAdventures = databaseHelper.cargarListaAventurasBD(db, "","",false)
 
         mRecyclerView = view.findViewById(R.id.recyclerAventuraLocal) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
@@ -82,7 +82,7 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
     fun recargarReciclerView() {
         // Recargar la lista de las aventuras
         listaAdventures.removeAll(listaAdventures)
-        listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db))
+        listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db, "", "", false))
         mAdapter.notifyDataSetChanged()
         Log.d("Miapp", "On restart")
     }
@@ -160,6 +160,10 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
 
     fun filtrarLista(nombreAventura : String, autorAventura: String, soloNoPublicados : Boolean) {
         Log.d("Miapp" , "Filtrar Lista: " + nombreAventura + ", " + autorAventura + " ," + soloNoPublicados )
+        // Recargar la lista de las aventuras
+        listaAdventures.removeAll(listaAdventures)
+        listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db, nombreAventura, autorAventura, soloNoPublicados))
+        mAdapter.notifyDataSetChanged()
 
     }
 
