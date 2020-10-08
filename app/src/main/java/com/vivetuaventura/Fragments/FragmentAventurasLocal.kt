@@ -125,6 +125,9 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.crear_dialogo_layout)
 
+        val textoDialogo = dialog.findViewById(R.id.tituloDialog) as TextView
+        textoDialogo.setText("Editar Aventura")
+
         val nombreAventura = dialog.findViewById(R.id.nombreAventuraDLG) as EditText
         nombreAventura.setText(listaAdventures.get(position).nombreAventura)
         val autorAventura = dialog.findViewById(R.id.AutorDLG) as EditText

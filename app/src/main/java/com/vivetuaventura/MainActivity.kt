@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -92,6 +93,8 @@ class MainActivity : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.crear_dialogo_layout)
         val yesBtn = dialog.findViewById(R.id.empezarCrearBTN) as Button
+        val textoDialogo = dialog.findViewById(R.id.tituloDialog) as TextView
+        textoDialogo.setText("Crear Aventura")
 
         yesBtn.setOnClickListener {
 
@@ -112,6 +115,11 @@ class MainActivity : AppCompatActivity() {
                 putExtra("ESNUEVO" , true)
             }
             startActivity(intent)
+            dialog.dismiss()
+        }
+
+        val cancelBtn = dialog.findViewById(R.id.cancelarCrearBTN) as Button
+        cancelBtn.setOnClickListener {
             dialog.dismiss()
         }
 

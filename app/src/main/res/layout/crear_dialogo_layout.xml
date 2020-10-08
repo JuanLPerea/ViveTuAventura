@@ -12,6 +12,16 @@
         android:scaleType="center"
         android:src="@drawable/brujula" />
 
+    <TextView
+        android:id="@+id/tituloDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Texto Dialogo"
+        android:textSize = "18sp"
+        android:textColor = "#F44336"
+        android:layout_gravity = "center"
+        />
+
     <EditText
         android:id="@+id/nombreAventuraDLG"
         android:layout_width="match_parent"
