@@ -8,13 +8,29 @@
     tools:context=".CrearAventuraActivity">
 
 
-    <ImageView
-        android:id="@+id/imagenCrearAventura"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:contentDescription="TODO"
-        android:scaleType="centerCrop" />
+        android:layout_gravity="center"
+        >
+
+        <ProgressBar
+            android:id="@+id/progressBarCrearAventura"
+            style="@android:style/Widget.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="5dp"
+            />
+
+        <ImageView
+            android:id="@+id/imagenCrearAventura"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="TODO"
+            android:scaleType="centerCrop" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,35 +42,35 @@
             android:id="@+id/checkbox_boost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onCheckboxClicked"
+            android:onClick="filtroClicked"
             app:srcCompat="@android:drawable/btn_star" />
 
         <ImageButton
             android:id="@+id/checkbox_sketch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onCheckboxClicked"
+            android:onClick="filtroClicked"
             app:srcCompat="@android:drawable/ic_menu_view" />
 
         <ImageButton
             android:id="@+id/checkbox_vigneta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onCheckboxClicked"
+            android:onClick="filtroClicked"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
         <ImageButton
             android:id="@+id/checkbox_sepia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onCheckboxClicked"
+            android:onClick="filtroClicked"
             app:srcCompat="@android:drawable/ic_menu_compass" />
 
         <ImageButton
             android:id="@+id/checkbox_gammma"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onCheckboxClicked"
+            android:onClick="filtroClicked"
             app:srcCompat="@android:drawable/ic_menu_manage" />
 
     </LinearLayout>

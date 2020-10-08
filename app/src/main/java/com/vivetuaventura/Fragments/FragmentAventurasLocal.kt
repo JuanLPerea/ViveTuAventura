@@ -65,13 +65,9 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
                 if (direction == ItemTouchHelper.LEFT) {
                     // Swipe hacia la izquierda editar
                     showDialogConfirmarEditar(position)
-                    recargarReciclerView()
-
-
                 } else {
                     // Swipe hacia la derecha borrar
                     showDialogConfirmarBorrar(position)
-                    recargarReciclerView()
                 }
             }
 
@@ -115,6 +111,7 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
 
         val noBtn = dialog.findViewById(R.id.cancelar_confirmar_dialog_BTN) as Button
         noBtn.setOnClickListener {
+            recargarReciclerView()
             dialog.dismiss()
         }
 
@@ -144,6 +141,7 @@ class FragmentAventurasLocal(context : Context) : Fragment() {
 
         val noBtn = dialog.findViewById(R.id.cancelar_confirmar_dialog_BTN) as Button
         noBtn.setOnClickListener {
+            recargarReciclerView()
             dialog.dismiss()
         }
 

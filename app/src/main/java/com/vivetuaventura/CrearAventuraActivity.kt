@@ -23,7 +23,11 @@ import com.vivetuaventura.Utilidades.ImagesHelper
 import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.Capitulo
 import kotlinx.android.synthetic.main.activity_crear_aventura.*
-import kotlinx.android.synthetic.main.activity_jugar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class CrearAventuraActivity : AppCompatActivity() {
@@ -41,6 +45,9 @@ class CrearAventuraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_crear_aventura)
 
         imagenCrearAventura.setImageResource(R.drawable.selecciona_imagen)
+
+        // Ocultamos el progress bar
+        progressBarCrearAventura.setVisibility(View.INVISIBLE)
 
         // Establecemos las acciones para los botones y click en los componentes
         clickHandler()
@@ -411,51 +418,63 @@ class CrearAventuraActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     override fun onBackPressed() {
         Toast.makeText(this, "Pulsa en el botón de la bandera para salir", Toast.LENGTH_LONG).show()
 
     }
 
 
-    fun onCheckboxClicked(view: View) {
+    fun filtroClicked(view: View) {
 
         var miBitmap = imagenCrearAventura.drawToBitmap()
-
         if (view is ImageButton) {
 
-            when (view.id) {
-                R.id.checkbox_boost -> {
-                    miBitmap = EfectosImagen.gaussian(miBitmap)
-                }
-                R.id.checkbox_gammma -> {
-                    miBitmap =    EfectosImagen.gamma(miBitmap, .2 , .9, .8)
-                }
-                R.id.checkbox_vigneta -> {
-                    miBitmap = EfectosImagen.vignette(miBitmap)
-                }
-                R.id.checkbox_sketch -> {
-                    miBitmap = EfectosImagen.sketch(miBitmap)
-                }
-                R.id.checkbox_sepia -> {
-                    miBitmap = EfectosImagen.sepia(miBitmap)
-                }
+            progressBarCrearAventura.setVisibility(View.VISIBLE)
 
+            CoroutineScope(Default).launch {
+                AplicarFiltro(view.id, miBitmap)
+            }
+
+        }
+    }
+
+    // Suspend function
+    suspend fun AplicarFiltro (id : Int, bitmap: Bitmap)  {
+
+        var miBitmap : Bitmap
+        miBitmap = bitmap
+
+        when (id) {
+            R.id.checkbox_boost -> {
+                Log.d("Miapp" , "Efecto 1")
+                miBitmap = EfectosImagen.gaussian(bitmap)
+            }
+            R.id.checkbox_sepia -> {
+                Log.d("Miapp" , "Efecto 2")
+                  miBitmap = EfectosImagen.sepia(bitmap)
+            }
+            R.id.checkbox_vigneta -> {
+                Log.d("Miapp" , "Efecto 3")
+                   miBitmap = EfectosImagen.vignette(bitmap)
+            }
+            R.id.checkbox_sketch -> {
+                Log.d("Miapp" , "Efecto 4")
+                   miBitmap = EfectosImagen.sketch(bitmap)
+            }
+            R.id.checkbox_gammma -> {
+                Log.d("Miapp" , "Efecto 5")
+                   miBitmap = EfectosImagen.hue(bitmap, .5f)
             }
         }
 
-        imagenCrearAventura.setImageBitmap(miBitmap)
+        imagesHelper.guardarBitmapEnMemoria(applicationContext, miBitmap, capituloActivo)
 
-        imagesHelper.guardarBitmapEnMemoria(
-            applicationContext,
-            miBitmap,
-            capituloActivo
-        )
+        withContext(Main){
+            imagenCrearAventura.setImageBitmap(miBitmap)
+            progressBarCrearAventura.setVisibility(View.INVISIBLE)
+        }
+
     }
-
-
 
 }
 
