@@ -159,12 +159,10 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
     }
 
     fun filtrarLista(nombreAventura : String, autorAventura: String, soloNoPublicados : Boolean) {
-        Log.d("Miapp" , "Filtrar Lista: " + nombreAventura + ", " + autorAventura + " ," + soloNoPublicados )
         // Recargar la lista de las aventuras
         listaAdventures.removeAll(listaAdventures)
         listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db, nombreAventura, autorAventura, soloNoPublicados))
         mAdapter.notifyDataSetChanged()
-
     }
 
 

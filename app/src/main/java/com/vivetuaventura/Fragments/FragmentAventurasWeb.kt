@@ -23,33 +23,22 @@ lateinit var mRecyclerView: RecyclerView
 val mAdapter: RecyclerAdapter = RecyclerAdapter()
 var listaAventuras: MutableList<Adventure> = mutableListOf()
 lateinit var firebaseUtils : FirebaseUtils
-private lateinit var auth: FirebaseAuth
-private var user = ""
 
 class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback {
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_aventuras_web, container, false)
 
-        // Usuario
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-        user = auth.currentUser!!.uid
-        Log.d("Miapp" , "Usuario: " + user)
-
         // utlidades de Firebase
         firebaseUtils = FirebaseUtils(context!!)
         firebaseUtils.setListener(this)
 
         // Recuperar lista aventuras en Firebase
-        listaAventuras = firebaseUtils.recuperarListaAventurasFirebase(user)
+        firebaseUtils.recuperarListaAventurasFirebase("","", false)
         var aventura = Adventure()
         aventura.nombreAventura = "Prueba"
 
         listaAventuras.add(aventura)
-
-        Log.d("Miapp" , "Tamaño de la lista on Create:" + listaAventuras.size.toString())
-
 
         mRecyclerView = view.findViewById(R.id.recyclerAventuraWeb) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
@@ -62,10 +51,8 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback {
 
     fun recargarReciclerView() {
         // Recargar la lista de las aventuras
-        listaAventuras.removeAll(listaAventuras)
-        listaAventuras.addAll( firebaseUtils.recuperarListaAventurasFirebase(user))
+        firebaseUtils.recuperarListaAventurasFirebase("","", false)
         mAdapter.notifyDataSetChanged()
-        Log.d("Miapp", "On restart")
     }
 
     override fun onResume() {
@@ -79,5 +66,10 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback {
         mAdapter.notifyDataSetChanged()
     }
 
+    fun filtrarLista(nombreAventura : String, autorAventura: String, soloNoPublicados : Boolean) {
+        // Recargar la lista de las aventuras
+        firebaseUtils.recuperarListaAventurasFirebase(nombreAventura, autorAventura, soloNoPublicados)
+        mAdapter.notifyDataSetChanged()
+    }
 
 }

@@ -78,7 +78,7 @@ class JugarActivity : AppCompatActivity() , AventuraFirebaseCallback , ImagenFir
         } else {
             aventuraLocal = false
             // Cargar de firebase
-            firebaseUtils.recuperarAventuraFirebase(user , recuperarID)
+            firebaseUtils.recuperarAventuraFirebase(recuperarID)
         }
 
         clickHandler()
@@ -134,7 +134,7 @@ class JugarActivity : AppCompatActivity() , AventuraFirebaseCallback , ImagenFir
                 setMessage("La historia deberá ser aprobada, normalmente tarda 1 día y si es correcto aparecerá en las historias compartidas y cualquiera podrá jugar y ver tu historia!!!")
                 setPositiveButton("ENVIAR",
                     DialogInterface.OnClickListener {  dialog, id ->
-                        firebaseUtils.subirAventuraFirebase(db, aventuraNueva, user)
+                        firebaseUtils.subirAventuraFirebase(db, aventuraNueva)
 
                         // Guardar imágenes en Firebase Storage
                         firebaseUtils.subirImagenesFirebase(aventuraNueva.listaCapitulos, aventuraNueva.id)

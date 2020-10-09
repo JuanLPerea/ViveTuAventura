@@ -27,7 +27,7 @@ class FirebaseUtils (val context: Context) {
     lateinit var storage: FirebaseStorage
     var contador = 0
 
-    fun subirAventuraFirebase (db : SQLiteDatabase, adventure : Adventure, usuario : String) {
+    fun subirAventuraFirebase (db : SQLiteDatabase, adventure : Adventure) {
 
         val databaseHelper = DatabaseHelper(context)
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -36,7 +36,7 @@ class FirebaseUtils (val context: Context) {
         adventure.listaCapitulos = listaCapitulos
 
         // Guardar en firebase
-        firebaseDatabase.collection(usuario).document(adventure.id)
+        firebaseDatabase.collection("AVENTURAS").document(adventure.id)
             .set(adventure)
             .addOnSuccessListener { documentReference ->
                 Log.d("Miapp", "DocumentSnapshot added with ID: ${adventure.id}")
@@ -88,13 +88,13 @@ class FirebaseUtils (val context: Context) {
         }
     }
 
-    fun recuperarAventuraFirebase  (usuario: String , idAventura:String)  {
+    fun recuperarAventuraFirebase  (idAventura:String)  {
 
         var  aventuraCargada = Adventure()
 
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-        val docRef = firebaseDatabase.collection(usuario).document(idAventura)
+        val docRef = firebaseDatabase.collection("AVENTURAS").document(idAventura)
         docRef.get().addOnSuccessListener { documentSnapshot ->
             aventuraCargada = documentSnapshot.toObject(Adventure::class.java)!!
             aventuraListener!!.onAventuraLoaded(aventuraCargada)
@@ -104,26 +104,46 @@ class FirebaseUtils (val context: Context) {
     }
     
     
-    fun recuperarListaAventurasFirebase (usuario: String) : MutableList<Adventure> {
-        
+    fun recuperarListaAventurasFirebase (nombreAventura:String, autorAventura:String, soloNoPublicados:Boolean) {
+        // TODO FILTRAR POR NOMBRE DE AVENTURA O NOMBRE DE USUARIO
+        // TODO FILTRAR POR LOS QUE NO ESTÉN PUBLICADOS
+
         var listaAventuras : MutableList<Adventure> = mutableListOf()
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-        firebaseDatabase.collection(usuario)
+        firebaseDatabase.collection("AVENTURAS")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val aventuraTMP = document.toObject(Adventure::class.java)
-                    Log.d("Miapp" , "Aventura ${document.id} del usuario ${usuario}")
-                    listaAventuras.add(aventuraTMP)
-                }
 
+
+                    // Filtrar ...........................
+                    //
+
+                    var filtrarAdd = false
+                    // Si no filtramos por ningún criterio, añadir siempre
+                    if (nombreAventura.equals("") && autorAventura.equals("")) {
+                        filtrarAdd = true
+                    } else {
+                        // si filtramos por nombre, añadir si contiene el texto buscado
+                        if (!nombreAventura.equals("") && aventuraTMP.nombreAventura.contains(nombreAventura)) {
+                            filtrarAdd = true
+                        }
+                        // si filtramos por autor, añadir si contiene el texto buscado
+                        if (!autorAventura.equals("") && aventuraTMP.creador.contains(autorAventura)) {
+                            filtrarAdd = true
+                        }
+                    }
+                    // Si queremos ver solo los no publicados (No tiene en cuenta si se ha filtrado por nombre o autor
+                    if (soloNoPublicados && !aventuraTMP.publicado) filtrarAdd = true
+
+                    if (filtrarAdd) listaAventuras.add(aventuraTMP)
+
+                }
                 // Comunicamos al interface que ha terminado la tarea y devolvemos los datos
                 listener!!.onListLoaded(listaAventuras)
             }
-
-        return listaAventuras
-        
     }
 
 
