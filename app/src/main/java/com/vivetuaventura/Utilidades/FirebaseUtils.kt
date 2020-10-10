@@ -13,6 +13,7 @@ import com.google.firebase.storage.StorageReference
 import com.vivetuaventura.Interfaces.AventuraFirebaseCallback
 import com.vivetuaventura.Interfaces.FirebaseCallback
 import com.vivetuaventura.Interfaces.ImagenFirebaseCallback
+import com.vivetuaventura.Interfaces.NumeroAventurasCallback
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Adventure
@@ -24,6 +25,7 @@ class FirebaseUtils (val context: Context) {
     private var listener: FirebaseCallback? = null //instance of your interface
     private var aventuraListener : AventuraFirebaseCallback? = null
     private var imageListener : ImagenFirebaseCallback? = null
+    private var numeroAventurasUsuarioListener : NumeroAventurasCallback? = null
     lateinit var storage: FirebaseStorage
     var contador = 0
 
@@ -44,9 +46,6 @@ class FirebaseUtils (val context: Context) {
             .addOnFailureListener { e ->
                 Log.w("Miapp", "Error adding document", e)
             }
-
-
-
     }
 
     fun subirImagenesFirebase (listaCapitulos: MutableList<Capitulo> , idAventura: String) {
@@ -89,11 +88,8 @@ class FirebaseUtils (val context: Context) {
     }
 
     fun recuperarAventuraFirebase  (idAventura:String)  {
-
         var  aventuraCargada = Adventure()
-
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
-
         val docRef = firebaseDatabase.collection("AVENTURAS").document(idAventura)
         docRef.get().addOnSuccessListener { documentSnapshot ->
             aventuraCargada = documentSnapshot.toObject(Adventure::class.java)!!
@@ -102,8 +98,29 @@ class FirebaseUtils (val context: Context) {
 
 
     }
-    
-    
+
+    fun getNumAventurasUsuario (usuario : String) {
+
+        var listaAventuras : MutableList<Adventure> = mutableListOf()
+        var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
+        var numeroAventuras = 0
+
+        firebaseDatabase.collection("AVENTURAS")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val aventuraTMP = document.toObject(Adventure::class.java)
+                        if (aventuraTMP.usuario.equals(usuario)) {
+                            numeroAventuras++
+                        }
+                    }
+                    numeroAventurasUsuarioListener!!.NumeroAventurasUsuario(numeroAventuras)
+                    }
+
+    }
+
+
+
     fun recuperarListaAventurasFirebase (nombreAventura:String, autorAventura:String, soloNoPublicados:Boolean) {
         // TODO FILTRAR POR NOMBRE DE AVENTURA O NOMBRE DE USUARIO
         // TODO FILTRAR POR LOS QUE NO ESTÉN PUBLICADOS
@@ -147,6 +164,8 @@ class FirebaseUtils (val context: Context) {
     }
 
 
+
+
     fun setListener(listener : FirebaseCallback) {
         this.listener = listener
     }
@@ -157,6 +176,10 @@ class FirebaseUtils (val context: Context) {
 
     fun setImageListener(listenerImagenes : ImagenFirebaseCallback) {
         this.imageListener = listenerImagenes
+    }
+
+    fun setNumeroAventurasListener(numeroAventurasCallback: NumeroAventurasCallback) {
+        this.numeroAventurasUsuarioListener = numeroAventurasCallback
     }
 
     /*

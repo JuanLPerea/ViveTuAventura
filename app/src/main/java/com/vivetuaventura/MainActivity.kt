@@ -17,11 +17,14 @@ import com.google.firebase.ktx.Firebase
 import com.vivetuaventura.Adapters.TabLayoutAdapter
 import com.vivetuaventura.Fragments.FragmentAventurasLocal
 import com.vivetuaventura.Fragments.FragmentAventurasWeb
+import com.vivetuaventura.Fragments.firebaseUtils
+import com.vivetuaventura.Interfaces.NumeroAventurasCallback
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
+import com.vivetuaventura.Utilidades.FirebaseUtils
 import com.vivetuaventura.Utilidades.ImagesHelper
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity()  {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     lateinit var tabLayout: TabLayout
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var fragmentAventurasLocal : FragmentAventurasLocal
     lateinit var fragmentAventurasWeb : FragmentAventurasWeb
+    var usuario = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +61,10 @@ class MainActivity : AppCompatActivity() {
         // Tab Layout
         tabLayout = findViewById(R.id.tabLayout)
         viewPager = findViewById(R.id.viewPager)
-        tabLayout.addTab(tabLayout.newTab().setText("Tus Aventuras"))
-        tabLayout.addTab(tabLayout.newTab().setText("Aventuras Web"))
+        val tab1 = tabLayout.newTab().setText("Tus Aventuras")
+        val tab2 = tabLayout.newTab().setText("Aventuras Web")
+        tabLayout.addTab(tab1)
+        tabLayout.addTab(tab2)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         val adapter = TabLayoutAdapter(this, supportFragmentManager, tabLayout.tabCount, fragmentAventurasLocal, fragmentAventurasWeb)
         viewPager.adapter = adapter
@@ -72,14 +78,13 @@ class MainActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-
         val crearAventuraBTN = findViewById(R.id.crearAventuraBTN) as FloatingActionButton
         crearAventuraBTN.setOnClickListener {
             Log.d("Miapp", "Ha pulsado crear aventura")
-            showDialog()
+            CrearAventura()
         }
 
-        val filtrarAventuras = findViewById(R.id.filtrarAventurasAB) as FloatingActionButton
+        val filtrarAventuras = findViewById<FloatingActionButton>(R.id.filtrarAventurasAB)
         filtrarAventuras.setOnClickListener{
             Log.d("Miapp", "pulsado filtar")
             dialogoFiltrar()
@@ -88,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun showDialog() {
+    private fun CrearAventura() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -98,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         textoDialogo.setText("Crear Aventura")
 
         yesBtn.setOnClickListener {
-
             val nombreAventuraET = dialog.findViewById(R.id.nombreAventuraDLG) as EditText
             val autorET = dialog.findViewById(R.id.AutorDLG) as EditText
 
@@ -123,9 +127,7 @@ class MainActivity : AppCompatActivity() {
         cancelBtn.setOnClickListener {
             dialog.dismiss()
         }
-
         dialog.show()
-
     }
 
     private fun dialogoFiltrar() {
@@ -185,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("Miapp", "signInAnonymously:success")
-                    val user = auth.currentUser
+                    usuario = auth.currentUser.toString()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("Miapp", "signInAnonymously:failure", task.exception)
@@ -200,6 +202,7 @@ class MainActivity : AppCompatActivity() {
     private fun signOut() {
         auth.signOut()
     }
+
 
 
 }

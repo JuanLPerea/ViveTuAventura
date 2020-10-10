@@ -70,7 +70,6 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
                     showDialogConfirmarBorrar(position)
                 }
             }
-
         }
 
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
