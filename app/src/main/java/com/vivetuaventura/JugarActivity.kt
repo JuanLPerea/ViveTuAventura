@@ -135,6 +135,7 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
             // Hacemos una consulta a Firebase para ver cuantas aventuras tiene este usuario
             // (Como máximo se permitirán 10 aventuras publicadas por usuario para no saturar Firebase)
             // Cuando Firebase devuelva el resultado se llamará a la función NumeroAventurasUsuario mediante el Interface implementado
+            Toast.makeText(this, "Publicando aventura!!" , Toast.LENGTH_LONG).show()
             firebaseUtils.getNumAventurasUsuario(user)
 
         }

@@ -3,9 +3,8 @@ package com.vivetuaventura.Adapters
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -30,14 +29,13 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return ViewHolder(layoutInflater.inflate(R.layout.item_aventura, parent, false))
+        val viewHolder = ViewHolder(layoutInflater.inflate(R.layout.item_aventura, parent, false))
+        return viewHolder
     }
-
 
     override fun getItemCount(): Int {
         return adventures.size
     }
-
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nombreAventura = view.findViewById(R.id.itemAventura) as TextView
@@ -45,36 +43,31 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         val visitas = view.findViewById(R.id.itemVisitas) as TextView
         val nota = view.findViewById(R.id.itemNota) as TextView
 
-
-
         fun bind(adventure:Adventure, context: Context) {
             nombreAventura.text = adventure.nombreAventura
             creador.text = adventure.creador
             visitas.text = adventure.visitas.toString()
             nota.text = adventure.nota.toString()
 
-            itemView.setOnClickListener(View.OnClickListener {
-
-              //  Toast.makeText(context, "Has hecho click en: " + nombreAventura.text, Toast.LENGTH_LONG).show()
-
-            //    Log.d("Miapp" , "Aventura pulsada ID: " +  adventure.id)
-
-                val intent = Intent (context, JugarActivity::class.java).apply {
-                    putExtra("ID_AVENTURA", adventure.id)
+            val popupMenu = PopupMenu(context, itemView)
+            popupMenu.inflate(R.menu.jugar_menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                if (menuItem.itemId ==  R.id.jugar_aventura_menu_item) {
+                    val intent = Intent (context, JugarActivity::class.java).apply {
+                        putExtra("ID_AVENTURA", adventure.id)
+                    }
+                    context.startActivity(intent)
                 }
-                context.startActivity(intent)
+                true
+            }
 
+            itemView.setOnClickListener(View.OnClickListener {
+                    popupMenu.show()
             })
-
-
-
         }
 
+
     }
-
-
-
-
 
 
 }

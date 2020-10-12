@@ -3,6 +3,7 @@ package com.vivetuaventura
 import android.app.Dialog
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +23,7 @@ import com.vivetuaventura.Interfaces.NumeroAventurasCallback
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.FirebaseUtils
 import com.vivetuaventura.Utilidades.ImagesHelper
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity()  {
@@ -34,10 +36,17 @@ class MainActivity : AppCompatActivity()  {
     lateinit var fragmentAventurasLocal : FragmentAventurasLocal
     lateinit var fragmentAventurasWeb : FragmentAventurasWeb
     var usuario = ""
+    lateinit var imagenPortada : ImageView
+    lateinit var textoPortada : TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Referencias a las views de la portada
+        imagenPortada = findViewById(R.id.imageViewPortada)
+        textoPortada = findViewById(R.id.textViewPortada)
 
         // Referencias a los fragments
         fragmentAventurasLocal = FragmentAventurasLocal(this)
@@ -89,8 +98,6 @@ class MainActivity : AppCompatActivity()  {
             Log.d("Miapp", "pulsado filtar")
             dialogoFiltrar()
         }
-
-
     }
 
     private fun CrearAventura() {
@@ -198,9 +205,18 @@ class MainActivity : AppCompatActivity()  {
             }
     }
 
+    fun setImagenPortada (bitmap: Bitmap) {
+        imagenPortada.setImageBitmap(bitmap)
+    }
+
 
     private fun signOut() {
         auth.signOut()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        signOut()
     }
 
 

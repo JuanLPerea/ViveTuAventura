@@ -15,10 +15,12 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchUIUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.CrearAventuraActivity
+import com.vivetuaventura.Interfaces.OnLocalListItemSelected
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.modelos.Adventure
@@ -50,18 +52,11 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
         mRecyclerView.adapter = mAdapter
 
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 TODO("Not yet implemented")
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
                 val position = viewHolder.adapterPosition
-
                 if (direction == ItemTouchHelper.LEFT) {
                     // Swipe hacia la izquierda editar
                     showDialogConfirmarEditar(position)
@@ -74,6 +69,7 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
 
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(mRecyclerView)
+
 
         return view
     }

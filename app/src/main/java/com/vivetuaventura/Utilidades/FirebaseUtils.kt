@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -41,7 +42,8 @@ class FirebaseUtils (val context: Context) {
         firebaseDatabase.collection("AVENTURAS").document(adventure.id)
             .set(adventure)
             .addOnSuccessListener { documentReference ->
-                Log.d("Miapp", "DocumentSnapshot added with ID: ${adventure.id}")
+//                Log.d("Miapp", "DocumentSnapshot added with ID: ${adventure.id}")
+                Toast.makeText(context, "Historia Publicada.", Toast.LENGTH_LONG).show()
             }
             .addOnFailureListener { e ->
                 Log.w("Miapp", "Error adding document", e)
@@ -61,11 +63,13 @@ class FirebaseUtils (val context: Context) {
             // Register observers to listen for when the download is done or if it fails
             uploadTask.addOnFailureListener {
                 // Handle unsuccessful uploads
-                Log.d("Miapp" , "Error al subir foto a Firebase")
+                //Log.d("Miapp" , "Error al subir foto a Firebase")
+                Toast.makeText(context, "Error al subir imágenes", Toast.LENGTH_LONG).show()
             }.addOnSuccessListener { taskSnapshot ->
                 // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
                 // ...
-                Log.d("Miapp" , "Subida foto a Firebase")
+                //Log.d("Miapp" , "Subida foto a Firebase")
+                Toast.makeText(context, "Imágenes subidas", Toast.LENGTH_LONG).show()
                 contador++
                 subirImagenesFirebase(listaCapitulos, idAventura)
             }
