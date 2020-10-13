@@ -15,23 +15,25 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchUIUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.CrearAventuraActivity
+import com.vivetuaventura.Interfaces.OnItemListClicked
 import com.vivetuaventura.Interfaces.OnLocalListItemSelected
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
+import com.vivetuaventura.Utilidades.ImagesHelper
 import com.vivetuaventura.modelos.Adventure
 
-class FragmentAventurasLocal(context : Context) : Fragment()  {
+class FragmentAventurasLocal(context : Context) : Fragment()   {
 
     lateinit var mRecyclerView: RecyclerView
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     val mAdapter: RecyclerAdapter = RecyclerAdapter()
     var listaAdventures: MutableList<Adventure> = mutableListOf()
+    var listenerItemClick : OnLocalListItemSelected? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -48,7 +50,9 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
         mRecyclerView = view.findViewById(R.id.recyclerAventuraLocal) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mAdapter.RecyclerAdapter(listaAdventures, view.context)
+
+        // Recycler adapter
+        mAdapter.RecyclerAdapter(listaAdventures, view.context, this)
         mRecyclerView.adapter = mAdapter
 
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -160,6 +164,18 @@ class FragmentAventurasLocal(context : Context) : Fragment()  {
         mAdapter.notifyDataSetChanged()
     }
 
+    fun setListClickListener (onLocalListItemSelected : OnLocalListItemSelected) {
+        listenerItemClick = onLocalListItemSelected
+    }
+
+    /*
+    override fun clickEnLista(idAventura: String) {
+        // recuperamos la imagen local y utilizamos el interface para pasarlo a la MainActivity
+        val imagesHelper = ImagesHelper(context!!)
+        val bitmap = imagesHelper.loadBitmap(idAventura)
+        listenerItemClick!!.LocalListItemSelected(bitmap!!)
+    }
+*/
 
 }
 

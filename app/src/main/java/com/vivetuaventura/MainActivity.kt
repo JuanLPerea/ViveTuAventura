@@ -20,13 +20,16 @@ import com.vivetuaventura.Fragments.FragmentAventurasLocal
 import com.vivetuaventura.Fragments.FragmentAventurasWeb
 import com.vivetuaventura.Fragments.firebaseUtils
 import com.vivetuaventura.Interfaces.NumeroAventurasCallback
+import com.vivetuaventura.Interfaces.OnLocalListItemSelected
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.FirebaseUtils
 import com.vivetuaventura.Utilidades.ImagesHelper
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import org.w3c.dom.Text
 
 
-class MainActivity : AppCompatActivity()  {
+class MainActivity : AppCompatActivity() , OnLocalListItemSelected {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     lateinit var tabLayout: TabLayout
@@ -51,6 +54,9 @@ class MainActivity : AppCompatActivity()  {
         // Referencias a los fragments
         fragmentAventurasLocal = FragmentAventurasLocal(this)
         fragmentAventurasWeb = FragmentAventurasWeb(this)
+
+        // Listener para cuando haces click en un elemento de la lista
+        fragmentAventurasLocal.setListClickListener(this)
 
         // creamos una instancia de la clase para manipular la imágenes
         imagesHelper = ImagesHelper(applicationContext)
@@ -219,6 +225,9 @@ class MainActivity : AppCompatActivity()  {
         signOut()
     }
 
+    override fun LocalListItemSelected(bitmap: Bitmap) {
+        imageViewPortada.setImageBitmap(bitmap)
+    }
 
 
 }

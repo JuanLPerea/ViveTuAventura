@@ -2,19 +2,15 @@ package com.vivetuaventura.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.Interfaces.FirebaseCallback
+import com.vivetuaventura.Interfaces.OnItemListClicked
 import com.vivetuaventura.R
 import com.vivetuaventura.Utilidades.FirebaseUtils
 import com.vivetuaventura.modelos.Adventure
@@ -43,7 +39,7 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback {
         mRecyclerView = view.findViewById(R.id.recyclerAventuraWeb) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mAdapter.RecyclerAdapter(listaAventuras, view.context)
+        mAdapter.RecyclerAdapter(listaAventuras, view.context , this as OnItemListClicked)
         mRecyclerView.adapter = mAdapter
 
         return view

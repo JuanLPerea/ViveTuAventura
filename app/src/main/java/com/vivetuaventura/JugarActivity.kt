@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
@@ -14,11 +13,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
+
 import com.vivetuaventura.Interfaces.AventuraFirebaseCallback
 import com.vivetuaventura.Interfaces.ImagenFirebaseCallback
 import com.vivetuaventura.Interfaces.NumeroAventurasCallback
@@ -28,7 +28,6 @@ import com.vivetuaventura.Utilidades.ImagesHelper
 import com.vivetuaventura.modelos.Adventure
 import com.vivetuaventura.modelos.Capitulo
 import kotlinx.android.synthetic.main.activity_jugar.*
-import java.net.URI
 
 class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFirebaseCallback , NumeroAventurasCallback {
 

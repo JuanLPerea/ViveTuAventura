@@ -1,5 +1,7 @@
 package com.vivetuaventura.Interfaces
 
+import android.graphics.Bitmap
+
 interface OnLocalListItemSelected {
-    fun LocalListItemSelected () : String
+    fun LocalListItemSelected (bitmap: Bitmap)
 }
