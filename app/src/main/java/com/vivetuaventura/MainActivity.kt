@@ -76,8 +76,8 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
         // Tab Layout
         tabLayout = findViewById(R.id.tabLayout)
         viewPager = findViewById(R.id.viewPager)
-        val tab1 = tabLayout.newTab().setText("Tus Aventuras")
-        val tab2 = tabLayout.newTab().setText("Aventuras Web")
+        val tab2 = tabLayout.newTab().setText("Tus Aventuras")
+        val tab1 = tabLayout.newTab().setText("Aventuras Web")
         tabLayout.addTab(tab1)
         tabLayout.addTab(tab2)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
@@ -87,6 +87,8 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
+                imagenPortada.setImageResource(R.drawable.brujula)
+                textoPortada.setText("Aventuras")
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}

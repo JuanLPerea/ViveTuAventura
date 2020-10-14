@@ -20,10 +20,10 @@ internal class TabLayoutAdapter (
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                fragmentAventurasLocal
+                fragmentAventurasWeb
             }
             1 -> {
-                fragmentAventurasWeb
+                fragmentAventurasLocal
             }
             else -> getItem(position)
         }

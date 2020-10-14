@@ -7,4 +7,6 @@
   <color name="negro">#000000</color>
   <color name="naranja">#FF9800</color>
   <color name="azul_oscuro">#212953</color>
+    <color name="tab_background_unselected">#505050</color>
+    <color name="tab_background_selected">#43A4CF</color>
 </resources>
