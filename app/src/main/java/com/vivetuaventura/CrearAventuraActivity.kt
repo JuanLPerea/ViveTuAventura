@@ -53,7 +53,7 @@ class CrearAventuraActivity : AppCompatActivity() {
         clickHandler()
 
         // Recuperamos id de la aventura del intent
-        aventuraNueva.id = intent.getStringExtra("ID_AVENTURA")
+        aventuraNueva.id = intent.getStringExtra("ID_AVENTURA")!!
         val esNuevaAventura = intent.getBooleanExtra("ESNUEVO" , true)
 
         // Accedemos a la BD

@@ -45,10 +45,11 @@ class FirebaseUtils (val context: Context) {
             .set(adventure)
             .addOnSuccessListener { documentReference ->
 //                Log.d("Miapp", "DocumentSnapshot added with ID: ${adventure.id}")
-                Toast.makeText(context, "Historia Publicada.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Historia Subida, pendiente de publicación.", Toast.LENGTH_LONG).show()
             }
             .addOnFailureListener { e ->
-                Log.w("Miapp", "Error adding document", e)
+                Toast.makeText(context, "Error $e", Toast.LENGTH_LONG).show()
+                Log.d("Miapp", "Error adding document", e)
             }
     }
 

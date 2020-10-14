@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
     lateinit var imagenPortada : ImageView
     lateinit var textoPortada : TextView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -200,14 +199,13 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("Miapp", "signInAnonymously:success" + auth.currentUser.toString())
+                    Log.d("Miapp", "signInAnonymously:success - " + auth.uid)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("Miapp", "signInAnonymously:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
+                    Toast.makeText(baseContext, "Fallo al crear usuario",
                         Toast.LENGTH_SHORT).show()
                 }
-
             }
     }
 
@@ -218,7 +216,7 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
 
     override fun onStop() {
         super.onStop()
-        signOut()
+        //signOut()
     }
 
     override fun LocalListItemSelected(idAventura : String) {

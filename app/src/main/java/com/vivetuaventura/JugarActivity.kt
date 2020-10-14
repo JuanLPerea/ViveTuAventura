@@ -67,7 +67,7 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         imagesHelper = ImagesHelper(this)
 
         // Recuperamos id de la aventura del intent
-        val recuperarID = intent.getStringExtra("ID_AVENTURA")
+        val recuperarID = intent.getStringExtra("ID_AVENTURA")!!
 
         // Diferenciar si la historia que queremos ver es local o de Firebase
         aventuraNueva = databaseHelper.recuperarAventura(db, recuperarID)
