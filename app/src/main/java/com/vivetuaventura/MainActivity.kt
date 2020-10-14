@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,17 +20,17 @@ import com.vivetuaventura.Adapters.TabLayoutAdapter
 import com.vivetuaventura.Fragments.FragmentAventurasLocal
 import com.vivetuaventura.Fragments.FragmentAventurasWeb
 import com.vivetuaventura.Fragments.firebaseUtils
-import com.vivetuaventura.Interfaces.NumeroAventurasCallback
-import com.vivetuaventura.Interfaces.OnLocalListItemSelected
+import com.vivetuaventura.Interfaces.*
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.FirebaseUtils
 import com.vivetuaventura.Utilidades.ImagesHelper
+import com.vivetuaventura.modelos.Adventure
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import org.w3c.dom.Text
 
 
-class MainActivity : AppCompatActivity() , OnLocalListItemSelected {
+class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListItemSelected, ImagenFirebaseCallback , AventuraFirebaseCallback {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     lateinit var tabLayout: TabLayout
@@ -55,8 +56,9 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected {
         fragmentAventurasLocal = FragmentAventurasLocal(this)
         fragmentAventurasWeb = FragmentAventurasWeb(this)
 
-        // Listener para cuando haces click en un elemento de la lista
+        // Listeners para cuando haces click en un elemento de la lista
         fragmentAventurasLocal.setListClickListener(this)
+        fragmentAventurasWeb.setListenerWebListItemSelected(this)
 
         // creamos una instancia de la clase para manipular la imágenes
         imagesHelper = ImagesHelper(applicationContext)
@@ -211,10 +213,6 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected {
             }
     }
 
-    fun setImagenPortada (bitmap: Bitmap) {
-        imagenPortada.setImageBitmap(bitmap)
-    }
-
 
     private fun signOut() {
         auth.signOut()
@@ -225,8 +223,32 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected {
         signOut()
     }
 
-    override fun LocalListItemSelected(bitmap: Bitmap) {
-        imageViewPortada.setImageBitmap(bitmap)
+    override fun LocalListItemSelected(idAventura : String) {
+        val aventuraSeleccionada : Adventure
+        aventuraSeleccionada = databaseHelper.recuperarAventura(db, idAventura)
+        aventuraSeleccionada.listaCapitulos = databaseHelper.cargarCapitulos(db, idAventura)
+        var bitmap = imagesHelper.recuperarImagenMemoriaInterna(aventuraSeleccionada.listaCapitulos.get(0).imagenCapitulo)
+        if (bitmap == null) {
+            bitmap =  BitmapFactory.decodeResource(resources, R.drawable.sinimagen)
+        }
+
+        imagenPortada.setImageBitmap(bitmap)
+        textoPortada.setText(aventuraSeleccionada.nombreAventura)
+    }
+
+    override fun OnWebListItemSelected(idAventura: String) {
+        firebaseUtils.setAventuraListener(this)
+        firebaseUtils.recuperarAventuraFirebase(idAventura)
+    }
+
+    override fun onImageLoaded(bitmap: Bitmap) {
+        imagenPortada.setImageBitmap(bitmap)
+    }
+
+    override fun onAventuraLoaded(aventura: Adventure) {
+        firebaseUtils.setImageListener(this)
+        textoPortada.setText(aventura.nombreAventura)
+        firebaseUtils.cargarImagenFirebase(aventura.id, aventura.listaCapitulos.get(0).id)
     }
 
 

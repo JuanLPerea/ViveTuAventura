@@ -28,7 +28,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         val item = adventures.get(position)
         holder.bind(item , context)
         holder.itemView.setOnClickListener {
-            listener.itemListClicked(item.id)
+            listener.itemListClicked(item.id , holder.itemView)
         }
     }
 
@@ -54,20 +54,6 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             creador.text = adventure.creador
             visitas.text = adventure.visitas.toString()
             nota.text = adventure.nota.toString()
-            itemView.setOnClickListener(View.OnClickListener {
-                val popupMenu = PopupMenu(context, itemView)
-                popupMenu.inflate(R.menu.jugar_menu)
-                popupMenu.setOnMenuItemClickListener { menuItem ->
-                    if (menuItem.itemId ==  R.id.jugar_aventura_menu_item) {
-                        val intent = Intent (context, JugarActivity::class.java).apply {
-                            putExtra("ID_AVENTURA", adventure.id)
-                        }
-                        context.startActivity(intent)
-                    }
-                    true
-                }
-                    popupMenu.show()
-            })
         }
 
 

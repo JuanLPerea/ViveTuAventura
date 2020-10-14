@@ -1,6 +1,7 @@
 package com.vivetuaventura.Utilidades
 
 import android.content.Context
+import android.content.res.Resources
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -87,6 +88,8 @@ class FirebaseUtils (val context: Context) {
             val bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.size)
             imageListener!!.onImageLoaded(bitmap)
         }.addOnFailureListener{
+            val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.sinimagen)
+            imageListener!!.onImageLoaded(bitmap)
             Log.d("Miapp" , "Error al descargar imagen")
         }
     }
@@ -99,8 +102,6 @@ class FirebaseUtils (val context: Context) {
             aventuraCargada = documentSnapshot.toObject(Adventure::class.java)!!
             aventuraListener!!.onAventuraLoaded(aventuraCargada)
         }
-
-
     }
 
     fun getNumAventurasUsuario (usuario : String) {

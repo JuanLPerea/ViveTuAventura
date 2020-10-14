@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,26 +22,26 @@ import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.CrearAventuraActivity
 import com.vivetuaventura.Interfaces.OnItemListClicked
 import com.vivetuaventura.Interfaces.OnLocalListItemSelected
+import com.vivetuaventura.JugarActivity
 import com.vivetuaventura.R
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.ImagesHelper
 import com.vivetuaventura.modelos.Adventure
 
-class FragmentAventurasLocal(context : Context) : Fragment()   {
+class FragmentAventurasLocal(context : Context) : Fragment() , OnItemListClicked  {
 
     lateinit var mRecyclerView: RecyclerView
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
     val mAdapter: RecyclerAdapter = RecyclerAdapter()
     var listaAdventures: MutableList<Adventure> = mutableListOf()
-    var listenerItemClick : OnLocalListItemSelected? = null
+    lateinit var listenerLocalItemClick : OnLocalListItemSelected
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_aventuras_local, container, false)
 
-        Log.d("MIAPP", "on Create")
         databaseHelper = DatabaseHelper(context!!)
         db = databaseHelper.writableDatabase
 
@@ -165,7 +166,27 @@ class FragmentAventurasLocal(context : Context) : Fragment()   {
     }
 
     fun setListClickListener (onLocalListItemSelected : OnLocalListItemSelected) {
-        listenerItemClick = onLocalListItemSelected
+        listenerLocalItemClick = onLocalListItemSelected
+    }
+
+    override fun itemListClicked(idAventura: String , itemView : View) {
+        Log.d("Miapp" , "Click en la lista: " + idAventura)
+
+            listenerLocalItemClick.LocalListItemSelected(idAventura)
+
+            val popupMenu = PopupMenu(context, itemView)
+            popupMenu.inflate(R.menu.jugar_menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                if (menuItem.itemId ==  R.id.jugar_aventura_menu_item) {
+                    val intent = Intent (context, JugarActivity::class.java).apply {
+                        putExtra("ID_AVENTURA", idAventura)
+                    }
+                    startActivity(intent)
+                }
+                true
+            }
+            popupMenu.show()
+
     }
 
     /*
