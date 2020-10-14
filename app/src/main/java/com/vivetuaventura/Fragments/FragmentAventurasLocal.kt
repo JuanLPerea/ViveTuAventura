@@ -169,9 +169,10 @@ class FragmentAventurasLocal(context : Context) : Fragment() , OnItemListClicked
         listenerLocalItemClick = onLocalListItemSelected
     }
 
-    override fun itemListClicked(idAventura: String , itemView : View) {
+    override fun itemListClicked(idAventura: String , itemView : View, publicado : Boolean) {
         Log.d("Miapp" , "Click en la lista: " + idAventura)
 
+            // Listener para mostrar la imagen en la portada
             listenerLocalItemClick.LocalListItemSelected(idAventura)
 
             val popupMenu = PopupMenu(context, itemView)

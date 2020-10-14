@@ -3,8 +3,10 @@ package com.vivetuaventura.Adapters
 import android.content.Context
 import android.content.Intent
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.vivetuaventura.Interfaces.OnItemListClicked
 import com.vivetuaventura.JugarActivity
@@ -28,7 +30,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         val item = adventures.get(position)
         holder.bind(item , context)
         holder.itemView.setOnClickListener {
-            listener.itemListClicked(item.id , holder.itemView)
+            listener.itemListClicked(item.id , holder.itemView , item.publicado)
         }
     }
 
@@ -47,6 +49,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         val creador = view.findViewById(R.id.itemCreador) as TextView
         val visitas = view.findViewById(R.id.itemVisitas) as TextView
         val nota = view.findViewById(R.id.itemNota) as TextView
+        val fondoFila = view.findViewById(R.id.fondo_item_list) as LinearLayout
 
 
         fun bind(adventure:Adventure, context: Context) {
@@ -54,10 +57,12 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             creador.text = adventure.creador
             visitas.text = adventure.visitas.toString()
             nota.text = adventure.nota.toString()
+            if (adventure.publicado) {
+                fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.negro))
+            } else {
+                fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.azul_oscuro))
+            }
         }
-
-
-
 
     }
 

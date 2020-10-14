@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.vivetuaventura.Adapters.RecyclerAdapter
 import com.vivetuaventura.Interfaces.FirebaseCallback
 import com.vivetuaventura.Interfaces.OnItemListClicked
@@ -37,10 +40,6 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
 
         // Recuperar lista aventuras en Firebase
         firebaseUtils.recuperarListaAventurasFirebase("","", false)
-        var aventura = Adventure()
-        aventura.nombreAventura = "Prueba"
-
-        listaAventuras.add(aventura)
 
         mRecyclerView = view.findViewById(R.id.recyclerAventuraWeb) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
@@ -74,21 +73,25 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun itemListClicked(idAventura: String , itemView : View) {
-        listenerWebListItemSelected.OnWebListItemSelected(idAventura)
+    override fun itemListClicked(idAventura: String , itemView : View , publicado : Boolean) {
 
-        val popupMenu = PopupMenu(context, itemView)
-        popupMenu.inflate(R.menu.jugar_menu)
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            if (menuItem.itemId ==  R.id.jugar_aventura_menu_item) {
-                val intent = Intent (context, JugarActivity::class.java).apply {
-                    putExtra("ID_AVENTURA", idAventura)
+        if (publicado) {
+            listenerWebListItemSelected.OnWebListItemSelected(idAventura)
+            val popupMenu = PopupMenu(context, itemView)
+            popupMenu.inflate(R.menu.jugar_menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                if (menuItem.itemId ==  R.id.jugar_aventura_menu_item) {
+                    val intent = Intent (context, JugarActivity::class.java).apply {
+                        putExtra("ID_AVENTURA", idAventura)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
+                true
             }
-            true
+            popupMenu.show()
+        } else {
+            Toast.makeText(context, "Esta historia aún no está publicada" , Toast.LENGTH_LONG).show()
         }
-        popupMenu.show()
     }
 
     fun setListenerWebListItemSelected (mListenerWebListItemSelected: OnWebListItemSelected) {

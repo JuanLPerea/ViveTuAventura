@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -106,7 +107,6 @@ class FirebaseUtils (val context: Context) {
 
     fun getNumAventurasUsuario (usuario : String) {
 
-        var listaAventuras : MutableList<Adventure> = mutableListOf()
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
         var numeroAventuras = 0
 
@@ -121,14 +121,15 @@ class FirebaseUtils (val context: Context) {
                     }
                     numeroAventurasUsuarioListener!!.NumeroAventurasUsuario(numeroAventuras)
                     }
-
+                .addOnFailureListener {exception ->
+                    Toast.makeText(context, "Error al publicar aventura" , Toast.LENGTH_LONG).show()
+                    Log.d("Miapp" , "Error: " + exception)
+                }
     }
 
 
 
     fun recuperarListaAventurasFirebase (nombreAventura:String, autorAventura:String, soloNoPublicados:Boolean) {
-        // TODO FILTRAR POR NOMBRE DE AVENTURA O NOMBRE DE USUARIO
-        // TODO FILTRAR POR LOS QUE NO ESTÉN PUBLICADOS
 
         var listaAventuras : MutableList<Adventure> = mutableListOf()
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -138,7 +139,6 @@ class FirebaseUtils (val context: Context) {
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val aventuraTMP = document.toObject(Adventure::class.java)
-
 
                     // Filtrar ...........................
                     //
@@ -166,9 +166,11 @@ class FirebaseUtils (val context: Context) {
                 // Comunicamos al interface que ha terminado la tarea y devolvemos los datos
                 listener!!.onListLoaded(listaAventuras)
             }
+                .addOnFailureListener {
+                    Log.d("Miapp" , "Error al descargar lista")
+                }
+
     }
-
-
 
 
     fun setListener(listener : FirebaseCallback) {

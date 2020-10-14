@@ -1,17 +1,13 @@
 package com.vivetuaventura
 
-import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
-import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -36,6 +32,7 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
     lateinit var imagesHelper: ImagesHelper
     lateinit var capituloActivo: Capitulo
     lateinit var firebaseUtils: FirebaseUtils
+    lateinit var botonPublicar : FloatingActionButton
     private lateinit var auth: FirebaseAuth
     private var user = ""
     var aventuraLocal = true
@@ -46,6 +43,9 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jugar)
+
+        // Floating button de publicar
+        botonPublicar = findViewById(R.id.publicarBTN)
 
         // Accedemos a la BD
         databaseHelper = DatabaseHelper(this)
@@ -79,9 +79,15 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
             // cargar el primer capitulo
             capituloActivo = databaseHelper.cargarCapituloRaiz(db, aventuraNueva.id)
             cargarCapituloEnPantalla()
+            // Comprobamos si esta historia está publicada
+            if (aventuraNueva.publicado) {
+                botonPublicar.visibility = View.GONE
+            }
 
         } else {
             aventuraLocal = false
+            // Ocultamos el botón de publicar
+            botonPublicar.visibility = View.GONE
             // Cargar de firebase
             firebaseUtils.recuperarAventuraFirebase(recuperarID)
         }
@@ -129,15 +135,19 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         }
 
         val publicarClick = findViewById(R.id.publicarBTN) as FloatingActionButton
-        publicarClick.setOnClickListener {
-            // Publicar la historia
-            // Hacemos una consulta a Firebase para ver cuantas aventuras tiene este usuario
-            // (Como máximo se permitirán 10 aventuras publicadas por usuario para no saturar Firebase)
-            // Cuando Firebase devuelva el resultado se llamará a la función NumeroAventurasUsuario mediante el Interface implementado
-            Toast.makeText(this, "Publicando aventura!!" , Toast.LENGTH_LONG).show()
-            firebaseUtils.getNumAventurasUsuario(user)
 
+        if (!aventuraNueva.publicado && aventuraLocal) {
+            publicarClick.setOnClickListener {
+                // Publicar la historia
+                // Hacemos una consulta a Firebase para ver cuantas aventuras tiene este usuario
+                // (Como máximo se permitirán 10 aventuras publicadas por usuario para no saturar Firebase)
+                // Cuando Firebase devuelva el resultado se llamará a la función NumeroAventurasUsuario mediante el Interface implementado
+                Toast.makeText(this, "Publicando aventura!!" , Toast.LENGTH_LONG).show()
+                botonPublicar.setVisibility(View.GONE)
+                firebaseUtils.getNumAventurasUsuario(user)
+            }
         }
+
 
     }
 

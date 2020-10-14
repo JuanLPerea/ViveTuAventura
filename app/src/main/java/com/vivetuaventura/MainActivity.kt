@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
     private lateinit var auth: FirebaseAuth
     lateinit var fragmentAventurasLocal : FragmentAventurasLocal
     lateinit var fragmentAventurasWeb : FragmentAventurasWeb
-    var usuario = ""
     lateinit var imagenPortada : ImageView
     lateinit var textoPortada : TextView
 
@@ -47,6 +46,11 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
+        if (currentUser == null) signInAnonymously()
 
         // Referencias a las views de la portada
         imagenPortada = findViewById(R.id.imageViewPortada)
@@ -65,11 +69,6 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
 
         // Desactivamos modo estricto
         imagesHelper.desactivarModoEstricto()
-
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-        val currentUser = auth.currentUser
-        if (currentUser == null) signInAnonymously()
 
         // Instanciar Base de Datos SQLite
         databaseHelper = DatabaseHelper(applicationContext)
@@ -201,8 +200,7 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("Miapp", "signInAnonymously:success")
-                    usuario = auth.currentUser.toString()
+                    Log.d("Miapp", "signInAnonymously:success" + auth.currentUser.toString())
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("Miapp", "signInAnonymously:failure", task.exception)
