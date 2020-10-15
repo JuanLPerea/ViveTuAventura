@@ -54,6 +54,9 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         // Usuario
         // Initialize Firebase Auth
         auth = Firebase.auth
+        val currentUser = auth.currentUser
+        if (currentUser == null) signInAnonymously()
+
         user = auth.currentUser!!.uid
         Log.d("Miapp", "Usuario: " + user)
 
@@ -147,7 +150,6 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
                 firebaseUtils.getNumAventurasUsuario(user)
             }
         }
-
 
     }
 
@@ -244,6 +246,22 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         } else {
             Toast.makeText(this, "Como máximo puedes publicar 10 historias. Borra alguna de la Web si quieres publicar esta", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun signInAnonymously() {
+        // [START signin_anonymously]
+        auth.signInAnonymously()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("Miapp", "signInAnonymously:success - " + auth.uid)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("Miapp", "signInAnonymously:failure", task.exception)
+                        Toast.makeText(baseContext, "Fallo al crear usuario",
+                                Toast.LENGTH_SHORT).show()
+                    }
+                }
     }
 
 }
