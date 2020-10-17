@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
+import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -88,6 +89,7 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
             }
 
         } else {
+            // La aventura es de Firebase
             aventuraLocal = false
             // Ocultamos el botón de publicar
             botonPublicar.visibility = View.GONE
@@ -170,12 +172,9 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         val salirBtn = dialog.findViewById(R.id.salir_jugar_dialog_BTN) as Button
         salirBtn.setOnClickListener {
             // Salir
-            finish()
+            dialogoVotarAventura()
             dialog.dismiss()
         }
-
-        // TODO SI LA HISTORIA ES DE LA WEB PODEMOS PONERLE NOTA (HABRÍA QUE COMPROBAR QUE NO SEA EL MISMO USUARIO QUE SE VOTE A SI MISMO)
-
         dialog.show()
 
     }
@@ -208,8 +207,12 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
 
 
     override fun onAventuraLoaded(aventura: Adventure) {
+        // Aquí hemos recibido los datos de Firebase mendiante el callback de FirebaseUtils
         capituloActivo = aventura.listaCapitulos.get(0)
         aventuraNueva = aventura
+        aventuraNueva.visitas = aventura.visitas + 1
+        firebaseUtils.actualizarVisitasAventura(aventuraNueva)
+        // Actualizamos las views
         textoJugarTV.setText(capituloActivo.textoCapitulo)
         decision1JugarBTN.setText(capituloActivo.textoOpcion1)
         decision2JugarBTN.setText(capituloActivo.textoOpcion2)
@@ -264,4 +267,44 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
                 }
     }
 
+    override fun onBackPressed() {
+        dialogoVotarAventura()
+    }
+
+
+    fun dialogoVotarAventura() {
+        if (!aventuraLocal) {
+            if (!databaseHelper.aventuraYaVotada(db, aventuraNueva.id)) {
+                val dialog = Dialog(this)
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCancelable(true)
+                dialog.setContentView(R.layout.dialog_votar)
+
+                val pickerNumber = dialog.findViewById<NumberPicker>(R.id.numberPickerVotar)
+                pickerNumber.minValue = 0
+                pickerNumber.maxValue = 10
+                pickerNumber.value = 5
+
+                val votarBtn = dialog.findViewById(R.id.votar_dialog_BTN) as Button
+                votarBtn.setOnClickListener {
+                    // Votar
+                    val nota = ((aventuraNueva.nota + pickerNumber.value) / 2) as Int
+                    if (aventuraNueva.visitas == 1) {
+                        aventuraNueva.nota = pickerNumber.value
+                    } else {
+                        aventuraNueva.nota = nota
+                    }
+                    databaseHelper.aventurasVotadasAdd(db, aventuraNueva)
+                    firebaseUtils.actualizarNotaAventura(aventuraNueva)
+                    finish()
+                    dialog.dismiss()
+                }
+                dialog.show()
+            } else {
+                finish()
+            }
+        } else {
+            finish()
+        }
+    }
 }

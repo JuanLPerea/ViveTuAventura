@@ -46,6 +46,9 @@ class FirebaseUtils (val context: Context) {
             .addOnSuccessListener { documentReference ->
 //                Log.d("Miapp", "DocumentSnapshot added with ID: ${adventure.id}")
                 Toast.makeText(context, "Historia Subida, pendiente de publicación.", Toast.LENGTH_LONG).show()
+                // Actualizamos la base de datos local para saber que esta aventura ya está publicada
+                adventure.publicado = true
+                databaseHelper.actualizarAventura(db , adventure)
             }
             .addOnFailureListener { e ->
                 Toast.makeText(context, "Error $e", Toast.LENGTH_LONG).show()
@@ -190,11 +193,29 @@ class FirebaseUtils (val context: Context) {
         this.numeroAventurasUsuarioListener = numeroAventurasCallback
     }
 
-    /*
-    fun getJobsOnADate(Date date) {
-        ...
+    fun actualizarNotaAventura( aventura: Adventure) {
+        var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
+        firebaseDatabase.collection("AVENTURAS").document(aventura.id)
+                .update("nota" , aventura.nota)
+                .addOnSuccessListener {
+                    Log.d("Miapp" , "Nota actualizada")
+                }
+                .addOnFailureListener { e ->
+                    Log.d("Miapp" , "Error: $e")
+                }
     }
-     */
+
+    fun actualizarVisitasAventura(aventura: Adventure) {
+        var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
+        firebaseDatabase.collection("AVENTURAS").document(aventura.id)
+                .update("visitas" , aventura.visitas)
+                .addOnSuccessListener {
+                    Log.d("Miapp" , "Nota actualizada")
+                }
+                .addOnFailureListener { e ->
+                    Log.d("Miapp" , "Error: $e")
+                }
+    }
 
 
 }

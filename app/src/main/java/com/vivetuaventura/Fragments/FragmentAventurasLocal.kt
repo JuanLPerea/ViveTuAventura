@@ -190,14 +190,6 @@ class FragmentAventurasLocal(context : Context) : Fragment() , OnItemListClicked
 
     }
 
-    /*
-    override fun clickEnLista(idAventura: String) {
-        // recuperamos la imagen local y utilizamos el interface para pasarlo a la MainActivity
-        val imagesHelper = ImagesHelper(context!!)
-        val bitmap = imagesHelper.loadBitmap(idAventura)
-        listenerItemClick!!.LocalListItemSelected(bitmap!!)
-    }
-*/
 
 }
 

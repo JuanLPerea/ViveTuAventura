@@ -175,8 +175,8 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
 
             // llamar a un método público dentro de Fragment Aventuras Local o Web según sea
             when (viewPager.currentItem) {
-                0 -> fragmentAventurasLocal.filtrarLista(nombreFiltrar, autorFiltrar, soloNoPublicados)
-                1 -> fragmentAventurasWeb.filtrarLista(nombreFiltrar, autorFiltrar, soloNoPublicados)
+                1 -> fragmentAventurasLocal.filtrarLista(nombreFiltrar, autorFiltrar, soloNoPublicados)
+                0 -> fragmentAventurasWeb.filtrarLista(nombreFiltrar, autorFiltrar, soloNoPublicados)
             }
 
             dialog.dismiss()

@@ -90,7 +90,7 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
             }
             popupMenu.show()
         } else {
-            Toast.makeText(context, "Esta historia aún no está publicada" , Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Aventura pendiente de aprobación, próximamente podrás jugar!" , Toast.LENGTH_LONG).show()
         }
     }
 

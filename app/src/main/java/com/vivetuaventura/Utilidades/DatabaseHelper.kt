@@ -16,8 +16,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
             "CREATE TABLE AVENTURA (ID TEXT, NOMBRE TEXT, CREADOR TEXT, NOTA INTEGER, PUBLICADO BOOLEAN, VISITAS INTEGER, USUARIO TEXT)"
         val CREATE_TABLE_CAPITULOS =
             "CREATE TABLE CAPITULOS ( IDAVENTURA TEXT, ID TEXT, CAPITULOPADRE TEXT, CAPITULO1 TEXT, TEXTOOPCION1 TEXT,CAPITULO2 TEXT, TEXTOOPCION2 TEXT, TEXTOCAPITULO TEXT, IMAGENCAPITULO TEXT, FINHISTORIA BOOLEAN)"
+        val CREATE_TABLE_VOTOS = "CREATE TABLE VOTOS (IDAVENTURA TEXT)"
         db!!.execSQL(CREATE_TABLE_AVENTURA)
         db!!.execSQL(CREATE_TABLE_CAPITULOS)
+        db!!.execSQL(CREATE_TABLE_VOTOS)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -43,8 +45,23 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
     fun actualizarAventura(db: SQLiteDatabase?, adventure:Adventure) {
         var publicado = 0
         if (adventure.publicado == true) publicado = 1
-        val UPDATE_AVENTURA = "UPDATE AVENTURA SET ID = '" + adventure.id + "' , NOMBRE = '" + adventure.nombreAventura + "' , CREADOR = '" +  adventure.creador + "' , NOTA = " + adventure.nota +", PUBLICADO = " + publicado + " , VISITAS = "  + adventure.visitas + ", USUARIO = '" + adventure.usuario + "'"
+        val UPDATE_AVENTURA = "UPDATE AVENTURA SET ID = '" + adventure.id + "' , NOMBRE = '" + adventure.nombreAventura + "' , CREADOR = '" +  adventure.creador + "' , NOTA = " + adventure.nota +", PUBLICADO = " + publicado + " , VISITAS = "  + adventure.visitas + ", USUARIO = '" + adventure.usuario + "' WHERE ID = '" + adventure.id + "'"
         db!!.execSQL(UPDATE_AVENTURA)
+    }
+
+    fun aventurasVotadasAdd (db: SQLiteDatabase , adventure: Adventure) {
+        val UPDATE_AVENTURA = "INSERT INTO VOTOS VALUES ('" + adventure.id + "')"
+        db!!.execSQL(UPDATE_AVENTURA)
+    }
+
+
+    fun aventuraYaVotada(db: SQLiteDatabase, idAventura: String) : Boolean {
+        var votada = false
+        val datosBruto = db.rawQuery("SELECT * FROM VOTOS WHERE IDAVENTURA ='" + idAventura + "'", null)
+        if (datosBruto!!.moveToFirst()) {
+            votada = true
+        }
+        return votada
     }
 
 
@@ -322,6 +339,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "DB_AVENTURAS
 
         return capituloRecuperado
     }
+
 
 
 }
