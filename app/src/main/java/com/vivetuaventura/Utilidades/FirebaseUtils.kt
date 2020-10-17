@@ -148,21 +148,25 @@ class FirebaseUtils (val context: Context) {
                     //
 
                     var filtrarAdd = false
-                    // Si no filtramos por ningún criterio, añadir siempre
-                    if (nombreAventura.equals("") && autorAventura.equals("")) {
-                        filtrarAdd = true
+
+                    // Si queremos ver solo los no publicados (No tiene en cuenta si se ha filtrado por nombre o autor
+                    if (soloNoPublicados) {
+                        if (!aventuraTMP.publicado) filtrarAdd = true
                     } else {
-                        // si filtramos por nombre, añadir si contiene el texto buscado
-                        if (!nombreAventura.equals("") && aventuraTMP.nombreAventura.contains(nombreAventura)) {
+                        // Si no filtramos por ningún criterio, añadir siempre
+                        if (nombreAventura.equals("") && autorAventura.equals("")) {
                             filtrarAdd = true
-                        }
-                        // si filtramos por autor, añadir si contiene el texto buscado
-                        if (!autorAventura.equals("") && aventuraTMP.creador.contains(autorAventura)) {
-                            filtrarAdd = true
+                        } else {
+                            // si filtramos por nombre, añadir si contiene el texto buscado
+                            if (!nombreAventura.equals("") && aventuraTMP.nombreAventura.contains(nombreAventura)) {
+                                filtrarAdd = true
+                            }
+                            // si filtramos por autor, añadir si contiene el texto buscado
+                            if (!autorAventura.equals("") && aventuraTMP.creador.contains(autorAventura)) {
+                                filtrarAdd = true
+                            }
                         }
                     }
-                    // Si queremos ver solo los no publicados (No tiene en cuenta si se ha filtrado por nombre o autor
-                    if (soloNoPublicados && !aventuraTMP.publicado) filtrarAdd = true
 
                     if (filtrarAdd) listaAventuras.add(aventuraTMP)
 

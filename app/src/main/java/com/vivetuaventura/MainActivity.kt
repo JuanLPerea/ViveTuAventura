@@ -24,6 +24,7 @@ import com.vivetuaventura.Interfaces.*
 import com.vivetuaventura.SalvarPreferencias.DatabaseHelper
 import com.vivetuaventura.Utilidades.FirebaseUtils
 import com.vivetuaventura.Utilidades.ImagesHelper
+import com.vivetuaventura.Utilidades.Prefs
 import com.vivetuaventura.modelos.Adventure
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -31,20 +32,22 @@ import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListItemSelected, ImagenFirebaseCallback , AventuraFirebaseCallback {
-    lateinit var databaseHelper: DatabaseHelper
-    lateinit var db: SQLiteDatabase
-    lateinit var tabLayout: TabLayout
-    lateinit var viewPager: ViewPager
-    lateinit var imagesHelper : ImagesHelper
+    private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var db: SQLiteDatabase
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
+    private lateinit var imagesHelper : ImagesHelper
     private lateinit var auth: FirebaseAuth
-    lateinit var fragmentAventurasLocal : FragmentAventurasLocal
-    lateinit var fragmentAventurasWeb : FragmentAventurasWeb
-    lateinit var imagenPortada : ImageView
-    lateinit var textoPortada : TextView
+    private lateinit var fragmentAventurasLocal : FragmentAventurasLocal
+    private lateinit var fragmentAventurasWeb : FragmentAventurasWeb
+    private lateinit var imagenPortada : ImageView
+    private lateinit var textoPortada : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        ComprobarPrimeraEjecucion()
 
         // Initialize Firebase Auth
         auth = Firebase.auth
@@ -212,15 +215,6 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
     }
 
 
-    private fun signOut() {
-        auth.signOut()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        //signOut()
-    }
-
     override fun LocalListItemSelected(idAventura : String) {
         val aventuraSeleccionada : Adventure
         aventuraSeleccionada = databaseHelper.recuperarAventura(db, idAventura)
@@ -247,6 +241,17 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
         firebaseUtils.setImageListener(this)
         textoPortada.setText(aventura.nombreAventura)
         firebaseUtils.cargarImagenFirebase(aventura.id, aventura.listaCapitulos.get(0).id)
+    }
+
+    fun ComprobarPrimeraEjecucion () {
+        val prefs = Prefs(applicationContext)
+        if (prefs.primeraEjecucion!!) {
+            prefs.primeraEjecucion = false
+            val intent = Intent (applicationContext, PresentacionActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 
 
