@@ -17,7 +17,7 @@
             android:name="com.google.android.actions"
             android:resource="@xml/tab_color_selector" />
 
-        <activity android:name=".PresentacionActivity" />
+        <activity android:name=".PresentacionActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".CrearAventuraActivity" />
         <activity android:name=".JugarActivity" />
         <activity

@@ -100,14 +100,18 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
 
         val crearAventuraBTN = findViewById(R.id.crearAventuraBTN) as FloatingActionButton
         crearAventuraBTN.setOnClickListener {
-            Log.d("Miapp", "Ha pulsado crear aventura")
             CrearAventura()
         }
 
         val filtrarAventuras = findViewById<FloatingActionButton>(R.id.filtrarAventurasAB)
         filtrarAventuras.setOnClickListener{
-            Log.d("Miapp", "pulsado filtar")
             dialogoFiltrar()
+        }
+
+        val infoButton = findViewById<FloatingActionButton>(R.id.infoFloatingActionButton)
+        infoButton.setOnClickListener {
+            val intent = Intent (applicationContext, PresentacionActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -191,9 +195,8 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if user is signed in (non-null)
         val currentUser = auth.currentUser
-        Log.d("Miapp" , "Usuario: " + currentUser.toString())
         if (currentUser == null) signInAnonymously()
 
     }
@@ -250,8 +253,6 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
             val intent = Intent (applicationContext, PresentacionActivity::class.java)
             startActivity(intent)
         }
-
-
     }
 
 

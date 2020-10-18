@@ -3,15 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     tools:context=".PresentacionActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/onBoardingViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/presentacionTabLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Presentacion"
-        android:textSize="36sp" />
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:tabBackground="@drawable/indicator_selector">
+
+
+    </com.google.android.material.tabs.TabLayout>
+
+
 </FrameLayout>
