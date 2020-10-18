@@ -13,8 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_launcher_background"
-        />
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <RelativeLayout
         android:id="@+id/frameJugarTV"
@@ -35,8 +34,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:clickable="true"
+            android:tint="#FFEB3B"
+            app:backgroundTint="#4CAF50"
             app:elevation="5dp"
             app:srcCompat="@android:drawable/ic_menu_share" />
     </RelativeLayout>
@@ -52,8 +58,8 @@
             android:id="@+id/decision1JugarBTN"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="20dp"
+            android:layout_weight="1"
             android:text="Decision 1" />
 
         <TextView
@@ -68,8 +74,8 @@
             android:id="@+id/decision2JugarBTN"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginRight="20dp"
+            android:layout_weight="1"
             android:text="Decision 2" />
     </LinearLayout>
 </LinearLayout>

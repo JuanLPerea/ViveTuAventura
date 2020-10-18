@@ -58,9 +58,6 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         val currentUser = auth.currentUser
         if (currentUser == null) signInAnonymously()
 
-        user = auth.currentUser!!.uid
-        Log.d("Miapp", "Usuario: " + user)
-
         // utlidades de Firebase
         firebaseUtils = FirebaseUtils(this)
         firebaseUtils.setAventuraListener(this)
@@ -263,6 +260,8 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("Miapp", "signInAnonymously:success - " + auth.uid)
+                        user = auth.currentUser!!.uid
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("Miapp", "signInAnonymously:failure", task.exception)

@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:background="#000000"
     tools:context=".PresentacionActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/onBoardingViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
     </androidx.viewpager.widget.ViewPager>
 
@@ -24,10 +25,53 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        app:tabBackground="@drawable/indicator_selector">
+        app:tabBackground="@drawable/indicator_selector"
+        app:tabIndicatorColor="#F44336"
+        app:tabRippleColor="#FFEB3B">
 
 
     </com.google.android.material.tabs.TabLayout>
 
+    <TextView
+        android:id="@+id/textViewAtrasPresentacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="Atrás"
+        android:textColor="#FFEB3B"
+        android:textSize="18dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textViewSiguientePresentacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="Siguiente"
+        android:textColor="#FFEB3B"
+        android:textSize="18dp" />
+
+    <Button
+        android:id="@+id/buttonPresentacionEmpezar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Empezar"
+        android:layout_gravity="bottom|center"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible"/>
 
 </FrameLayout>

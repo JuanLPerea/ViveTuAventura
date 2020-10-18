@@ -9,7 +9,7 @@
             android:innerRadius="3dp"
             android:useLevel="false">
 
-            <solid android:color="@color/azul_oscuro"/>
+            <solid android:color="@color/naranja"/>
 
 
         </shape>
