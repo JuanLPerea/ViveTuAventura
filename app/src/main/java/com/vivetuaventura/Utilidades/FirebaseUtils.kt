@@ -113,17 +113,19 @@ class FirebaseUtils (val context: Context) {
 
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
         var numeroAventuras = 0
+        var totalAventuras = 0
 
         firebaseDatabase.collection("AVENTURAS")
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
+                        totalAventuras++
                         val aventuraTMP = document.toObject(Adventure::class.java)
                         if (aventuraTMP.usuario.equals(usuario)) {
                             numeroAventuras++
                         }
                     }
-                    numeroAventurasUsuarioListener!!.NumeroAventurasUsuario(numeroAventuras)
+                    numeroAventurasUsuarioListener!!.NumeroAventurasUsuario(numeroAventuras, totalAventuras)
                     }
                 .addOnFailureListener {exception ->
                     Toast.makeText(context, "Error al publicar aventura" , Toast.LENGTH_LONG).show()
@@ -220,6 +222,20 @@ class FirebaseUtils (val context: Context) {
                     Log.d("Miapp" , "Error: $e")
                 }
     }
+
+    fun borrarAventura(idAventura: String) {
+        var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
+        firebaseDatabase.collection("AVENTURAS").document(idAventura)
+                .delete()
+                .addOnSuccessListener {
+                    Toast.makeText(context , "Aventura Borrada" , Toast.LENGTH_LONG).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(context , "Error al borrar la aventura" , Toast.LENGTH_LONG).show()
+                }
+    }
+
+
 
 
 }

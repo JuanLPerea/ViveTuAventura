@@ -223,32 +223,37 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         jugarIV.setImageBitmap(bitmap)
     }
 
-    override fun NumeroAventurasUsuario(numeroAventuras: Int) {
-        Log.d("Miapp" , "Numero de aventuras en Firebase de este usuario: " + numeroAventuras)
-        if (numeroAventuras < 10) {
-            val dialog = Dialog(this)
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialog.setCancelable(true)
-            dialog.setContentView(R.layout.dialogo_publicar)
+    override fun NumeroAventurasUsuario(numeroAventurasUsuario: Int , totalAventuras : Int) {
+       // Log.d("Miapp" , "Numero de aventuras en Firebase de este usuario: " + numeroAventurasUsuario)
+        if (totalAventuras < 100) {
+            if (numeroAventurasUsuario < 10) {
+                val dialog = Dialog(this)
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCancelable(true)
+                dialog.setContentView(R.layout.dialogo_publicar)
 
-            val cancelarBtn = dialog.findViewById(R.id.cancelar_publicar_dialog_BTN) as Button
-            cancelarBtn.setOnClickListener {
-                // Salir
-                dialog.dismiss()
-            }
+                val cancelarBtn = dialog.findViewById(R.id.cancelar_publicar_dialog_BTN) as Button
+                cancelarBtn.setOnClickListener {
+                    // Salir
+                    dialog.dismiss()
+                }
 
-            val publicarBtn = dialog.findViewById(R.id.aceptar_publicar_dialog_BTN) as Button
-            publicarBtn.setOnClickListener {
-                // Publicar la historia en Firebase
-                firebaseUtils.subirAventuraFirebase(db, aventuraNueva)
-                // Guardar imágenes en Firebase Storage
-                firebaseUtils.subirImagenesFirebase(aventuraNueva.listaCapitulos, aventuraNueva.id)
-                dialog.dismiss()
+                val publicarBtn = dialog.findViewById(R.id.aceptar_publicar_dialog_BTN) as Button
+                publicarBtn.setOnClickListener {
+                    // Publicar la historia en Firebase
+                    firebaseUtils.subirAventuraFirebase(db, aventuraNueva)
+                    // Guardar imágenes en Firebase Storage
+                    firebaseUtils.subirImagenesFirebase(aventuraNueva.listaCapitulos, aventuraNueva.id)
+                    dialog.dismiss()
+                }
+                dialog.show()
+            } else {
+                Toast.makeText(this, "Como máximo puedes publicar 10 historias. Borra alguna de la Web si quieres publicar esta", Toast.LENGTH_LONG).show()
             }
-            dialog.show()
         } else {
-            Toast.makeText(this, "Como máximo puedes publicar 10 historias. Borra alguna de la Web si quieres publicar esta", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Se ha llegado al máximo de aventuras que puede tener esta APP, haz una donación para aumentar la capacidad de nuestro servidor", Toast.LENGTH_LONG).show()
         }
+
     }
 
     private fun signInAnonymously() {
