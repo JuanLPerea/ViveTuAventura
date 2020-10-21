@@ -75,7 +75,7 @@ class FirebaseUtils (val context: Context) {
                 // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
                 // ...
                 //Log.d("Miapp" , "Subida foto a Firebase")
-                Toast.makeText(context, "Imágenes subidas", Toast.LENGTH_LONG).show()
+              //  Toast.makeText(context, "Imágenes subidas", Toast.LENGTH_LONG).show()
                 contador++
                 subirImagenesFirebase(listaCapitulos, idAventura)
             }

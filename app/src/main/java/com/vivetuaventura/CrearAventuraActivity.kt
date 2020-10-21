@@ -180,7 +180,9 @@ class CrearAventuraActivity : AppCompatActivity() {
 
         val guardarClick = findViewById(R.id.botonTerminarCA) as ImageButton
         guardarClick.setOnClickListener {
-            // Botón terminar
+            // Botón terminar guardar los cambios y podemos publicar de nuevo la historia
+            aventuraNueva.publicado = false
+            databaseHelper.actualizarAventura(db, aventuraNueva)
             // Salir de la activity
             finish()
         }
