@@ -17,9 +17,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="5"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center"
             android:text="Aventura"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@color/azul_oscuro" />
 
         <TextView
             android:id="@+id/textView3"
@@ -27,9 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="3"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center"
             android:text="Creador"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@color/azul_oscuro" />
 
         <TextView
             android:id="@+id/textView4"
@@ -37,9 +39,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="2"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center"
             android:text="Visitas"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@color/azul_oscuro" />
 
         <TextView
             android:id="@+id/textView5"
@@ -47,9 +50,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="2"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center"
             android:text="Nota"
-            android:textColor="@android:color/background_light" />
+            android:textColor="@color/azul_oscuro" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -20,8 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:fontFamily="@font/schoolbell"
         android:gravity="center"
-        android:text="La historia deberá ser aprobada, normalmente tarda 1 día y si es correcto aparecerá en las historias compartidas y cualquiera podrá jugar y ver tu historia!!!"
+        android:text="La historia deberá ser aprobada, normalmente tarda 1 día y si cumple las normas de la app aparecerá en las historias compartidas y cualquiera podrá jugar y ver tu historia!!!"
         android:textColor="@color/design_default_color_error"
         android:textSize="30sp" />
 
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Salir" />
 
@@ -46,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Publicar" />
     </LinearLayout>

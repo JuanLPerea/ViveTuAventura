@@ -58,9 +58,9 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             visitas.text = adventure.visitas.toString()
             nota.text = adventure.nota.toString()
             if (adventure.publicado) {
-                fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.negro))
+                fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.blanco ))
             } else {
-                fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.azul_oscuro))
+                fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.amarillo))
             }
         }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@android:color/background_light"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -19,9 +19,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Aventura"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/azul_oscuro"
             android:textSize="36sp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -58,6 +59,7 @@
             android:layout_height="wrap_content"
             android:background="#1db995"
             android:elevation="6dp"
+            app:tabTextAppearance="@style/tab_text"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:tabBackground="@drawable/tab_color_selector"></com.google.android.material.tabs.TabLayout>
