@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:fontFamily="@font/schoolbell"
+        android:fontFamily="@font/special_elite"
         android:gravity="center"
         android:text="La historia deberá ser aprobada, normalmente tarda 1 día y si cumple las normas, otros usuarios de 'Aventuras' podrán jugar y ver tu historia!!!"
         android:textColor="@color/azul_oscuro"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:fontFamily="@font/schoolbell"
+            android:fontFamily="@font/special_elite"
             android:gravity="center_horizontal|center_vertical"
             android:text="Salir" />
 
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:fontFamily="@font/schoolbell"
+            android:fontFamily="@font/special_elite"
             android:gravity="center_horizontal|center_vertical"
             android:text="Publicar" />
     </LinearLayout>

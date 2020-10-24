@@ -25,7 +25,8 @@
             android:id="@+id/textoJugarTV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/schoolbell"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/special_elite"
             android:textSize="24sp"
             tools:text="Aventura" />
 
@@ -61,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:fontFamily="@font/schoolbell"
+            android:fontFamily="@font/special_elite"
             android:text="Decision 1" />
 
         <TextView
@@ -69,7 +70,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/schoolbell"
+            android:fontFamily="@font/special_elite"
             android:gravity="center"
             android:text="Decide que haces" />
 
@@ -79,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:fontFamily="@font/schoolbell"
+            android:fontFamily="@font/special_elite"
             android:text="Decision 2" />
     </LinearLayout>
 </LinearLayout>

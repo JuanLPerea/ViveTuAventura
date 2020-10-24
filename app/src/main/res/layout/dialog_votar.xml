@@ -20,7 +20,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:fontFamily="@font/schoolbell"
+        android:fontFamily="@font/special_elite"
         android:gravity="center"
         android:text="Por favor, vota esta historia:"
         android:textColor="@color/design_default_color_error"
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:fontFamily="@font/schoolbell"
+        android:fontFamily="@font/special_elite"
         android:gravity="center_horizontal|center_vertical"
         android:text="Votar" />
 

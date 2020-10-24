@@ -21,9 +21,13 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name="com.aventuras.PresentacionActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name="com.aventuras.CrearAventuraActivity" />
-        <activity android:name="com.aventuras.JugarActivity" />
+        <activity android:name="com.aventuras.PresentacionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.aventuras.CrearAventuraActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.aventuras.JugarActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.aventuras.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

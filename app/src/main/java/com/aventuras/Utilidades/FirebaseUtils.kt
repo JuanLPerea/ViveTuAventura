@@ -34,7 +34,7 @@ class FirebaseUtils (val context: Context) {
         var listaCapitulos: MutableList<Capitulo> = mutableListOf()
         listaCapitulos = databaseHelper.cargarCapitulos(db, adventure.id)
         adventure.listaCapitulos = listaCapitulos
-
+        adventure.publicado = false
         // Guardar en firebase
         firebaseDatabase.collection("AVENTURAS").document(adventure.id)
             .set(adventure)
