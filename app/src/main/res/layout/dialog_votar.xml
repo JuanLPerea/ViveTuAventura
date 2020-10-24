@@ -8,12 +8,10 @@
     <ImageView
         android:id="@+id/titulo3_img_header"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFFFBB33"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/brujula" />
+        android:src="@drawable/nombre_app" />
 
 
     <TextView

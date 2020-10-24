@@ -8,11 +8,10 @@
     <ImageView
         android:id="@+id/titulo2_img_header"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#FFFFBB33"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/brujula" />
+        android:src="@drawable/nombre_app" />
 
 
     <TextView
@@ -24,7 +23,7 @@
         android:gravity="center"
         android:text="¿Seguro?"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp" />
+        android:textSize="36sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

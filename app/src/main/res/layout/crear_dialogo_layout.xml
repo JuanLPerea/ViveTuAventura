@@ -6,11 +6,10 @@
     <ImageView
         android:id="@+id/titulo_img_header"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#FFFFBB33"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/brujula" />
+        android:src="@drawable/nombre_app" />
 
     <TextView
         android:id="@+id/tituloDialog"
@@ -19,8 +18,8 @@
         android:layout_gravity="center"
         android:fontFamily="@font/schoolbell"
         android:text="Texto Dialogo"
-        android:textColor="#F44336"
-        android:textSize="18sp" />
+        android:textColor="@color/azul_oscuro"
+        android:textSize="36sp" />
 
     <EditText
         android:id="@+id/nombreAventuraDLG"

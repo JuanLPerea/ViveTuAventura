@@ -9,10 +9,9 @@
         android:id="@+id/titulo_publicar_img_header"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="#FFFFBB33"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/brujula" />
+        android:src="@drawable/nombre_app" />
 
 
     <TextView
@@ -22,8 +21,8 @@
         android:layout_margin="20dp"
         android:fontFamily="@font/schoolbell"
         android:gravity="center"
-        android:text="La historia deberá ser aprobada, normalmente tarda 1 día y si cumple las normas de la app aparecerá en las historias compartidas y cualquiera podrá jugar y ver tu historia!!!"
-        android:textColor="@color/design_default_color_error"
+        android:text="La historia deberá ser aprobada, normalmente tarda 1 día y si cumple las normas, otros usuarios de 'Aventuras' podrán jugar y ver tu historia!!!"
+        android:textColor="@color/azul_oscuro"
         android:textSize="30sp" />
 
     <LinearLayout

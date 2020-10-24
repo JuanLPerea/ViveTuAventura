@@ -6,11 +6,10 @@
     <ImageView
         android:id="@+id/titulo_img_header_filtrar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#FFFFBB33"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/brujula" />
+        android:src="@drawable/nombre_app" />
 
     <TextView
         android:id="@+id/titulo_filtrarTV"
@@ -18,9 +17,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:fontFamily="@font/schoolbell"
+        android:gravity="center"
         android:text="Introduce el título o autor que quieras encontrar:"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="36sp" />
 
     <EditText
         android:id="@+id/nombreAventuraDLG_filtrar"

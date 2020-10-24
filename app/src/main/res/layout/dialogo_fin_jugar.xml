@@ -9,10 +9,9 @@
         android:id="@+id/titulo3_img_header"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="#FFFFBB33"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/brujula" />
+        android:src="@drawable/nombre_app" />
 
 
     <TextView
@@ -23,8 +22,8 @@
         android:fontFamily="@font/schoolbell"
         android:gravity="center"
         android:text="¡Esta historia acaba aquí. Vuelve a intentarlo!"
-        android:textColor="@color/design_default_color_error"
-        android:textSize="30sp" />
+        android:textColor="@color/azul_oscuro"
+        android:textSize="36sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
