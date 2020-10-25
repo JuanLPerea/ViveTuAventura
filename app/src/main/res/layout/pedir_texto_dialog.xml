@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:fontFamily="@font/special_elite"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Cancelar" />
 
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:fontFamily="@font/special_elite"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Aceptar" />
     </LinearLayout>

@@ -81,7 +81,7 @@
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:layout_weight="3"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:gravity="start"
         android:hint="Escribe aquí tu historia"
         android:maxLength="255"
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="3"
-            android:fontFamily="@font/special_elite"
+            android:fontFamily="@font/schoolbell"
             android:text="Decision 1" />
 
         <Button
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_weight="3"
-            android:fontFamily="@font/special_elite"
+            android:fontFamily="@font/schoolbell"
             android:text="Decision 2" />
 
         <ImageButton

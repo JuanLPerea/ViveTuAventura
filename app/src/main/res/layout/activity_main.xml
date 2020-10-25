@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:background="#34FFFFFF"
-            android:fontFamily="@font/special_elite"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Aventuras"
             android:textColor="@color/azul_oscuro"

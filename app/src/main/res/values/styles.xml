@@ -11,12 +11,12 @@
 
   <style name="NumberPickerText">
     <item name="android:textSize">36sp</item>
-    <item name="android:fontFamily">@font/special_elite</item>
+    <item name="android:fontFamily">@font/schoolbell</item>
   </style>
 
   <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
-    <item name="android:fontFamily">@font/special_elite</item>
-    <item name="android:textSize">18sp</item>
+    <item name="android:fontFamily">@font/schoolbell</item>
+    <item name="android:textSize">24sp</item>
   </style>
 
   <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">

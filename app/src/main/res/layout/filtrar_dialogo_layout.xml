@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:gravity="center"
         android:text="Introduce el título o autor que quieras encontrar:"
         android:textColor="@android:color/black"
@@ -30,7 +30,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:hint="@string/titulo_aventura_hint"
         android:inputType="textNoSuggestions" />
 
@@ -42,7 +42,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:hint="@string/autor"
         android:inputType="textNoSuggestions" />
 
@@ -50,7 +50,7 @@
         android:id="@+id/publicadosCHKBX"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:text="Solo ver los no publicados" />
 
     <Button
@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:gravity="center_horizontal|center_vertical"
         android:text="Aceptar" />
 

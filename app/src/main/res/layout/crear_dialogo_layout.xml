@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:text="Texto Dialogo"
         android:textColor="@color/azul_oscuro"
         android:textSize="36sp" />
@@ -29,7 +29,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:hint="@string/titulo_aventura_hint"
         android:inputType="textNoSuggestions"
         android:maxLength="30" />
@@ -42,7 +42,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
-        android:fontFamily="@font/special_elite"
+        android:fontFamily="@font/schoolbell"
         android:hint="@string/autor"
         android:inputType="textNoSuggestions"
         android:maxLength="10" />
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/special_elite"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Cancelar" />
 
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/special_elite"
+            android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
             android:text="Aceptar" />
     </LinearLayout>
