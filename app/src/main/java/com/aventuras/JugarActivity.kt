@@ -4,11 +4,13 @@ import android.app.Dialog
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.NumberPicker
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,6 +36,7 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
     lateinit var capituloActivo: Capitulo
     lateinit var firebaseUtils: FirebaseUtils
     lateinit var botonPublicar : FloatingActionButton
+    lateinit var textViewAventura : TextView
     private lateinit var auth: FirebaseAuth
     private var user = ""
     var aventuraLocal = true
@@ -44,6 +47,10 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jugar)
+
+        // Scroll Text View
+        textViewAventura = findViewById(R.id.textoJugarTV)
+        textViewAventura.movementMethod = ScrollingMovementMethod()
 
         // Floating button de publicar
         botonPublicar = findViewById(R.id.publicarBTN)
@@ -178,6 +185,7 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
 
     private fun cargarCapituloEnPantalla() {
         setTitle(aventuraNueva.nombreAventura + " (" + aventuraNueva.creador + ")")
+        textViewAventura.scrollTo(0, 0)
         if (aventuraNueva.publicado) {
             // Si esta historia ya está publicada, ocultamos el botón
             publicarBTN.hide()

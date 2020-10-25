@@ -84,8 +84,8 @@
         android:fontFamily="@font/schoolbell"
         android:gravity="start"
         android:hint="Escribe aquí tu historia"
-        android:maxLength="255"
-        android:maxLines="10"
+        android:maxLength="500"
+        android:maxLines="30"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
 

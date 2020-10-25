@@ -114,20 +114,9 @@ class CrearAventuraActivity : AppCompatActivity() {
                     databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo1)
             } else {
                 if (aventuraNueva.listaCapitulos.size < 30) {
-                    // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
-                    // añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
-                    //Primero guardamos el capitulo activo en una variable temporal
-                    var capituloTMP: Capitulo
-                    capituloTMP = capituloActivo
-                    // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
-                    capituloActivo =
-                        databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
-                    // Al capitulo que estabamos antes actualizamos el campo decisión1 con el id del nuevo capitulo
-                    capituloTMP.capitulo1 = capituloActivo.id
                     // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
-                    pedirTexto(decision1Click, capituloTMP)
-                    // Añadimos el capitulo nuevo a la lista de la aventura
-                    aventuraNueva.listaCapitulos.add(capituloActivo)
+                    pedirTexto(decision1Click)
+
                 } else {
                     Toast.makeText(applicationContext, "Como máximo puedes crear 30 capitulos, no puedes crear mas", Toast.LENGTH_LONG).show()
                 }
@@ -145,20 +134,9 @@ class CrearAventuraActivity : AppCompatActivity() {
                     databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo2)
             } else {
                 if (aventuraNueva.listaCapitulos.size < 30) {
-                    // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
-                    // añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
-                    //Primero guardamos el capitulo activo en una variable temporal
-                    var capituloTMP: Capitulo
-                    capituloTMP = capituloActivo
-                    // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
-                    capituloActivo =
-                        databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
-                    // Al capitulo que estabamos antes actualizamos el campo decisión2 con el id del nuevo capitulo
-                    capituloTMP.capitulo2 = capituloActivo.id
                     // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
-                    pedirTexto(decision2Click, capituloTMP)
-                    // Añadimos el capitulo nuevo a la lista de la aventura
-                    aventuraNueva.listaCapitulos.add(capituloActivo)
+                    pedirTexto(decision2Click)
+
                 } else {
                     Toast.makeText(applicationContext, "Como máximo puedes crear 30 capitulos, no puedes crear mas", Toast.LENGTH_LONG).show()
                 }
@@ -261,7 +239,7 @@ class CrearAventuraActivity : AppCompatActivity() {
 
     }
 
-    private fun pedirTexto(botonPulsado: Button, capituloTMP: Capitulo) {
+    private fun pedirTexto(botonPulsado: Button) {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
@@ -277,18 +255,32 @@ class CrearAventuraActivity : AppCompatActivity() {
                 Toast.makeText(this, "Debes introducir al menos una palabra", Toast.LENGTH_LONG)
                     .show()
             } else {
+                // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
+                // añadimos un nuevo capitulo a nuestra historia y guardamos que el capitulo padre es el actual
+                //Primero guardamos el capitulo activo en una variable temporal
+                var capituloTMP = capituloActivo
+                // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
+                capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
+
+                // Añadimos el capitulo nuevo a la lista de la aventura
+                aventuraNueva.listaCapitulos.add(capituloActivo)
+
                 when (botonPulsado.id) {
                     R.id.botonDecision1CA -> {
                         capituloTMP.textoOpcion1 = textoRespuestas
-
+                        // Al capitulo que estabamos antes actualizamos el campo decisión2 con el id del nuevo capitulo
+                        capituloTMP.capitulo1 = capituloActivo.id
                     }
                     R.id.botonDecision2CA -> {
                         capituloTMP.textoOpcion2 = textoRespuestas
+                        // Al capitulo que estabamos antes actualizamos el campo decisión2 con el id del nuevo capitulo
+                        capituloTMP.capitulo2 = capituloActivo.id
 
                     }
                 }
                 // actualizamos la base de datos
                 databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloTMP)
+                cargarCapituloEnPantalla()
                 dialog.dismiss()
             }
 
