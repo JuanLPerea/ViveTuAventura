@@ -11,9 +11,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
         android:layout_gravity="center"
-        >
+        android:layout_weight="4">
 
         <ProgressBar
             android:id="@+id/progressBarCrearAventura"
@@ -21,8 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:elevation="5dp"
-            />
+            android:elevation="5dp" />
 
         <ImageView
             android:id="@+id/imagenCrearAventura"
@@ -34,44 +32,60 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/checkbox_boost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
             android:onClick="filtroClicked"
-            app:srcCompat="@android:drawable/btn_star" />
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/bote1" />
 
         <ImageButton
             android:id="@+id/checkbox_sketch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
             android:onClick="filtroClicked"
-            app:srcCompat="@android:drawable/ic_menu_view" />
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/brocha" />
 
         <ImageButton
             android:id="@+id/checkbox_vigneta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
             android:onClick="filtroClicked"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ojo" />
 
         <ImageButton
             android:id="@+id/checkbox_sepia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
             android:onClick="filtroClicked"
-            app:srcCompat="@android:drawable/ic_menu_compass" />
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/sol" />
 
         <ImageButton
             android:id="@+id/checkbox_gammma"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
             android:onClick="filtroClicked"
-            app:srcCompat="@android:drawable/ic_menu_manage" />
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/luna" />
 
     </LinearLayout>
 
@@ -80,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:fontFamily="@font/schoolbell"
         android:gravity="start"
         android:hint="Escribe aquí tu historia"

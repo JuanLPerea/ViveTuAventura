@@ -38,7 +38,7 @@ class CrearAventuraActivity : AppCompatActivity() {
     lateinit var capituloActivo: Capitulo
 
     // Creamos una aventura nueva
-    var aventuraNueva = Adventure()
+    var aventuraActiva = Adventure()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,7 @@ class CrearAventuraActivity : AppCompatActivity() {
         clickHandler()
 
         // Recuperamos id de la aventura del intent
-        aventuraNueva.id = intent.getStringExtra("ID_AVENTURA")!!
+        aventuraActiva.id = intent.getStringExtra("ID_AVENTURA")!!
         val esNuevaAventura = intent.getBooleanExtra("ESNUEVO" , true)
 
         // Accedemos a la BD
@@ -64,16 +64,16 @@ class CrearAventuraActivity : AppCompatActivity() {
         imagesHelper = ImagesHelper(this)
 
         // Cargamos la aventura de la BD
-        aventuraNueva = databaseHelper.recuperarAventura(db, aventuraNueva.id)
-        setTitle(aventuraNueva.nombreAventura + " (" + aventuraNueva.creador + ")")
+        aventuraActiva = databaseHelper.recuperarAventura(db, aventuraActiva.id)
+        setTitle(aventuraActiva.nombreAventura + " (" + aventuraActiva.creador + ")")
 
         // Comprobamos si la aventura ya existe (Editar) o es nueva (Crear)
         // Insertamos o cargamos el primer capítulo que editaremos mediante la aplicación
         if (esNuevaAventura) {
-            capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, "")
-            aventuraNueva.listaCapitulos.add(capituloActivo)
+            capituloActivo = databaseHelper.crearCapituloBD(db, aventuraActiva.id, "")
+            aventuraActiva.listaCapitulos.add(capituloActivo)
         } else {
-            capituloActivo = databaseHelper.cargarCapituloRaiz(db, aventuraNueva.id)
+            capituloActivo = databaseHelper.cargarCapituloRaiz(db, aventuraActiva.id)
         }
         // Mostrar el capitulo en pantalla
         cargarCapituloEnPantalla()
@@ -111,9 +111,9 @@ class CrearAventuraActivity : AppCompatActivity() {
             if (!capituloActivo.capitulo1.equals("")) {
                 // Si existe cargamos el capitulo existente
                 capituloActivo =
-                    databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo1)
+                    databaseHelper.cargarCapitulo(db, aventuraActiva.id, capituloActivo.capitulo1)
             } else {
-                if (aventuraNueva.listaCapitulos.size < 30) {
+                if (aventuraActiva.listaCapitulos.size < 30) {
                     // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
                     pedirTexto(decision1Click)
 
@@ -131,9 +131,9 @@ class CrearAventuraActivity : AppCompatActivity() {
             if (!capituloActivo.capitulo2.equals("")) {
                 // Si existe cargamos el capitulo existente
                 capituloActivo =
-                    databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capitulo2)
+                    databaseHelper.cargarCapitulo(db, aventuraActiva.id, capituloActivo.capitulo2)
             } else {
-                if (aventuraNueva.listaCapitulos.size < 30) {
+                if (aventuraActiva.listaCapitulos.size < 30) {
                     // Pedimos al usuario que introduzca un texto que se mostrará en el botón para esta decisión
                     pedirTexto(decision2Click)
 
@@ -150,7 +150,7 @@ class CrearAventuraActivity : AppCompatActivity() {
         atrasClick.setOnClickListener {
             // Al hacer click en el botón atrás navegamos al nodo padre, si ya estamos en el nodo raiz, no hacemos nada
             if (!capituloActivo.capituloPadre.equals("")) {
-                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraNueva.id, capituloActivo.capituloPadre
+                capituloActivo = databaseHelper.cargarCapitulo(db, aventuraActiva.id, capituloActivo.capituloPadre
                 )
                 cargarCapituloEnPantalla()
             }
@@ -159,8 +159,8 @@ class CrearAventuraActivity : AppCompatActivity() {
         val guardarClick = findViewById(R.id.botonTerminarCA) as ImageButton
         guardarClick.setOnClickListener {
             // Botón terminar guardar los cambios y podemos publicar de nuevo la historia
-            aventuraNueva.publicado = false
-            databaseHelper.actualizarAventura(db, aventuraNueva)
+            aventuraActiva.publicado = false
+            databaseHelper.actualizarAventura(db, aventuraActiva)
             // Salir de la activity
             finish()
         }
@@ -175,8 +175,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                 // guardar cambios cuando editemos el texto
                 val textoView = editTextCrearAventura.text.toString()
                 capituloActivo.textoCapitulo = textoView
-                databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
-
+                databaseHelper.actualizarCapitulo(db, aventuraActiva.id, capituloActivo)
             }
         })
 
@@ -203,7 +202,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     // actualizamos la base de datos
                     var capituloTMP = databaseHelper.cargarCapitulo(
                         db,
-                        aventuraNueva.id,
+                        aventuraActiva.id,
                         capituloActivo.capituloPadre
                     )
                     if (capituloTMP.capitulo1.equals(capituloActivo.id)) {
@@ -215,11 +214,11 @@ class CrearAventuraActivity : AppCompatActivity() {
                         capituloTMP.textoOpcion2 = ""
                         capituloTMP.capitulo2 = ""
                     }
-                    databaseHelper.borrarCapituloBD(db, aventuraNueva.id, capituloActivo)
+                    databaseHelper.borrarCapituloBD(db, aventuraActiva.id, capituloActivo)
                     capituloActivo = capituloTMP
-                    databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
-                    aventuraNueva.listaCapitulos.removeAll(aventuraNueva.listaCapitulos)
-                    aventuraNueva.listaCapitulos = databaseHelper.cargarCapitulos(db, aventuraNueva.id)
+                    databaseHelper.actualizarCapitulo(db, aventuraActiva.id, capituloActivo)
+                    aventuraActiva.listaCapitulos.removeAll(aventuraActiva.listaCapitulos)
+                    aventuraActiva.listaCapitulos = databaseHelper.cargarCapitulos(db, aventuraActiva.id)
                     cargarCapituloEnPantalla()
                     dialogBorrar.dismiss()
                 }
@@ -260,10 +259,10 @@ class CrearAventuraActivity : AppCompatActivity() {
                 //Primero guardamos el capitulo activo en una variable temporal
                 var capituloTMP = capituloActivo
                 // Despues creamos el capitulo nuevo y le indicamos el capitulo padre que es el que hemos guardado
-                capituloActivo = databaseHelper.crearCapituloBD(db, aventuraNueva.id, capituloTMP.id)
+                capituloActivo = databaseHelper.crearCapituloBD(db, aventuraActiva.id, capituloTMP.id)
 
                 // Añadimos el capitulo nuevo a la lista de la aventura
-                aventuraNueva.listaCapitulos.add(capituloActivo)
+                aventuraActiva.listaCapitulos.add(capituloActivo)
 
                 when (botonPulsado.id) {
                     R.id.botonDecision1CA -> {
@@ -279,7 +278,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     }
                 }
                 // actualizamos la base de datos
-                databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloTMP)
+                databaseHelper.actualizarCapitulo(db, aventuraActiva.id, capituloTMP)
                 cargarCapituloEnPantalla()
                 dialog.dismiss()
             }
@@ -391,7 +390,7 @@ class CrearAventuraActivity : AppCompatActivity() {
 
             // Convertimos la ruta del archivo a String y lo guardamos en la BD
             capituloActivo.imagenCapitulo = rutaImagen.toString()
-            databaseHelper.actualizarCapitulo(db, aventuraNueva.id, capituloActivo)
+            databaseHelper.actualizarCapitulo(db, aventuraActiva.id, capituloActivo)
 
             // Visualizamos la imagen en el ImageView
             imagenCrearAventura.setImageBitmap(
@@ -430,19 +429,19 @@ class CrearAventuraActivity : AppCompatActivity() {
 
         when (id) {
             R.id.checkbox_boost -> {
-                miBitmap = EfectosImagen.gaussian(bitmap)
+                miBitmap = EfectosImagen.hue(bitmap, 10f)
             }
             R.id.checkbox_sepia -> {
-                  miBitmap = EfectosImagen.sepia(bitmap)
+                  miBitmap = EfectosImagen.tint(bitmap, 20)
             }
             R.id.checkbox_vigneta -> {
                    miBitmap = EfectosImagen.vignette(bitmap)
             }
             R.id.checkbox_sketch -> {
-                   miBitmap = EfectosImagen.sketch(bitmap)
+                   miBitmap = EfectosImagen.brightness(bitmap, 30)
             }
             R.id.checkbox_gammma -> {
-                   miBitmap = EfectosImagen.hue(bitmap, .5f)
+                   miBitmap = EfectosImagen.invert(bitmap)
             }
         }
 
