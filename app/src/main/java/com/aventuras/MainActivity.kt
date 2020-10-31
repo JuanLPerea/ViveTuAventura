@@ -1,15 +1,20 @@
 package com.aventuras
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.*
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -27,17 +32,17 @@ import com.aventuras.Utilidades.Prefs
 import com.aventuras.modelos.Adventure
 
 
-class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListItemSelected, ImagenFirebaseCallback , AventuraFirebaseCallback {
+class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItemSelected, ImagenFirebaseCallback, AventuraFirebaseCallback {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var db: SQLiteDatabase
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
-    private lateinit var imagesHelper : ImagesHelper
+    private lateinit var imagesHelper: ImagesHelper
     private lateinit var auth: FirebaseAuth
-    private lateinit var fragmentAventurasLocal : FragmentAventurasLocal
-    private lateinit var fragmentAventurasWeb : FragmentAventurasWeb
-    private lateinit var imagenPortada : ImageView
-    private lateinit var textoPortada : TextView
+    private lateinit var fragmentAventurasLocal: FragmentAventurasLocal
+    private lateinit var fragmentAventurasWeb: FragmentAventurasWeb
+    private lateinit var imagenPortada: ImageView
+    private lateinit var textoPortada: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +93,15 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
                 viewPager.currentItem = tab.position
                 imagenPortada.setImageResource(R.drawable.libreta_cortada)
                 textoPortada.setText("Aventuras")
+                fragmentAventurasWeb.filtrarLista("", "", false)
+
+                if (CheckConnection()) {
+                    viewPager.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.blanco))
+
+                } else {
+                    viewPager.setBackgroundResource(R.drawable.sinconexion)
+                }
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -100,14 +114,21 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
         }
 
         val filtrarAventuras = findViewById<FloatingActionButton>(R.id.filtrarAventurasAB)
-        filtrarAventuras.setOnClickListener{
+        filtrarAventuras.setOnClickListener {
             dialogoFiltrar()
         }
 
         val infoButton = findViewById<FloatingActionButton>(R.id.infoFloatingActionButton)
         infoButton.setOnClickListener {
-            val intent = Intent (applicationContext, PresentacionActivity::class.java)
+            val intent = Intent(applicationContext, PresentacionActivity::class.java)
             startActivity(intent)
+        }
+
+        // Comprobar conexion
+        if (CheckConnection()) {
+            viewPager.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.blanco))
+        } else {
+            viewPager.setBackgroundResource(R.drawable.sinconexion)
         }
     }
 
@@ -124,18 +145,18 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
             val nombreAventuraET = dialog.findViewById(R.id.nombreAventuraDLG) as EditText
             val autorET = dialog.findViewById(R.id.AutorDLG) as EditText
 
-            var nomavTMP =  nombreAventuraET.text.toString()
+            var nomavTMP = nombreAventuraET.text.toString()
             if (nomavTMP.equals("")) nomavTMP = "Sin Nombre"
 
-            var autorTMP =  autorET.text.toString()
+            var autorTMP = autorET.text.toString()
             if (autorTMP.equals("")) autorTMP = "Sin Autor"
 
             // CREAMOS LA AVENTURA EN LA BASE DE DATOS
-            val idAventura = databaseHelper.crearAventuraBD(db , nomavTMP, autorTMP, auth.currentUser!!.uid)
+            val idAventura = databaseHelper.crearAventuraBD(db, nomavTMP, autorTMP, auth.currentUser!!.uid)
 
-            val intent = Intent (this, CrearAventuraActivity::class.java).apply {
+            val intent = Intent(this, CrearAventuraActivity::class.java).apply {
                 putExtra("ID_AVENTURA", idAventura)
-                putExtra("ESNUEVO" , true)
+                putExtra("ESNUEVO", true)
             }
             startActivity(intent)
             dialog.dismiss()
@@ -200,27 +221,27 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
     private fun signInAnonymously() {
         // [START signin_anonymously]
         auth.signInAnonymously()
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d("Miapp", "signInAnonymously:success - " + auth.uid)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w("Miapp", "signInAnonymously:failure", task.exception)
-                    Toast.makeText(baseContext, "Fallo al crear usuario",
-                        Toast.LENGTH_SHORT).show()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("Miapp", "signInAnonymously:success - " + auth.uid)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("Miapp", "signInAnonymously:failure", task.exception)
+                        Toast.makeText(baseContext, "Fallo al crear usuario",
+                                Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
     }
 
 
-    override fun LocalListItemSelected(idAventura : String) {
-        val aventuraSeleccionada : Adventure
+    override fun LocalListItemSelected(idAventura: String) {
+        val aventuraSeleccionada: Adventure
         aventuraSeleccionada = databaseHelper.recuperarAventura(db, idAventura)
         aventuraSeleccionada.listaCapitulos = databaseHelper.cargarCapitulos(db, idAventura)
         var bitmap = imagesHelper.recuperarImagenMemoriaInterna(aventuraSeleccionada.listaCapitulos.get(0).imagenCapitulo)
         if (bitmap == null) {
-            bitmap =  BitmapFactory.decodeResource(resources, R.drawable.sinimagen)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.sinimagen)
         }
 
         imagenPortada.setImageBitmap(bitmap)
@@ -242,14 +263,21 @@ class MainActivity : AppCompatActivity() , OnLocalListItemSelected , OnWebListIt
         firebaseUtils.cargarImagenFirebase(aventura.id, aventura.listaCapitulos.get(0).id)
     }
 
-    fun ComprobarPrimeraEjecucion () {
+    fun ComprobarPrimeraEjecucion() {
         val prefs = Prefs(applicationContext)
         if (prefs.primeraEjecucion!!) {
             prefs.primeraEjecucion = false
-            val intent = Intent (applicationContext, PresentacionActivity::class.java)
+            val intent = Intent(applicationContext, PresentacionActivity::class.java)
             startActivity(intent)
         }
     }
 
+    fun CheckConnection(): Boolean {
+        val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+
+        return isConnected
+    }
 
 }

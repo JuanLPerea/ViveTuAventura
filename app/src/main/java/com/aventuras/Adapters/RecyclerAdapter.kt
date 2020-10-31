@@ -1,6 +1,9 @@
 package com.aventuras.Adapters
 
 import android.content.Context
+import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -54,13 +57,12 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             visitas.text = adventure.visitas.toString()
             nota.text = adventure.nota.toString()
             if (adventure.publicado) {
-                fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.blanco ))
+                fondoFila.setBackgroundColor( Color.TRANSPARENT )
             } else {
                 fondoFila.setBackgroundColor(ContextCompat.getColor(context, R.color.amarillo))
             }
         }
 
     }
-
 
 }

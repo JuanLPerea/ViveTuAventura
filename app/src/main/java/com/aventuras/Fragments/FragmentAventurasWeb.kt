@@ -3,6 +3,8 @@ package com.aventuras.Fragments
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +42,12 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_aventuras_web, container, false)
 
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
+        if (currentUser == null) signInAnonymously()
+        val usuarioUUID = auth.uid
+
         // utlidades de Firebase
         firebaseUtils = FirebaseUtils(context!!)
         firebaseUtils.setListener(this)
@@ -53,7 +61,6 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
         mAdapter.RecyclerAdapter(listaAventuras, view.context , this)
         mRecyclerView.adapter = mAdapter
 
-
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 TODO("Not yet implemented")
@@ -61,11 +68,6 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 
-                // Initialize Firebase Auth
-                auth = Firebase.auth
-                val currentUser = auth.currentUser
-                if (currentUser == null) signInAnonymously()
-                val usuarioUUID = auth.uid
 
                 if (direction == ItemTouchHelper.LEFT) {
                      // Swipe hacia la izquierda editar
@@ -86,7 +88,6 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
 
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(mRecyclerView)
-
 
         return view
     }
@@ -119,7 +120,10 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
 
     fun recargarReciclerView() {
         // Recargar la lista de las aventuras
-        firebaseUtils.recuperarListaAventurasFirebase("","", false)
+        listaAventuras.removeAll(listaAventuras)
+        if (CheckConnection()) {
+            firebaseUtils.recuperarListaAventurasFirebase("","", false)
+        }
         mAdapter.notifyDataSetChanged()
     }
 
@@ -130,34 +134,41 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
 
     override fun onListLoaded(listaAventurasRecuperadas: MutableList<Adventure>) {
         listaAventuras.removeAll(listaAventuras)
-        listaAventuras.addAll(listaAventurasRecuperadas)
+        if (CheckConnection()) {
+            listaAventuras.addAll(listaAventurasRecuperadas)
+        }
         mAdapter.notifyDataSetChanged()
     }
 
     fun filtrarLista(nombreAventura : String, autorAventura: String, soloNoPublicados : Boolean) {
         // Recargar la lista de las aventuras
-        firebaseUtils.recuperarListaAventurasFirebase(nombreAventura, autorAventura, soloNoPublicados)
+        listaAventuras.removeAll(listaAventuras)
+        if(CheckConnection()) {
+            firebaseUtils.recuperarListaAventurasFirebase(nombreAventura, autorAventura, soloNoPublicados)
+        }
         mAdapter.notifyDataSetChanged()
     }
 
     override fun itemListClicked(idAventura: String , itemView : View , publicado : Boolean) {
-
-        if (publicado) {
-            listenerWebListItemSelected.OnWebListItemSelected(idAventura)
-            val popupMenu = PopupMenu(context, itemView)
-            popupMenu.menu.add("Jugar")
-            popupMenu.setOnMenuItemClickListener { menuItem ->
+        if (CheckConnection()) {
+            if (publicado) {
+                listenerWebListItemSelected.OnWebListItemSelected(idAventura)
+                val popupMenu = PopupMenu(context, itemView)
+                popupMenu.menu.add("Jugar")
+                popupMenu.setOnMenuItemClickListener { menuItem ->
                     val intent = Intent (context, JugarActivity::class.java).apply {
                         putExtra("ID_AVENTURA", idAventura)
                     }
                     startActivity(intent)
 
-                true
+                    true
+                }
+                popupMenu.show()
+            } else {
+                Toast.makeText(context, "Aventura pendiente de aprobación, próximamente podrás jugar!" , Toast.LENGTH_LONG).show()
             }
-            popupMenu.show()
-        } else {
-            Toast.makeText(context, "Aventura pendiente de aprobación, próximamente podrás jugar!" , Toast.LENGTH_LONG).show()
         }
+
     }
 
     fun setListenerWebListItemSelected (mListenerWebListItemSelected: OnWebListItemSelected) {
@@ -168,6 +179,13 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
         // [START signin_anonymously]
         auth.signInAnonymously()
 
+    }
+
+    fun CheckConnection () : Boolean {
+        val cm = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+        return isConnected
     }
 
 }
