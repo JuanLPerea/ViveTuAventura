@@ -30,14 +30,16 @@ import com.aventuras.R
 import com.aventuras.Utilidades.FirebaseUtils
 import com.aventuras.modelos.Adventure
 
-lateinit var mRecyclerView: RecyclerView
-val mAdapter: RecyclerAdapter = RecyclerAdapter()
-var listaAventuras: MutableList<Adventure> = mutableListOf()
+private lateinit var mRecyclerView: RecyclerView
+private val mAdapter: RecyclerAdapter = RecyclerAdapter()
+private var listaAventuras: MutableList<Adventure> = mutableListOf()
 lateinit var firebaseUtils : FirebaseUtils
-lateinit var listenerWebListItemSelected : OnWebListItemSelected
-lateinit var auth : FirebaseAuth
+private lateinit var listenerWebListItemSelected : OnWebListItemSelected
+private lateinit var auth : FirebaseAuth
+private lateinit var contexto : Context
 
-class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , OnItemListClicked {
+class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked {
+
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_aventuras_web, container, false)
@@ -181,8 +183,12 @@ class FragmentAventurasWeb (context : Context): Fragment() , FirebaseCallback , 
 
     }
 
-    fun CheckConnection () : Boolean {
-        val cm = context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    fun setContexto (contextoApp : Context) {
+        contexto = contextoApp
+    }
+
+    private fun CheckConnection () : Boolean {
+        val cm = contexto.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
         return isConnected

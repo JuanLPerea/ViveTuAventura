@@ -7,13 +7,12 @@ import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.*
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Window
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ComprobarPrimeraEjecucion()
+        comprobarPrimeraEjecucion()
 
         // Initialize Firebase Auth
         auth = Firebase.auth
@@ -59,14 +58,6 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         imagenPortada = findViewById(R.id.imageViewPortada)
         textoPortada = findViewById(R.id.textViewPortada)
 
-        // Referencias a los fragments
-        fragmentAventurasLocal = FragmentAventurasLocal(this)
-        fragmentAventurasWeb = FragmentAventurasWeb(this)
-
-        // Listeners para cuando haces click en un elemento de la lista
-        fragmentAventurasLocal.setListClickListener(this)
-        fragmentAventurasWeb.setListenerWebListItemSelected(this)
-
         // creamos una instancia de la clase para manipular la imágenes
         imagesHelper = ImagesHelper(applicationContext)
 
@@ -76,6 +67,16 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         // Instanciar Base de Datos SQLite
         databaseHelper = DatabaseHelper(applicationContext)
         db = databaseHelper.writableDatabase
+
+        // Referencias a los fragments
+        fragmentAventurasLocal = FragmentAventurasLocal()
+        fragmentAventurasLocal.setContexto(applicationContext)
+        fragmentAventurasWeb = FragmentAventurasWeb()
+        fragmentAventurasWeb.setContexto(applicationContext)
+
+        // Listeners para cuando haces click en un elemento de la lista
+        fragmentAventurasLocal.setListClickListener(this)
+        fragmentAventurasWeb.setListenerWebListItemSelected(this)
 
         // Tab Layout
         tabLayout = findViewById(R.id.tabLayout)
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
                 textoPortada.setText("Aventuras")
                 fragmentAventurasWeb.filtrarLista("", "", false)
 
-                if (CheckConnection()) {
+                if (checkConnection()) {
                     viewPager.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.blanco))
 
                 } else {
@@ -125,7 +126,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         }
 
         // Comprobar conexion
-        if (CheckConnection()) {
+        if (checkConnection()) {
             viewPager.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.blanco))
         } else {
             viewPager.setBackgroundResource(R.drawable.sinconexion)
@@ -212,6 +213,9 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
     public override fun onStart() {
         super.onStart()
+
+        Log.d("Miapp" , "OnStart Main Activity")
+
         // Check if user is signed in (non-null)
         val currentUser = auth.currentUser
         if (currentUser == null) signInAnonymously()
@@ -263,7 +267,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         firebaseUtils.cargarImagenFirebase(aventura.id, aventura.listaCapitulos.get(0).id)
     }
 
-    fun ComprobarPrimeraEjecucion() {
+    fun comprobarPrimeraEjecucion() {
         val prefs = Prefs(applicationContext)
         if (prefs.primeraEjecucion!!) {
             prefs.primeraEjecucion = false
@@ -272,12 +276,44 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         }
     }
 
-    fun CheckConnection(): Boolean {
+    fun checkConnection(): Boolean {
         val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
 
         return isConnected
     }
+
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        Log.d("Miapp", "Guardado estado")
+
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.d("Miapp", "Restaurado estado")
+
+    }
+
+
+/*
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        var databaseHelperSaved = databaseHelper
+        var dbSaved = db
+        var tabLayoutSaved = tabLayout
+        var viewPagerSaved = viewPager
+        var imagesHeleperSaved = imagesHelper
+        var authSaved = auth
+        var fragmentAventurasLocalSaved = fragmentAventurasLocal
+        var fragmentAventurasWebSaved = fragmentAventurasWeb
+        var imagenPortadaSaved = imagenPortada
+        var textoPortadaSaved = textoPortada
+    }
+
+
+*/
 
 }

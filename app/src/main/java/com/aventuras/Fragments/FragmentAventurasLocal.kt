@@ -27,14 +27,15 @@ import com.aventuras.R
 import com.aventuras.SalvarPreferencias.DatabaseHelper
 import com.aventuras.modelos.Adventure
 
-class FragmentAventurasLocal(context : Context) : Fragment() , OnItemListClicked  {
+class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
 
-    lateinit var mRecyclerView: RecyclerView
-    lateinit var databaseHelper: DatabaseHelper
-    lateinit var db: SQLiteDatabase
-    val mAdapter: RecyclerAdapter = RecyclerAdapter()
-    var listaAdventures: MutableList<Adventure> = mutableListOf()
-    lateinit var listenerLocalItemClick : OnLocalListItemSelected
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var db: SQLiteDatabase
+    private val mAdapter: RecyclerAdapter = RecyclerAdapter()
+    private var listaAdventures: MutableList<Adventure> = mutableListOf()
+    private lateinit var listenerLocalItemClick : OnLocalListItemSelected
+    private lateinit var contexto : Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -174,12 +175,12 @@ class FragmentAventurasLocal(context : Context) : Fragment() , OnItemListClicked
             // Listener para mostrar la imagen en la portada
             listenerLocalItemClick.LocalListItemSelected(idAventura)
 
-            val popupMenu = PopupMenu(context, itemView)
+            val popupMenu = PopupMenu(context!!, itemView)
             popupMenu.menu.add("Jugar")
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
 
-                    val intent = Intent (context, JugarActivity::class.java).apply {
+                    val intent = Intent (context!!, JugarActivity::class.java).apply {
                         putExtra("ID_AVENTURA", idAventura)
                     }
                     startActivity(intent)
@@ -190,6 +191,9 @@ class FragmentAventurasLocal(context : Context) : Fragment() , OnItemListClicked
 
     }
 
+    fun setContexto (contextoApp : Context) {
+        contexto = contextoApp
+    }
 
 }
 
