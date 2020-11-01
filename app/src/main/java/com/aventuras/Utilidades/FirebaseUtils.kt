@@ -218,9 +218,9 @@ class FirebaseUtils (val context: Context) {
                 }
     }
 
-    fun borrarAventura(idAventura: String) {
+    fun borrarAventura(aventura : Adventure) {
         var firebaseDatabase: FirebaseFirestore = FirebaseFirestore.getInstance()
-        firebaseDatabase.collection("AVENTURAS").document(idAventura)
+        firebaseDatabase.collection("AVENTURAS").document(aventura.id)
                 .delete()
                 .addOnSuccessListener {
                     Toast.makeText(context , "Aventura Borrada" , Toast.LENGTH_LONG).show()
@@ -228,6 +228,28 @@ class FirebaseUtils (val context: Context) {
                 .addOnFailureListener { e ->
                     Toast.makeText(context , "Error al borrar la aventura" , Toast.LENGTH_LONG).show()
                 }
+
+        // Borrar imagenes de la aventura de Firebase Storage
+        storage = FirebaseStorage.getInstance()
+        val storageRef = storage.getReference()
+
+        // Delete the file
+
+
+        aventura.listaCapitulos.forEach {capituloTMP ->
+            val imageRef = storageRef.child("images/" + aventura.id + "/" + capituloTMP.id + ".jpg")
+            imageRef
+                .delete()
+                .addOnSuccessListener {
+                     Log.d("Miapp" , "Imagenes Borradas Correctamente")
+            }
+                .addOnFailureListener {
+                     Log.d("Miapp" , "Error al borrar imagenes")
+                }
+        }
+
+
+
     }
 
 

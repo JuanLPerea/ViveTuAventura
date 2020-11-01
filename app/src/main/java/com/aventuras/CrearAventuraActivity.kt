@@ -432,7 +432,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                 miBitmap = EfectosImagen.hue(bitmap, 10f)
             }
             R.id.checkbox_sepia -> {
-                  miBitmap = EfectosImagen.tint(bitmap, 20)
+                  miBitmap = EfectosImagen.saturation(bitmap, 20)
             }
             R.id.checkbox_vigneta -> {
                    miBitmap = EfectosImagen.vignette(bitmap)

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -29,6 +30,7 @@ import com.aventuras.SalvarPreferencias.DatabaseHelper
 import com.aventuras.Utilidades.ImagesHelper
 import com.aventuras.Utilidades.Prefs
 import com.aventuras.modelos.Adventure
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItemSelected, ImagenFirebaseCallback, AventuraFirebaseCallback {
@@ -38,21 +40,17 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
     private lateinit var viewPager: ViewPager
     private lateinit var imagesHelper: ImagesHelper
     private lateinit var auth: FirebaseAuth
-    private lateinit var fragmentAventurasLocal: FragmentAventurasLocal
-    private lateinit var fragmentAventurasWeb: FragmentAventurasWeb
     private lateinit var imagenPortada: ImageView
     private lateinit var textoPortada: TextView
+    private var usuarioUUID : String = ""
+    lateinit var fragmentAventurasLocal: FragmentAventurasLocal
+    lateinit var fragmentAventurasWeb: FragmentAventurasWeb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         comprobarPrimeraEjecucion()
-
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-        val currentUser = auth.currentUser
-        if (currentUser == null) signInAnonymously()
 
         // Referencias a las views de la portada
         imagenPortada = findViewById(R.id.imageViewPortada)
@@ -71,12 +69,14 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         // Referencias a los fragments
         fragmentAventurasLocal = FragmentAventurasLocal()
         fragmentAventurasLocal.setContexto(applicationContext)
+        fragmentAventurasLocal.setListClickListener(this)
+
         fragmentAventurasWeb = FragmentAventurasWeb()
         fragmentAventurasWeb.setContexto(applicationContext)
-
-        // Listeners para cuando haces click en un elemento de la lista
-        fragmentAventurasLocal.setListClickListener(this)
         fragmentAventurasWeb.setListenerWebListItemSelected(this)
+
+        // Botón crear aventura oculto al cargar activity
+        crearAventuraBTN.visibility = View.INVISIBLE
 
         // Tab Layout
         tabLayout = findViewById(R.id.tabLayout)
@@ -91,6 +91,13 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
+                if (tab.position == 0) {
+                    crearAventuraBTN.visibility = View.INVISIBLE
+                } else {
+                    crearAventuraBTN.visibility = View.VISIBLE
+                }
+
+
                 viewPager.currentItem = tab.position
                 imagenPortada.setImageResource(R.drawable.libreta_cortada)
                 textoPortada.setText("Aventuras")
@@ -214,11 +221,19 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
     public override fun onStart() {
         super.onStart()
 
-        Log.d("Miapp" , "OnStart Main Activity")
-
-        // Check if user is signed in (non-null)
+        Log.d("Miapp", "OnStart Main Activity")
+        // Initialize Firebase Auth
+        auth = Firebase.auth
         val currentUser = auth.currentUser
-        if (currentUser == null) signInAnonymously()
+        if (currentUser == null) {
+            signInAnonymously()
+        } else {
+            usuarioUUID = currentUser.uid
+            fragmentAventurasWeb.setUsuarioUUID(usuarioUUID)
+        }
+
+
+
 
     }
 
@@ -228,7 +243,9 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("Miapp", "signInAnonymously:success - " + auth.uid)
+                        Log.d("Miapp", "Main Activity signInAnonymously:success - " + auth.uid)
+                        usuarioUUID = auth.uid.toString()
+                        fragmentAventurasWeb.setUsuarioUUID(usuarioUUID)
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("Miapp", "signInAnonymously:failure", task.exception)
@@ -284,7 +301,6 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         return isConnected
     }
 
-
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
         Log.d("Miapp", "Guardado estado")
@@ -297,23 +313,5 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
     }
 
-
-/*
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        var databaseHelperSaved = databaseHelper
-        var dbSaved = db
-        var tabLayoutSaved = tabLayout
-        var viewPagerSaved = viewPager
-        var imagesHeleperSaved = imagesHelper
-        var authSaved = auth
-        var fragmentAventurasLocalSaved = fragmentAventurasLocal
-        var fragmentAventurasWebSaved = fragmentAventurasWeb
-        var imagenPortadaSaved = imagenPortada
-        var textoPortadaSaved = textoPortada
-    }
-
-
-*/
 
 }

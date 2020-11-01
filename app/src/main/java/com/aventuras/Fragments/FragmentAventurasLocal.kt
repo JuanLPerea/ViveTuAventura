@@ -29,13 +29,13 @@ import com.aventuras.modelos.Adventure
 
 class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
 
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var databaseHelper: DatabaseHelper
-    private lateinit var db: SQLiteDatabase
-    private val mAdapter: RecyclerAdapter = RecyclerAdapter()
-    private var listaAdventures: MutableList<Adventure> = mutableListOf()
-    private lateinit var listenerLocalItemClick : OnLocalListItemSelected
-    private lateinit var contexto : Context
+     lateinit var mRecyclerView: RecyclerView
+     lateinit var databaseHelper: DatabaseHelper
+     lateinit var db: SQLiteDatabase
+     val mAdapter: RecyclerAdapter = RecyclerAdapter()
+     var listaAdventures: MutableList<Adventure> = mutableListOf()
+     lateinit var listenerLocalItemClick : OnLocalListItemSelected
+     private lateinit var contexto : Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -83,6 +83,8 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
         // Recargar la lista de las aventuras
         listaAdventures.removeAll(listaAdventures)
         listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db, "", "", false))
+        listaAdventures.sortBy { adventure -> adventure.visitas }
+        listaAdventures.reverse()
         mAdapter.notifyDataSetChanged()
         Log.d("Miapp", "On restart")
     }

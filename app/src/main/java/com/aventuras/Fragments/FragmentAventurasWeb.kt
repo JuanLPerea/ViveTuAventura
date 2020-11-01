@@ -37,18 +37,13 @@ lateinit var firebaseUtils : FirebaseUtils
 private lateinit var listenerWebListItemSelected : OnWebListItemSelected
 private lateinit var auth : FirebaseAuth
 private lateinit var contexto : Context
+private var usuarioUUID = ""
 
 class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked {
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_aventuras_web, container, false)
-
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-        val currentUser = auth.currentUser
-        if (currentUser == null) signInAnonymously()
-        val usuarioUUID = auth.uid
 
         // utlidades de Firebase
         firebaseUtils = FirebaseUtils(context!!)
@@ -106,7 +101,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
         val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
         yesBtn.setOnClickListener {
             // Borrar de Firebase
-            firebaseUtils.borrarAventura(listaAventuras.get(position).id)
+            firebaseUtils.borrarAventura(listaAventuras.get(position))
             recargarReciclerView()
             dialog.dismiss()
         }
@@ -135,6 +130,10 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
     }
 
     override fun onListLoaded(listaAventurasRecuperadas: MutableList<Adventure>) {
+
+        listaAventurasRecuperadas.sortBy{ adventure -> adventure.visitas }
+        listaAventurasRecuperadas.reverse()
+
         listaAventuras.removeAll(listaAventuras)
         if (CheckConnection()) {
             listaAventuras.addAll(listaAventurasRecuperadas)
@@ -192,6 +191,10 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
         return isConnected
+    }
+
+    fun setUsuarioUUID (usuarioUUIDMain : String) {
+        usuarioUUID = usuarioUUIDMain
     }
 
 }
