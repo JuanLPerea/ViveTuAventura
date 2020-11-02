@@ -21,7 +21,7 @@
         android:layout_margin="20dp"
         android:fontFamily="@font/schoolbell"
         android:gravity="center"
-        android:text="¡Esta historia acaba aquí. Vuelve a intentarlo!"
+        android:text="@string/fin_adv"
         android:textColor="@color/azul_oscuro"
         android:textSize="36sp" />
 
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Empezar de nuevo" />
+            android:text="@string/empezar_de_nuevo" />
 
         <Button
             android:id="@+id/salir_jugar_dialog_BTN"
@@ -49,7 +49,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Salir" />
+            android:text="@string/salir" />
     </LinearLayout>
 
     <LinearLayout

@@ -118,7 +118,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     pedirTexto(decision1Click)
 
                 } else {
-                    Toast.makeText(applicationContext, "Como máximo puedes crear 30 capitulos, no puedes crear mas", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, getString(R.string.max_caps), Toast.LENGTH_LONG).show()
                 }
             }
             // Mostrar el capitulo en pantalla
@@ -138,7 +138,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     pedirTexto(decision2Click)
 
                 } else {
-                    Toast.makeText(applicationContext, "Como máximo puedes crear 30 capitulos, no puedes crear mas", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, R.string.max_caps, Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -191,7 +191,7 @@ class CrearAventuraActivity : AppCompatActivity() {
 
                 val textoConfirmarET =
                     dialogBorrar.findViewById(R.id.texto_dialog_confirmarTV) as TextView
-                textoConfirmarET.setText("¿Borrar capítulo? ¡OJO! Se borrarán también todos los capitulos que dependan de éste y no se puede deshacer")
+                textoConfirmarET.setText(getString(R.string.delete_chapt))
 
                 val yesBtn = dialogBorrar.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
                 yesBtn.setOnClickListener {
@@ -208,9 +208,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     if (capituloTMP.capitulo1.equals(capituloActivo.id)) {
                         capituloTMP.textoOpcion1 = ""
                         capituloTMP.capitulo1 = ""
-                        Log.d("Miapp", "veniamos de la opcion 1")
                     } else if (capituloTMP.capitulo2.equals(capituloActivo.id)) {
-                        Log.d("Miapp", "veniamos de la opcion 2")
                         capituloTMP.textoOpcion2 = ""
                         capituloTMP.capitulo2 = ""
                     }
@@ -230,7 +228,7 @@ class CrearAventuraActivity : AppCompatActivity() {
 
                 dialogBorrar.show()
             } else {
-                Toast.makeText(applicationContext, "No se puede borrar el primer capítulo" , Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, getString(R.string.no_del_chapt) , Toast.LENGTH_LONG).show()
             }
 
 
@@ -251,7 +249,7 @@ class CrearAventuraActivity : AppCompatActivity() {
             val textoRespuestas = textoDecisionET.text.toString()
 
             if (textoRespuestas.equals("")) {
-                Toast.makeText(this, "Debes introducir al menos una palabra", Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.almost_one_word), Toast.LENGTH_LONG)
                     .show()
             } else {
                 // al capitulo activo tenemos que poner en la decisión 1 el id del nuevo capitulo que creemos
@@ -309,18 +307,17 @@ class CrearAventuraActivity : AppCompatActivity() {
         }
 
         if (capituloActivo.textoOpcion1.equals("")) {
-            botonDecision1CA.setText("Pulsa para elegir lo que pasa")
+            botonDecision1CA.setText(getString(R.string.select_decision))
         } else {
             botonDecision1CA.setText(capituloActivo.textoOpcion1)
         }
 
         if (capituloActivo.textoOpcion2.equals("")) {
-            botonDecision2CA.setText("Pulsa para elegir lo que pasa")
+            botonDecision2CA.setText(R.string.select_decision)
         } else {
             botonDecision2CA.setText(capituloActivo.textoOpcion2)
         }
 
-    //    Log.d("Miapp", "Hay " + aventuraNueva.listaCapitulos.size + " capitulos")
 
     }
 
@@ -358,7 +355,7 @@ class CrearAventuraActivity : AppCompatActivity() {
                     pickImageFromGallery()
                 } else {
                     //permission from popup denied
-                    Toast.makeText(this, "Permiso denegado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.no_permission), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -403,7 +400,7 @@ class CrearAventuraActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Toast.makeText(this, "Pulsa en el botón de la bandera para salir", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.flag_button_to_exit), Toast.LENGTH_LONG).show()
     }
 
 

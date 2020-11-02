@@ -21,7 +21,7 @@
         android:layout_margin="20dp"
         android:fontFamily="@font/schoolbell"
         android:gravity="center"
-        android:text="La historia deberá ser aprobada, normalmente tarda 1 día y si cumple las normas, otros usuarios de 'Aventuras' podrán jugar y ver tu historia!!!"
+        android:text="@string/publicar_msg"
         android:textColor="@color/azul_oscuro"
         android:textSize="30sp" />
 
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Salir" />
+            android:text="@string/salir" />
 
         <Button
             android:id="@+id/aceptar_publicar_dialog_BTN"
@@ -49,7 +49,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Publicar" />
+            android:text="@string/publicar" />
     </LinearLayout>
 
     <LinearLayout

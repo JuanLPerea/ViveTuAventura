@@ -103,7 +103,7 @@ class FragmentAventurasLocal() : Fragment(), OnItemListClicked {
         dialog.setContentView(R.layout.confirmar_dialog)
 
         val textoConfirmar = dialog.findViewById(R.id.texto_dialog_confirmarTV) as TextView
-        textoConfirmar.text = "¿Seguro que quieres borrar?"
+        textoConfirmar.text = getString(R.string.borrar_confirmar)
 
         val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
         yesBtn.setOnClickListener {
@@ -128,7 +128,7 @@ class FragmentAventurasLocal() : Fragment(), OnItemListClicked {
         dialog.setContentView(R.layout.crear_dialogo_layout)
 
         val textoDialogo = dialog.findViewById(R.id.tituloDialog) as TextView
-        textoDialogo.setText("Editar Aventura")
+        textoDialogo.setText(getString(R.string.editar_adv))
 
         val nombreAventura = dialog.findViewById(R.id.nombreAventuraDLG) as EditText
         nombreAventura.setText(listaAdventures.get(position).nombreAventura)
@@ -174,13 +174,11 @@ class FragmentAventurasLocal() : Fragment(), OnItemListClicked {
     }
 
     override fun itemListClicked(idAventura: String, itemView: View, publicado: Boolean) {
-        Log.d("Miapp", "Click en la lista: " + idAventura)
-
         // Listener para mostrar la imagen en la portada
         listenerLocalItemClick.LocalListItemSelected(idAventura)
 
         val popupMenu = PopupMenu(context!!, itemView)
-        popupMenu.menu.add("Jugar")
+        popupMenu.menu.add(getString(R.string.jugar))
 
         popupMenu.setOnMenuItemClickListener { menuItem ->
 

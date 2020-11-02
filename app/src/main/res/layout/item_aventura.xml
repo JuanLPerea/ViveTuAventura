@@ -17,7 +17,7 @@
             android:layout_weight="5"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Aventura"
+            android:text="@string/aventura"
             android:textColor="@color/azul_oscuro"
             android:textSize="18sp" />
 
@@ -28,7 +28,7 @@
             android:layout_weight="5"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Creador"
+            android:text="@string/creador"
             android:textColor="@color/azul_oscuro"
             android:textSize="18sp" />
 
@@ -39,7 +39,7 @@
             android:layout_weight="2"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Visitas"
+            android:text="@string/visitas"
             android:textColor="@color/azul_oscuro"
             android:textSize="18sp" />
 
@@ -50,7 +50,7 @@
             android:layout_weight="2"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Nota"
+            android:text="@string/nota"
             android:textColor="@color/azul_oscuro"
             android:textSize="18sp" />
 

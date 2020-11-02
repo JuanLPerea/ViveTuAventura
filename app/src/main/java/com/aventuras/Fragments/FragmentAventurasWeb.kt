@@ -68,7 +68,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
 
                 if (direction == ItemTouchHelper.LEFT) {
                      // Swipe hacia la izquierda editar
-                    Toast.makeText(context , "No es posible editar una Aventura de la Web, puedes borrarla y volver a subirla desde tus Aventuras" , Toast.LENGTH_LONG).show()
+                    Toast.makeText(context , getString(R.string.no_edit_web_adv) , Toast.LENGTH_LONG).show()
                 }
 
                 if ( direction == ItemTouchHelper.RIGHT) {
@@ -76,7 +76,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
                         // Swipe hacia la derecha borrar
                         ShowDialogConfirmarBorrar(position)
                     } else {
-                        Toast.makeText(context , "No puedes borrar una aventura que no has creado tu." , Toast.LENGTH_LONG).show()
+                        Toast.makeText(context , getString(R.string.no_delete_adv_own) , Toast.LENGTH_LONG).show()
                     }
                 }
                 recargarReciclerView()
@@ -96,7 +96,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
         dialog.setContentView(R.layout.confirmar_dialog)
 
         val textoConfirmar = dialog.findViewById(R.id.texto_dialog_confirmarTV) as TextView
-        textoConfirmar.text = "¿Seguro que quieres borrar?"
+        textoConfirmar.text = R.string.borrar_confirmar.toString()
 
         val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
         yesBtn.setOnClickListener {
@@ -155,7 +155,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
             if (publicado) {
                 listenerWebListItemSelected.OnWebListItemSelected(idAventura)
                 val popupMenu = PopupMenu(context, itemView)
-                popupMenu.menu.add("Jugar")
+                popupMenu.menu.add(R.string.jugar)
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     val intent = Intent (context, JugarActivity::class.java).apply {
                         putExtra("ID_AVENTURA", idAventura)
@@ -166,7 +166,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
                 }
                 popupMenu.show()
             } else {
-                Toast.makeText(context, "Aventura pendiente de aprobación, próximamente podrás jugar!" , Toast.LENGTH_LONG).show()
+                Toast.makeText(context, getString(R.string.pendiente_apro) , Toast.LENGTH_LONG).show()
             }
         }
 

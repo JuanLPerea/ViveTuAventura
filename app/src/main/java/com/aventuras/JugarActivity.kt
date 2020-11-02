@@ -117,7 +117,6 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         clickDecision1.setOnClickListener {
 
             if (capituloActivo.textoOpcion1.equals("FIN")) {
-                Log.d("Miapp", "Este capitulo es final")
                 //    Toast.makeText(applicationContext, "Esta historia termina aquí, vuelve a jugar!!" , Toast.LENGTH_LONG).show()
                 dialogoFin()
             }
@@ -134,7 +133,6 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         val clickDecision2 = findViewById(R.id.decision2JugarBTN) as Button
         clickDecision2.setOnClickListener {
             if (capituloActivo.textoOpcion2.equals("FIN")) {
-                Log.d("Miapp", "Este capitulo es final")
                 dialogoFin()
             }
 
@@ -257,10 +255,10 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
                 }
                 dialog.show()
             } else {
-                Toast.makeText(this, "Como máximo puedes publicar 10 historias. Borra alguna de la Web si quieres publicar esta", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.max_aventuras), Toast.LENGTH_LONG).show()
             }
         } else {
-            Toast.makeText(this, "Se ha llegado al máximo de aventuras que puede tener esta APP, haz una donación para aumentar la capacidad de nuestro servidor", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.max_adv_app), Toast.LENGTH_LONG).show()
         }
 
     }
@@ -271,13 +269,11 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("Miapp", "signInAnonymously:success - " + auth.uid)
                         user = auth.currentUser!!.uid
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("Miapp", "signInAnonymously:failure", task.exception)
-                        Toast.makeText(baseContext, "Fallo al crear usuario",
+                        Toast.makeText(baseContext, R.string.eror_usuario,
                                 Toast.LENGTH_SHORT).show()
                     }
                 }

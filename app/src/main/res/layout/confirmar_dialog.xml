@@ -21,7 +21,7 @@
         android:layout_margin="20dp"
         android:fontFamily="@font/schoolbell"
         android:gravity="center"
-        android:text="¿Seguro?"
+        android:text="@string/seguro"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="36sp" />
 
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Cancelar" />
+            android:text="@string/cancelar" />
 
         <Button
             android:id="@+id/aceptar_confirmar_dialog_BTN"
@@ -49,7 +49,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Aceptar" />
+            android:text="@string/aceptar" />
     </LinearLayout>
 
     <LinearLayout

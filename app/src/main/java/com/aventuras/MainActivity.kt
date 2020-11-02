@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
                 viewPager.currentItem = tab.position
                 imagenPortada.setImageResource(R.drawable.libreta_cortada)
-                textoPortada.setText("Aventuras")
+                textoPortada.setText(getString(R.string.aventuras_name))
                 fragmentAventurasWeb.filtrarLista("", "", false)
 
                 if (checkConnection()) {
@@ -147,17 +147,17 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         dialog.setContentView(R.layout.crear_dialogo_layout)
         val yesBtn = dialog.findViewById(R.id.empezarCrearBTN) as Button
         val textoDialogo = dialog.findViewById(R.id.tituloDialog) as TextView
-        textoDialogo.setText("Crear Aventura")
+        textoDialogo.setText(getString(R.string.add_adv))
 
         yesBtn.setOnClickListener {
             val nombreAventuraET = dialog.findViewById(R.id.nombreAventuraDLG) as EditText
             val autorET = dialog.findViewById(R.id.AutorDLG) as EditText
 
             var nomavTMP = nombreAventuraET.text.toString()
-            if (nomavTMP.equals("")) nomavTMP = "Sin Nombre"
+            if (nomavTMP.equals("")) nomavTMP = getString(R.string.sinnombre)
 
             var autorTMP = autorET.text.toString()
-            if (autorTMP.equals("")) autorTMP = "Sin Autor"
+            if (autorTMP.equals("")) autorTMP = getString(R.string.sinautor)
 
             // CREAMOS LA AVENTURA EN LA BASE DE DATOS
             val idAventura = databaseHelper.crearAventuraBD(db, nomavTMP, autorTMP, auth.currentUser!!.uid)
@@ -220,8 +220,6 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
     public override fun onStart() {
         super.onStart()
-
-        Log.d("Miapp", "OnStart Main Activity")
         // Initialize Firebase Auth
         auth = Firebase.auth
         val currentUser = auth.currentUser
@@ -232,9 +230,6 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
             fragmentAventurasWeb.setUsuarioUUID(usuarioUUID)
         }
 
-
-
-
     }
 
     private fun signInAnonymously() {
@@ -243,13 +238,11 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("Miapp", "Main Activity signInAnonymously:success - " + auth.uid)
                         usuarioUUID = auth.uid.toString()
                         fragmentAventurasWeb.setUsuarioUUID(usuarioUUID)
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("Miapp", "signInAnonymously:failure", task.exception)
-                        Toast.makeText(baseContext, "Fallo al crear usuario",
+                        Toast.makeText(baseContext, getString(R.string.eror_usuario),
                                 Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -297,20 +290,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
-
         return isConnected
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        Log.d("Miapp", "Guardado estado")
-
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        Log.d("Miapp", "Restaurado estado")
-
     }
 
 

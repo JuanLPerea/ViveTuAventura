@@ -38,7 +38,7 @@
             android:scrollbars="vertical"
             android:textColor="@color/azul_oscuro"
             android:textSize="24sp"
-            tools:text="Aventura" />
+            tools:text="@string/app_name" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/publicarBTN"
@@ -73,7 +73,7 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
-            android:text="Decision 1" />
+            android:text="@string/decision_1" />
 
         <TextView
             android:id="@+id/textView6"
@@ -82,7 +82,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center"
-            android:text="Decide que haces" />
+            android:text="@string/decide" />
 
         <Button
             android:id="@+id/decision2JugarBTN"
@@ -91,6 +91,6 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
-            android:text="Decision 2" />
+            android:text="@string/decision_2" />
     </LinearLayout>
 </LinearLayout>

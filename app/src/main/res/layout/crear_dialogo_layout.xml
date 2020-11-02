@@ -60,7 +60,7 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Cancelar" />
+            android:text="@string/cancelar" />
 
         <Button
             android:id="@+id/empezarCrearBTN"
@@ -69,7 +69,7 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Aceptar" />
+            android:text="@string/aceptar" />
     </LinearLayout>
 
     <LinearLayout

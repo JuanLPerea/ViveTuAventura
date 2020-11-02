@@ -97,7 +97,7 @@
         android:layout_weight="4"
         android:fontFamily="@font/schoolbell"
         android:gravity="start"
-        android:hint="Escribe aquí tu historia"
+        android:hint="@string/escribe_aqu_tu_historia"
         android:maxLength="500"
         android:maxLines="30"
         android:textColor="@android:color/black"

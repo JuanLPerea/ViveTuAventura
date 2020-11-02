@@ -19,7 +19,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="Introduce decisión"
+        android:hint="@string/decision"
         android:inputType="textNoSuggestions"
         android:maxLength="30" />
 
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Cancelar" />
+            android:text="@string/cancelar" />
 
         <Button
             android:id="@+id/aceptar_texto_dialog_BTN"
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/schoolbell"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Aceptar" />
+            android:text="@string/aceptar" />
     </LinearLayout>
 
     <LinearLayout
