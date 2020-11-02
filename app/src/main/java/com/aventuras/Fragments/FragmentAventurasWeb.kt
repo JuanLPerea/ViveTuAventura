@@ -176,12 +176,6 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
         listenerWebListItemSelected = mListenerWebListItemSelected
     }
 
-    private fun signInAnonymously() {
-        // [START signin_anonymously]
-        auth.signInAnonymously()
-
-    }
-
     fun setContexto (contextoApp : Context) {
         contexto = contextoApp
     }

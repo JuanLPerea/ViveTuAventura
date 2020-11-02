@@ -27,15 +27,15 @@ import com.aventuras.R
 import com.aventuras.SalvarPreferencias.DatabaseHelper
 import com.aventuras.modelos.Adventure
 
-class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
+class FragmentAventurasLocal() : Fragment(), OnItemListClicked {
 
-     lateinit var mRecyclerView: RecyclerView
-     lateinit var databaseHelper: DatabaseHelper
-     lateinit var db: SQLiteDatabase
-     val mAdapter: RecyclerAdapter = RecyclerAdapter()
-     var listaAdventures: MutableList<Adventure> = mutableListOf()
-     lateinit var listenerLocalItemClick : OnLocalListItemSelected
-     private lateinit var contexto : Context
+    lateinit var mRecyclerView: RecyclerView
+    lateinit var databaseHelper: DatabaseHelper
+    lateinit var db: SQLiteDatabase
+    val mAdapter: RecyclerAdapter = RecyclerAdapter()
+    var listaAdventures: MutableList<Adventure> = mutableListOf()
+    lateinit var listenerLocalItemClick: OnLocalListItemSelected
+    private lateinit var contexto: Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -46,7 +46,7 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
         db = databaseHelper.writableDatabase
 
         // Recuperar lista aventuras en la BD
-        listaAdventures = databaseHelper.cargarListaAventurasBD(db, "","",false)
+        listaAdventures = databaseHelper.cargarListaAventurasBD(db, "", "", false)
 
         mRecyclerView = view.findViewById(R.id.recyclerAventuraLocal) as RecyclerView
         mRecyclerView.setHasFixedSize(true)
@@ -60,6 +60,7 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 TODO("Not yet implemented")
             }
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 if (direction == ItemTouchHelper.LEFT) {
@@ -82,7 +83,7 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
     fun recargarReciclerView() {
         // Recargar la lista de las aventuras
         listaAdventures.removeAll(listaAdventures)
-        listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db, "", "", false))
+        listaAdventures.addAll(databaseHelper.cargarListaAventurasBD(db, "", "", false))
         listaAdventures.sortBy { adventure -> adventure.visitas }
         listaAdventures.reverse()
         mAdapter.notifyDataSetChanged()
@@ -95,7 +96,7 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
     }
 
 
-    private fun showDialogConfirmarBorrar(position : Int) {
+    private fun showDialogConfirmarBorrar(position: Int) {
         val dialog = Dialog(context!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -106,7 +107,7 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
 
         val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
         yesBtn.setOnClickListener {
-            databaseHelper.eliminarAventuraBD(db , listaAdventures.get(position).id)
+            databaseHelper.eliminarAventuraBD(db, listaAdventures.get(position).id)
             recargarReciclerView()
             dialog.dismiss()
         }
@@ -120,7 +121,7 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
         dialog.show()
     }
 
-    private fun showDialogConfirmarEditar(position : Int) {
+    private fun showDialogConfirmarEditar(position: Int) {
         val dialog = Dialog(context!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -143,9 +144,10 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
             databaseHelper.actualizarAventura(db, listaAdventures.get(position))
 
             // Lanzamos el activity
-            val intent = Intent (activity, CrearAventuraActivity::class.java).apply {
+            val intent = Intent(activity, CrearAventuraActivity::class.java).apply {
                 putExtra("ID_AVENTURA", listaAdventures.get(position).id)
-                putExtra("ESNUEVO" , false)
+                putExtra("ESNUEVO", false)
+
             }
             startActivity(intent)
             dialog.dismiss()
@@ -160,42 +162,43 @@ class FragmentAventurasLocal() : Fragment() , OnItemListClicked  {
         dialog.show()
     }
 
-    fun filtrarLista(nombreAventura : String, autorAventura: String, soloNoPublicados : Boolean) {
+    fun filtrarLista(nombreAventura: String, autorAventura: String, soloNoPublicados: Boolean) {
         // Recargar la lista de las aventuras
         listaAdventures.removeAll(listaAdventures)
-        listaAdventures.addAll( databaseHelper.cargarListaAventurasBD(db, nombreAventura, autorAventura, soloNoPublicados))
+        listaAdventures.addAll(databaseHelper.cargarListaAventurasBD(db, nombreAventura, autorAventura, soloNoPublicados))
         mAdapter.notifyDataSetChanged()
     }
 
-    fun setListClickListener (onLocalListItemSelected : OnLocalListItemSelected) {
+    fun setListClickListener(onLocalListItemSelected: OnLocalListItemSelected) {
         listenerLocalItemClick = onLocalListItemSelected
     }
 
-    override fun itemListClicked(idAventura: String , itemView : View, publicado : Boolean) {
-        Log.d("Miapp" , "Click en la lista: " + idAventura)
+    override fun itemListClicked(idAventura: String, itemView: View, publicado: Boolean) {
+        Log.d("Miapp", "Click en la lista: " + idAventura)
 
-            // Listener para mostrar la imagen en la portada
-            listenerLocalItemClick.LocalListItemSelected(idAventura)
+        // Listener para mostrar la imagen en la portada
+        listenerLocalItemClick.LocalListItemSelected(idAventura)
 
-            val popupMenu = PopupMenu(context!!, itemView)
-            popupMenu.menu.add("Jugar")
+        val popupMenu = PopupMenu(context!!, itemView)
+        popupMenu.menu.add("Jugar")
 
-            popupMenu.setOnMenuItemClickListener { menuItem ->
+        popupMenu.setOnMenuItemClickListener { menuItem ->
 
-                    val intent = Intent (context!!, JugarActivity::class.java).apply {
-                        putExtra("ID_AVENTURA", idAventura)
-                    }
-                    startActivity(intent)
-
-                true
+            val intent = Intent(context!!, JugarActivity::class.java).apply {
+                putExtra("ID_AVENTURA", idAventura)
             }
-            popupMenu.show()
+            startActivity(intent)
+
+            true
+        }
+        popupMenu.show()
 
     }
 
-    fun setContexto (contextoApp : Context) {
+    fun setContexto(contextoApp: Context) {
         contexto = contextoApp
     }
+
 
 }
 

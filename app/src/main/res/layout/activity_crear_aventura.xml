@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="TODO"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop" />
     </FrameLayout>
 
     <LinearLayout
@@ -106,7 +106,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -114,7 +114,6 @@
             android:id="@+id/botonDecision1CA"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:layout_weight="3"
             android:fontFamily="@font/schoolbell"
             android:text="Decision 1" />
@@ -123,7 +122,6 @@
             android:id="@+id/botonDecision2CA"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
             android:layout_weight="3"
             android:fontFamily="@font/schoolbell"
             android:text="Decision 2" />

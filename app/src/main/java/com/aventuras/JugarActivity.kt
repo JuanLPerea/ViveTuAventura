@@ -63,7 +63,12 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
         // Initialize Firebase Auth
         auth = Firebase.auth
         val currentUser = auth.currentUser
-        if (currentUser == null) signInAnonymously()
+        if (currentUser == null) {
+            signInAnonymously()
+        } else {
+            user = currentUser!!.uid
+        }
+
 
         // utlidades de Firebase
         firebaseUtils = FirebaseUtils(this)
@@ -151,7 +156,6 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
                 // Hacemos una consulta a Firebase para ver cuantas aventuras tiene este usuario
                 // (Como máximo se permitirán 10 aventuras publicadas por usuario para no saturar Firebase)
                 // Cuando Firebase devuelva el resultado se llamará a la función NumeroAventurasUsuario mediante el Interface implementado
-                Toast.makeText(this, "Publicando aventura!!" , Toast.LENGTH_LONG).show()
                 botonPublicar.setVisibility(View.GONE)
                 firebaseUtils.getNumAventurasUsuario(user)
             }
@@ -285,7 +289,7 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
 
 
     fun dialogoVotarAventura() {
-        if (!aventuraLocal) {
+        if (!user.equals(aventuraNueva.usuario)) {
             if (!databaseHelper.aventuraYaVotada(db, aventuraNueva.id)) {
                 val dialog = Dialog(this)
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
