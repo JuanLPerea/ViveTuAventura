@@ -96,7 +96,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
         dialog.setContentView(R.layout.confirmar_dialog)
 
         val textoConfirmar = dialog.findViewById(R.id.texto_dialog_confirmarTV) as TextView
-        textoConfirmar.text = R.string.borrar_confirmar.toString()
+        textoConfirmar.text = resources.getText(R.string.borrar_confirmar)
 
         val yesBtn = dialog.findViewById(R.id.aceptar_confirmar_dialog_BTN) as Button
         yesBtn.setOnClickListener {

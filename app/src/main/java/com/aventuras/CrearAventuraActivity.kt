@@ -74,6 +74,7 @@ class CrearAventuraActivity : AppCompatActivity() {
             aventuraActiva.listaCapitulos.add(capituloActivo)
         } else {
             capituloActivo = databaseHelper.cargarCapituloRaiz(db, aventuraActiva.id)
+            aventuraActiva.listaCapitulos = databaseHelper.cargarCapitulos(db, aventuraActiva.id)
         }
         // Mostrar el capitulo en pantalla
         cargarCapituloEnPantalla()
