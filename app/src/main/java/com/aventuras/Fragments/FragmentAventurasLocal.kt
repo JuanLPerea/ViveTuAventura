@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aventuras.Adapters.RecyclerAdapter
+import com.aventuras.Adapters.RecyclerAdapterLocal
 import com.aventuras.CrearAventuraActivity
 import com.aventuras.Interfaces.OnItemListClicked
 import com.aventuras.Interfaces.OnLocalListItemSelected
@@ -32,7 +33,7 @@ class FragmentAventurasLocal() : Fragment(), OnItemListClicked {
     lateinit var mRecyclerView: RecyclerView
     lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
-    val mAdapter: RecyclerAdapter = RecyclerAdapter()
+    val mAdapter: RecyclerAdapterLocal = RecyclerAdapterLocal()
     var listaAdventures: MutableList<Adventure> = mutableListOf()
     lateinit var listenerLocalItemClick: OnLocalListItemSelected
     private lateinit var contexto: Context
@@ -53,7 +54,7 @@ class FragmentAventurasLocal() : Fragment(), OnItemListClicked {
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
 
         // Recycler adapter
-        mAdapter.RecyclerAdapter(listaAdventures, view.context, this)
+        mAdapter.RecyclerAdapterLocal(listaAdventures, view.context, this)
         mRecyclerView.adapter = mAdapter
 
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {

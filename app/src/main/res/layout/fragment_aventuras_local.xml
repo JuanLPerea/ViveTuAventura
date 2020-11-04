@@ -35,27 +35,6 @@
             android:text="@string/creador"
             android:textColor="@color/azul_oscuro" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:fontFamily="@font/schoolbell"
-            android:gravity="center"
-            android:text="@string/visitas"
-            android:textColor="@color/azul_oscuro" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:fontFamily="@font/schoolbell"
-            android:gravity="center"
-            android:text="@string/nota"
-            android:textColor="@color/azul_oscuro" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

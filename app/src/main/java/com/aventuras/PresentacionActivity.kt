@@ -32,10 +32,16 @@ class PresentacionActivity : AppCompatActivity() {
 
          tabLayout = findViewById(R.id.presentacionTabLayout)
 
-
         onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla1))
         onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla2))
-        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla1))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla3))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla4))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla5))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla7))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla8))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla9))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla11))
+        onBoardingDatos.add(OnBoardingDatos(R.drawable.pantalla12))
 
         botonAtras = findViewById (R.id.textViewAtrasPresentacion)
         botonSiguiente = findViewById (R.id.textViewSiguientePresentacion)
