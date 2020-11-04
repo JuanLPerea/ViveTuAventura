@@ -81,8 +81,8 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         // Tab Layout
         tabLayout = findViewById(R.id.tabLayout)
         viewPager = findViewById(R.id.viewPager)
-        val tab2 = tabLayout.newTab().setText("Tus Aventuras")
-        val tab1 = tabLayout.newTab().setText("Aventuras Web")
+        val tab2 = tabLayout.newTab().setText(resources.getText(R.string.tusaventuras))
+        val tab1 = tabLayout.newTab().setText(resources.getText(R.string.aventurasweb))
         tabLayout.addTab(tab1)
         tabLayout.addTab(tab2)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL

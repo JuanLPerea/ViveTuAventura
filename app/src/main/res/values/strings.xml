@@ -46,4 +46,6 @@
     <string name="visitas">Visitas</string>
     <string name="nota">Nota</string>
     <string name="decision">Introduce decisión</string>
+    <string name="tusaventuras">Tus Aventuras</string>
+    <string name="aventurasweb">Aventuras Web</string>
 </resources>
