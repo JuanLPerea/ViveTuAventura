@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         tabLayout.addTab(tab1)
         tabLayout.addTab(tab2)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        tabLayout.tabMode = TabLayout.MODE_FIXED
         val adapter = TabLayoutAdapter(this, supportFragmentManager, tabLayout.tabCount, fragmentAventurasLocal, fragmentAventurasWeb)
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CrearAventuraActivity">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="4">
+
+        <ProgressBar
+            android:id="@+id/progressBarCrearAventura"
+            style="@android:style/Widget.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="5dp" />
+
+        <ImageView
+            android:id="@+id/imagenCrearAventura"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="TODO"
+            android:scaleType="centerCrop" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/checkbox_boost"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="filtroClicked"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/bote1" />
+
+        <ImageButton
+            android:id="@+id/checkbox_sketch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="filtroClicked"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/brocha" />
+
+        <ImageButton
+            android:id="@+id/checkbox_vigneta"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="filtroClicked"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ojo" />
+
+        <ImageButton
+            android:id="@+id/checkbox_sepia"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="filtroClicked"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/sol" />
+
+        <ImageButton
+            android:id="@+id/checkbox_gammma"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="filtroClicked"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/luna" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextCrearAventura"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="4"
+        android:fontFamily="@font/schoolbell"
+        android:gravity="start"
+        android:hint="@string/escribe_aqu_tu_historia"
+        android:maxLength="500"
+        android:maxLines="30"
+        android:textColor="@android:color/black"
+        android:textSize="36sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/botonDecision1CA"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:fontFamily="@font/schoolbell"
+            android:text="Decision 1"
+            android:textSize="36sp" />
+
+        <Button
+            android:id="@+id/botonDecision2CA"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:fontFamily="@font/schoolbell"
+            android:text="Decision 2"
+            android:textSize="36sp" />
+
+        <ImageButton
+            android:id="@+id/botonAtrasCA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_revert" />
+
+        <ImageButton
+            android:id="@+id/botonBorrarNodoCA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <ImageButton
+            android:id="@+id/botonTerminarCA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_bandera" />
+
+    </LinearLayout>
+
+</LinearLayout>
