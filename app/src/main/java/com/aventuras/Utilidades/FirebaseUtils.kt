@@ -62,14 +62,16 @@ class FirebaseUtils (val context: Context) {
             var uploadTask = imageRef.putFile(file)
 
             // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener {
+            uploadTask.addOnFailureListener {error ->
                 // Handle unsuccessful uploads
-                //Log.d("Miapp" , "Error al subir foto a Firebase")
-                Toast.makeText(context, "Error al subir imágenes", Toast.LENGTH_LONG).show()
+                Log.d("Miapp" , "Error al subir foto a Firebase")
+                Toast.makeText(context, "Error al subir imágenes: $error", Toast.LENGTH_LONG).show()
+                contador++
+                subirImagenesFirebase(listaCapitulos, idAventura)
             }.addOnSuccessListener { taskSnapshot ->
                 // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
                 // ...
-                //Log.d("Miapp" , "Subida foto a Firebase")
+                Log.d("Miapp" , "Subida foto a Firebase")
               //  Toast.makeText(context, "Imágenes subidas", Toast.LENGTH_LONG).show()
                 contador++
                 subirImagenesFirebase(listaCapitulos, idAventura)
