@@ -6,6 +6,9 @@ import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.GradientDrawable
 import android.net.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +16,7 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.view.animation.Animation
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
@@ -33,7 +37,7 @@ import com.aventuras.modelos.Adventure
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItemSelected, ImagenFirebaseCallback, AventuraFirebaseCallback {
+class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItemSelected, ImagenFirebaseCallback, AventuraFirebaseCallback , MainProgressBarCallback{
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var db: SQLiteDatabase
     private lateinit var tabLayout: TabLayout
@@ -45,12 +49,16 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
     private var usuarioUUID : String = ""
     lateinit var fragmentAventurasLocal: FragmentAventurasLocal
     lateinit var fragmentAventurasWeb: FragmentAventurasWeb
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         comprobarPrimeraEjecucion()
+
+        progressBar = findViewById(R.id.mainProgressBar)
+        progressBar.setVisibility(View.VISIBLE)
 
         // Referencias a las views de la portada
         imagenPortada = findViewById(R.id.imageViewPortada)
@@ -74,6 +82,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         fragmentAventurasWeb = FragmentAventurasWeb()
         fragmentAventurasWeb.setContexto(applicationContext)
         fragmentAventurasWeb.setListenerWebListItemSelected(this)
+        fragmentAventurasWeb.setListenerMainProgressBar(this)
 
         // Botón crear aventura oculto al cargar activity
         crearAventuraBTN.visibility = View.INVISIBLE
@@ -94,6 +103,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
             override fun onTabSelected(tab: TabLayout.Tab) {
                 if (tab.position == 0) {
                     crearAventuraBTN.visibility = View.INVISIBLE
+                    progressBar.setVisibility(View.VISIBLE)
                 } else {
                     crearAventuraBTN.visibility = View.VISIBLE
                 }
@@ -221,6 +231,8 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
     public override fun onStart() {
         super.onStart()
+        progressBar.setVisibility(View.VISIBLE)
+
         // Initialize Firebase Auth
         auth = Firebase.auth
         val currentUser = auth.currentUser
@@ -293,6 +305,13 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
         return isConnected
     }
+
+
+    override fun RecyclerListUpdated() {
+        progressBar.setVisibility(View.INVISIBLE)
+        Log.d("Miapp" , "Lista actualizada")
+    }
+
 
 
 }

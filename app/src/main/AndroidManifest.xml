@@ -15,9 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         >
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/tab_color_selector" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -19,10 +19,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.aventuras.Adapters.RecyclerAdapter
 import com.aventuras.Interfaces.FirebaseCallback
+import com.aventuras.Interfaces.MainProgressBarCallback
 import com.aventuras.Interfaces.OnItemListClicked
 import com.aventuras.Interfaces.OnWebListItemSelected
 import com.aventuras.JugarActivity
@@ -38,6 +37,7 @@ private lateinit var listenerWebListItemSelected : OnWebListItemSelected
 private lateinit var auth : FirebaseAuth
 private lateinit var contexto : Context
 private var usuarioUUID = ""
+lateinit var listenerProgressBar : MainProgressBarCallback
 
 class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked {
 
@@ -138,6 +138,7 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
         if (CheckConnection()) {
             listaAventuras.addAll(listaAventurasRecuperadas)
         }
+        listenerProgressBar!!.RecyclerListUpdated()
         mAdapter.notifyDataSetChanged()
     }
 
@@ -174,6 +175,11 @@ class FragmentAventurasWeb (): Fragment() , FirebaseCallback , OnItemListClicked
 
     fun setListenerWebListItemSelected (mListenerWebListItemSelected: OnWebListItemSelected) {
         listenerWebListItemSelected = mListenerWebListItemSelected
+    }
+
+    fun setListenerMainProgressBar (mListenerProgressBarCallback: MainProgressBarCallback) {
+        listenerProgressBar = mListenerProgressBarCallback
+
     }
 
     fun setContexto (contextoApp : Context) {
