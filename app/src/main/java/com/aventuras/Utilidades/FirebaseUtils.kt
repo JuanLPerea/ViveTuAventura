@@ -44,6 +44,9 @@ class FirebaseUtils (val context: Context) {
                 // Actualizamos la base de datos local para saber que esta aventura ya está publicada
                 adventure.publicado = true
                 databaseHelper.actualizarAventura(db , adventure)
+                // Actualizamos el campo notificaciones en Firebase
+                val valor = hashMapOf("NOTI_TXT" to adventure.nombreAventura)
+                firebaseDatabase.collection("NOTIFICACION").document("NOTI_DOC").set(valor)
             }
             .addOnFailureListener { e ->
                 Toast.makeText(context, "Error $e", Toast.LENGTH_LONG).show()

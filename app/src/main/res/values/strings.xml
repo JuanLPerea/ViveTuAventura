@@ -48,4 +48,10 @@
     <string name="decision">Introduce decisión</string>
     <string name="tusaventuras">Tus Aventuras</string>
     <string name="aventurasweb">Aventuras Web</string>
+    <string name="default_notification_channel_id">notificationChannelID</string>
+    <string name="default_notification_channel_name">notificacion</string>
+    <string name="msg_subscribed">Suscrito a Aventuras</string>
+    <string name="msg_subscribe_failed">error al suscribirse a Aventuras</string>
+    <string name="msg_token_fmt">token_notificaciones</string>
+    <string name="nueva_av">Nueva Aventura publicada!! </string>
 </resources>

@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
@@ -319,4 +318,6 @@ class JugarActivity : AppCompatActivity(), AventuraFirebaseCallback, ImagenFireb
             finish()
         }
     }
+
+
 }

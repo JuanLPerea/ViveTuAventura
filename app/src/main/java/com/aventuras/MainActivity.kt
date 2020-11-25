@@ -1,43 +1,51 @@
 package com.aventuras
 
+import android.app.AlarmManager
 import android.app.Dialog
+import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.GradientDrawable
-import android.net.*
-import androidx.appcompat.app.AppCompatActivity
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.Window
-import android.view.animation.Animation
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.tabs.TabLayout
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import androidx.work.*
 import com.aventuras.Adapters.TabLayoutAdapter
 import com.aventuras.Fragments.FragmentAventurasLocal
 import com.aventuras.Fragments.FragmentAventurasWeb
 import com.aventuras.Fragments.firebaseUtils
 import com.aventuras.Interfaces.*
 import com.aventuras.SalvarPreferencias.DatabaseHelper
+import com.aventuras.Utilidades.AlarmReceiver
 import com.aventuras.Utilidades.ImagesHelper
+import com.aventuras.Utilidades.NotificationsWorkManager
 import com.aventuras.Utilidades.Prefs
 import com.aventuras.modelos.Adventure
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
-class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItemSelected, ImagenFirebaseCallback, AventuraFirebaseCallback , MainProgressBarCallback{
+class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItemSelected,
+    ImagenFirebaseCallback, AventuraFirebaseCallback, MainProgressBarCallback {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var db: SQLiteDatabase
     private lateinit var tabLayout: TabLayout
@@ -46,7 +54,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
     private lateinit var auth: FirebaseAuth
     private lateinit var imagenPortada: ImageView
     private lateinit var textoPortada: TextView
-    private var usuarioUUID : String = ""
+    private var usuarioUUID: String = ""
     lateinit var fragmentAventurasLocal: FragmentAventurasLocal
     lateinit var fragmentAventurasWeb: FragmentAventurasWeb
     private lateinit var progressBar: ProgressBar
@@ -56,6 +64,9 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         setContentView(R.layout.activity_main)
 
         comprobarPrimeraEjecucion()
+
+        // Programar Notificaciones
+        ProgramarNotificaciones()
 
         progressBar = findViewById(R.id.mainProgressBar)
         progressBar.setVisibility(View.VISIBLE)
@@ -96,7 +107,13 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         tabLayout.addTab(tab2)
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         tabLayout.tabMode = TabLayout.MODE_FIXED
-        val adapter = TabLayoutAdapter(this, supportFragmentManager, tabLayout.tabCount, fragmentAventurasLocal, fragmentAventurasWeb)
+        val adapter = TabLayoutAdapter(
+            this,
+            supportFragmentManager,
+            tabLayout.tabCount,
+            fragmentAventurasLocal,
+            fragmentAventurasWeb
+        )
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -104,6 +121,7 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
                 if (tab.position == 0) {
                     crearAventuraBTN.visibility = View.INVISIBLE
                     progressBar.setVisibility(View.VISIBLE)
+                    fragmentAventurasWeb.filtrarLista("", "", false)
                 } else {
                     crearAventuraBTN.visibility = View.VISIBLE
                 }
@@ -112,10 +130,15 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
                 viewPager.currentItem = tab.position
                 imagenPortada.setImageResource(R.drawable.libreta_cortada)
                 textoPortada.setText(getString(R.string.aventuras_name))
-                fragmentAventurasWeb.filtrarLista("", "", false)
+
 
                 if (checkConnection()) {
-                    viewPager.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.blanco))
+                    viewPager.setBackgroundColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.blanco
+                        )
+                    )
 
                 } else {
                     viewPager.setBackgroundResource(R.drawable.sinconexion)
@@ -171,7 +194,8 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
             if (autorTMP.equals("")) autorTMP = getString(R.string.sinautor)
 
             // CREAMOS LA AVENTURA EN LA BASE DE DATOS
-            val idAventura = databaseHelper.crearAventuraBD(db, nomavTMP, autorTMP, auth.currentUser!!.uid)
+            val idAventura =
+                databaseHelper.crearAventuraBD(db, nomavTMP, autorTMP, auth.currentUser!!.uid)
 
             val intent = Intent(this, CrearAventuraActivity::class.java).apply {
                 putExtra("ID_AVENTURA", idAventura)
@@ -218,8 +242,16 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
             // llamar a un método público dentro de Fragment Aventuras Local o Web según sea
             when (viewPager.currentItem) {
-                1 -> fragmentAventurasLocal.filtrarLista(nombreFiltrar, autorFiltrar, soloNoPublicados)
-                0 -> fragmentAventurasWeb.filtrarLista(nombreFiltrar, autorFiltrar, soloNoPublicados)
+                1 -> fragmentAventurasLocal.filtrarLista(
+                    nombreFiltrar,
+                    autorFiltrar,
+                    soloNoPublicados
+                )
+                0 -> fragmentAventurasWeb.filtrarLista(
+                    nombreFiltrar,
+                    autorFiltrar,
+                    soloNoPublicados
+                )
             }
 
             dialog.dismiss()
@@ -248,17 +280,19 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
     private fun signInAnonymously() {
         // [START signin_anonymously]
         auth.signInAnonymously()
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        usuarioUUID = auth.uid.toString()
-                        fragmentAventurasWeb.setUsuarioUUID(usuarioUUID)
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(baseContext, getString(R.string.eror_usuario),
-                                Toast.LENGTH_SHORT).show()
-                    }
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    usuarioUUID = auth.uid.toString()
+                    fragmentAventurasWeb.setUsuarioUUID(usuarioUUID)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(
+                        baseContext, getString(R.string.eror_usuario),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+            }
     }
 
 
@@ -266,7 +300,8 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         val aventuraSeleccionada: Adventure
         aventuraSeleccionada = databaseHelper.recuperarAventura(db, idAventura)
         aventuraSeleccionada.listaCapitulos = databaseHelper.cargarCapitulos(db, idAventura)
-        var bitmap = imagesHelper.recuperarImagenMemoriaInterna(aventuraSeleccionada.listaCapitulos.get(0).imagenCapitulo)
+        var bitmap =
+            imagesHelper.recuperarImagenMemoriaInterna(aventuraSeleccionada.listaCapitulos.get(0).imagenCapitulo)
         if (bitmap == null) {
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.sinimagen)
         }
@@ -300,7 +335,8 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
     }
 
     fun checkConnection(): Boolean {
-        val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val cm =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
         return isConnected
@@ -309,9 +345,40 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
     override fun RecyclerListUpdated() {
         progressBar.setVisibility(View.INVISIBLE)
-        Log.d("Miapp" , "Lista actualizada")
+        Log.d("Miapp", "Lista actualizada")
     }
 
+    fun ProgramarNotificaciones() {
+
+        // Activar el receiver
+        val receiver = ComponentName(applicationContext, AlarmReceiver::class.java)
+        applicationContext.packageManager.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+
+        // Programar la alarma
+        var time = Calendar.getInstance()
+
+        time.set(Calendar.HOUR_OF_DAY, 16)
+        time.set(Calendar.MINUTE, 0)
+        time.set(Calendar.SECOND, 0)
+
+        var am = applicationContext.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+        val i = Intent (applicationContext, AlarmReceiver::class.java)
+        i.setAction("android.intent.action.NOTIFY")
+        val pi =  PendingIntent.getBroadcast(applicationContext, 0, i, PendingIntent.FLAG_ONE_SHOT)
+        am?.setRepeating(AlarmManager.RTC_WAKEUP, time.timeInMillis , 1000 * 60 * 60 , pi)
+
+        if (Build.VERSION.SDK_INT >= 23){
+            am!!.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pi);
+        }
+        else{
+            am!!.set(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pi);
+        }
+
+    }
 
 
 }
