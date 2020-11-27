@@ -21,7 +21,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
-import androidx.work.*
 import com.aventuras.Adapters.TabLayoutAdapter
 import com.aventuras.Fragments.FragmentAventurasLocal
 import com.aventuras.Fragments.FragmentAventurasWeb
@@ -30,18 +29,15 @@ import com.aventuras.Interfaces.*
 import com.aventuras.SalvarPreferencias.DatabaseHelper
 import com.aventuras.Utilidades.AlarmReceiver
 import com.aventuras.Utilidades.ImagesHelper
-import com.aventuras.Utilidades.NotificationsWorkManager
 import com.aventuras.Utilidades.Prefs
 import com.aventuras.modelos.Adventure
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItemSelected,
@@ -360,16 +356,13 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
         // Programar la alarma
         var time = Calendar.getInstance()
+        time.set(Calendar.HOUR_OF_DAY, 19)
 
-        time.set(Calendar.HOUR_OF_DAY, 16)
-        time.set(Calendar.MINUTE, 0)
-        time.set(Calendar.SECOND, 0)
 
         var am = applicationContext.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
         val i = Intent (applicationContext, AlarmReceiver::class.java)
         i.setAction("android.intent.action.NOTIFY")
         val pi =  PendingIntent.getBroadcast(applicationContext, 0, i, PendingIntent.FLAG_ONE_SHOT)
-        am?.setRepeating(AlarmManager.RTC_WAKEUP, time.timeInMillis , 1000 * 60 * 60 , pi)
 
         if (Build.VERSION.SDK_INT >= 23){
             am!!.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pi);
@@ -377,6 +370,15 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
         else{
             am!!.set(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pi);
         }
+
+        am?.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            time.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pi
+        )
+
+
 
     }
 

@@ -6,12 +6,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import java.util.*
 
 
 class AlarmReceiver () : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
+
+        Log.d("Miapp" , intent!!.action.toString())
 
         if (intent!!.action == "android.intent.action.BOOT_COMPLETED") {
             // Set the alarm here.
@@ -27,7 +30,7 @@ class AlarmReceiver () : BroadcastReceiver() {
             val i = Intent (context!!, AlarmReceiver::class.java)
             i.setAction("android.intent.action.NOTIFY")
             val pi =  PendingIntent.getBroadcast(context!!, 0, i, PendingIntent.FLAG_ONE_SHOT)
-            am?.setRepeating(AlarmManager.RTC_WAKEUP, time.timeInMillis , 1000 * 60 * 60 , pi)
+            am?.setRepeating(AlarmManager.RTC_WAKEUP, time.timeInMillis , 1000 * 60 * 10 , pi)
 
             if (Build.VERSION.SDK_INT >= 23){
                 am!!.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,time.getTimeInMillis(),pi);
