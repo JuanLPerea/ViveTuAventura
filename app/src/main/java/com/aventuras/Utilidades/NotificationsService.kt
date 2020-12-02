@@ -26,7 +26,6 @@ class NotificationsService () : JobIntentService() {
             val notificacion = documentSnapshot.getString("NOTI_TXT")
             val prefs = Prefs(applicationContext)
             val oldNotificacion = prefs.notificacion
-            CreateNotification("Notificacion Aventuras" , "Programada 1 vez cada hora $notificacion")
 
             if (!oldNotificacion.equals(notificacion)) {
                 // Si el String que hay en firebase es distinto del que

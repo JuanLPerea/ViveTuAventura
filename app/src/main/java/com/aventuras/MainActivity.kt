@@ -259,7 +259,13 @@ class MainActivity : AppCompatActivity(), OnLocalListItemSelected, OnWebListItem
 
     public override fun onStart() {
         super.onStart()
-        progressBar.setVisibility(View.VISIBLE)
+
+        if (tabLayout.selectedTabPosition == 0) {
+            progressBar.setVisibility(View.VISIBLE)
+        } else {
+            progressBar.setVisibility(View.INVISIBLE)
+        }
+
 
         // Initialize Firebase Auth
         auth = Firebase.auth
